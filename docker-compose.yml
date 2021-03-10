@@ -1,0 +1,103 @@
+version: "3"
+services:
+    redis:
+        image: redis:latest
+        container_name: intelmq-redis
+        volumes:
+            - ./redis:/usr/local/etc/redis
+        command:
+            - redis-server
+            - /usr/local/etc/redis/redis.conf
+        restart: always
+        networks: 
+            - intelmq
+    intelmq:
+        image: intelmq-base
+        container_name: intelmq-base
+        build:
+            context: ./..
+            dockerfile: ./docker/Dockerfile.intelmq
+        restart: always
+        ports:
+            - 1337:80
+        depends_on:
+            - redis
+        environment:
+            INTELMQ_PIPELINE_DRIVER: "redis"
+            INTELMQ_PIPELINE_HOST: "intelmq-redis"
+            INTELMQ_REDIS_CACHE_HOST: "intelmq-redis"
+        networks:
+            - intelmq
+    fody-backend:
+        image: intelmq-fody-backend
+        container_name: intelmq-fody-backend
+        build:
+            context: ./..
+            dockerfile: ./docker/Dockerfile.fody-backend
+        restart: always
+        volumes:
+            - ./fody-backend/conf:/opt/conf
+        ports:
+            - 1340:8002
+        depends_on:
+            - eventdb
+        environment:
+            EVENTDB_SERVE_CONF_FILE: "/opt/conf/eventdb.conf"
+            CONTACTDB_SERVE_CONF_FILE: "/opt/conf/contactdb.conf"
+            TICKETS_SERVE_CONF_FILE: "/opt/conf/ticketdb.conf"
+        networks:
+            - intelmq
+        command: ["wait-for-it.sh", "contactdb:5432", "-t", "0", "-s", "--", "hug", "-f", "./intelmq_fody_backend/serve.py", "-p", "8002"]
+    fody:
+        image: intelmq-fody-spa
+        container_name: intelmq-fody-spa
+        build:
+            context: ./..
+            dockerfile: ./docker/Dockerfile.fody
+        restart: always
+        ports:
+            - 1380:8080
+        # volumes:
+        #   - ../intelmq-fody:/opt/src/intelmq-fody
+        depends_on:
+            - fody-backend
+        networks:
+            - intelmq
+    contactdb:
+        image: intelmq-contactdb
+        container_name: intelmq-contactdb
+        build:
+            context: ./..
+            dockerfile: ./docker/Dockerfile.contactdb
+        restart: always
+        volumes:
+          - ./contactdb/init:/docker-entrypoint-initdb.d
+        environment:
+            POSTGRES_PASSWORD: secret
+        ports:
+            - 1338:5432
+        depends_on:
+            - intelmq
+        networks:
+            - intelmq
+    eventdb:
+        image: intelmq-eventdb
+        container_name: intelmq-eventdb
+        build:
+            context: ./..
+            dockerfile: ./docker/Dockerfile.eventdb
+        volumes:
+          - ./eventdb/init:/docker-entrypoint-initdb.d
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: secret
+        ports:
+            - 1339:5432
+        depends_on:
+            - intelmq
+        networks:
+            - intelmq
+
+networks: 
+    intelmq:
+        driver: bridge

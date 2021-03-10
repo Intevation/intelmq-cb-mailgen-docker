@@ -1,0 +1,20 @@
+FROM ubuntu:20.04
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y nodejs npm git
+
+RUN npm install --global yarn
+
+COPY docker/fody/startup-spa.sh /opt/startup-spa.sh
+
+WORKDIR /opt/src/
+
+RUN git clone https://github.com/Intevation/intelmq-fody.git
+
+WORKDIR /opt/src/intelmq-fody
+
+COPY docker/fody/index.js /opt/src/intelmq-fody/config/index.js
+
+EXPOSE 8080
+
+CMD ["/opt/startup-spa.sh"]
+

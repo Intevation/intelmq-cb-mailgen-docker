@@ -1,0 +1,91 @@
+diff --git a/example-rules/05inhibitions.py b/example-rules/05inhibitions.py
+index d4e9093..49eb018 100644
+--- a/example-rules/05inhibitions.py
++++ b/example-rules/05inhibitions.py
+@@ -10,7 +10,7 @@ Most of the actual work is done by :py:func:`notification_inhibited`.
+ See its documentation for details.
+ """
+ 
+-from intelmq.bots.experts.certbund_contact.rulesupport \
++from intelmq_certbund_contact.rulesupport \
+     import notification_inhibited
+ 
+ """
+diff --git a/example-rules/20prioritize_contacts.py b/example-rules/20prioritize_contacts.py
+index ae2ce00..b1ebc35 100644
+--- a/example-rules/20prioritize_contacts.py
++++ b/example-rules/20prioritize_contacts.py
+@@ -1,7 +1,7 @@
+ """Choose the most relevant contacts
+ """
+ 
+-from intelmq.bots.experts.certbund_contact.rulesupport \
++from intelmq_certbund_contact.rulesupport \
+     import keep_most_specific_contacts
+ 
+ 
+diff --git a/example-rules/31ct_botnet-drone.py b/example-rules/31ct_botnet-drone.py
+index 1ae50e7..349bcb2 100644
+--- a/example-rules/31ct_botnet-drone.py
++++ b/example-rules/31ct_botnet-drone.py
+@@ -20,7 +20,7 @@ Assumptions:
+ 
+ """
+ 
+-from intelmq.bots.experts.certbund_contact.rulesupport import \
++from intelmq_certbund_contact.rulesupport import \
+     Directive, most_specific_matches
+ 
+ CTS_TO_WORK_WITH = ['botnet drone']
+diff --git a/example-rules/32ct_vulnerable-service.py b/example-rules/32ct_vulnerable-service.py
+index 240b866..bccb8fd 100644
+--- a/example-rules/32ct_vulnerable-service.py
++++ b/example-rules/32ct_vulnerable-service.py
+@@ -13,7 +13,7 @@ Assumptions:
+ 
+ """
+ 
+-from intelmq.bots.experts.certbund_contact.rulesupport import \
++from intelmq_certbund_contact.rulesupport import \
+     Directive, most_specific_matches
+ 
+ CTS_TO_WORK_WITH = ['vulnerable service']
+diff --git a/example-rules/40xarf.py b/example-rules/40xarf.py
+index e0921d5..e838258 100644
+--- a/example-rules/40xarf.py
++++ b/example-rules/40xarf.py
+@@ -6,7 +6,7 @@ which states the explicit wish to notify the contact in x-arf format.
+ 
+ """
+ 
+-from intelmq.bots.experts.certbund_contact.rulesupport import Directive
++from intelmq_certbund_contact.rulesupport import Directive
+ 
+ 
+ # default X-ARF settings
+diff --git a/example-rules/50shadowserver.py b/example-rules/50shadowserver.py
+index 204bf86..e4baa9d 100644
+--- a/example-rules/50shadowserver.py
++++ b/example-rules/50shadowserver.py
+@@ -4,7 +4,7 @@ The notitification directives are determined based on the feed.name
+ attribute of the event.
+ """
+ 
+-from intelmq.bots.experts.certbund_contact.rulesupport import Directive
++from intelmq_certbund_contact.rulesupport import Directive
+ 
+ 
+ def determine_directives(context):
+diff --git a/example-rules/51avalanche.py b/example-rules/51avalanche.py
+index c521bf6..11426c4 100644
+--- a/example-rules/51avalanche.py
++++ b/example-rules/51avalanche.py
+@@ -2,7 +2,7 @@
+ 
+ """
+ 
+-from intelmq.bots.experts.certbund_contact.rulesupport import \
++from intelmq_certbund_contact.rulesupport import \
+     Directive, most_specific_matches
+ 
+ 

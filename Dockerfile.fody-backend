@@ -1,0 +1,50 @@
+FROM ubuntu:20.04
+
+# Install dependencies and stuff
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git python3-pip python3-psycopg2 python3-dateutil swig libgpgme-dev
+
+WORKDIR /opt
+
+# Add wait-for-it.
+# Used in compose environments to give the database time to start.
+RUN git clone https://github.com/vishnubob/wait-for-it.git
+
+RUN cp wait-for-it/wait-for-it.sh /usr/bin
+
+# Clone Mailgen (used as dependency and can be executed inside the container
+RUN git clone https://github.com/Intevation/intelmq-mailgen.git
+
+# Clone the fody backend
+RUN git clone https://github.com/Intevation/intelmq-fody-backend.git
+
+WORKDIR /opt/intelmq-mailgen
+
+# Install mailgen
+RUN pip3 install -e .
+
+WORKDIR /opt
+
+# Install dependencies
+RUN pip3 install pygpgme hug pyxarf
+
+# Create config inside the container
+RUN mkdir /etc/intelmq-mailgen
+
+COPY docker/fody-backend/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
+
+RUN mkdir -p /etc/intelmq/mailgen/templates
+
+RUN mkdir -p /etc/intelmq/mailgen/formats
+
+RUN cp /opt/intelmq-mailgen/templates/* /etc/intelmq/mailgen/templates
+
+RUN cp /opt/intelmq-mailgen/example_scripts/* /etc/intelmq/mailgen/formats
+
+WORKDIR /opt/intelmq-fody-backend
+
+# Install coreutils for development purposes.
+RUN apt-get install -y coreutils
+
+# Start the backend using hug. 
+# !!! compose file overwrites this CMD !!!
+CMD ["hug", "-f", "./intelmq_fody_backend/serve.py", "-p", "8002"]

@@ -1,0 +1,85 @@
+FROM ubuntu:20.04
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y apache2 php7.4
+
+# Install dependencies and stuff
+RUN apt-get update && apt-get install -y jq git \
+    python3-pip python3-psycopg2 \
+    python3-bs4 sudo libgpgme-dev swig
+
+WORKDIR /opt
+
+# Clone intelmq
+RUN git clone https://github.com/certtools/intelmq.git
+
+WORKDIR /opt/intelmq
+
+# add all relevant users and set access rules.
+RUN useradd -d /opt/intelmq -U -s /bin/bash intelmq \
+    && adduser intelmq sudo \
+    && adduser www-data sudo \
+    && echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
+    && sudo chown -R intelmq:intelmq /opt/intelmq
+
+# Checkout the intelmq master as the stable branch
+# and install.
+RUN git checkout master && pip3 install -e .
+
+# Run intelmqsetup to get a complete enviroment
+RUN intelmqsetup
+
+WORKDIR /opt
+
+# Clone intelmq manager
+RUN git clone https://github.com/certtools/intelmq-manager.git
+
+WORKDIR /opt/intelmq-manager
+
+# Checkout the intelmq master as the stable branch
+RUN git checkout 2.2.1
+
+WORKDIR /opt
+
+# Copy to webserver location
+RUN cp -R intelmq-manager/* /var/www/html
+
+WORKDIR /opt/intelmq/etc
+
+# Add manager configs to make the UI work
+RUN mkdir manager
+
+RUN touch /opt/intelmq/etc/manager/positions.conf
+
+WORKDIR /opt
+
+# Clone mailgen and install as a dependency for certbund-contact
+RUN git clone https://github.com/Intevation/intelmq-mailgen.git
+
+WORKDIR /opt/intelmq-mailgen
+
+RUN pip3 install -e .
+
+WORKDIR /opt
+
+# Clone and Install certbund-contact to add the BOTS to intelmq
+RUN git clone https://github.com/Intevation/intelmq-certbund-contact.git
+
+WORKDIR /opt/intelmq-certbund-contact
+
+# Patch example rules to fix imports.
+COPY docker/base/import.patch .
+
+RUN patch -p 1 -i import.patch
+
+RUN pip3 install -e .
+
+# Add config files to intelmq
+COPY docker/base/conf/* /opt/intelmq/etc/
+
+# Adjust ownership for configs
+RUN chgrp www-data /opt/intelmq/etc/*.conf /opt/intelmq/etc/manager/positions.conf
+
+RUN chmod g+w /opt/intelmq/etc/*.conf /opt/intelmq/etc/manager/positions.conf
+
+EXPOSE 80
+CMD ["apachectl", "-D", "FOREGROUND"]
