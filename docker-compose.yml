@@ -15,8 +15,8 @@ services:
         image: intelmq-base
         container_name: intelmq-base
         build:
-            context: ./..
-            dockerfile: ./docker/Dockerfile.intelmq
+            context: .
+            dockerfile: Dockerfile.intelmq
         restart: always
         ports:
             - 1337:80
@@ -33,8 +33,8 @@ services:
         image: intelmq-fody-backend
         container_name: intelmq-fody-backend
         build:
-            context: ./..
-            dockerfile: ./docker/Dockerfile.fody-backend
+            context: .
+            dockerfile: Dockerfile.fody-backend
         restart: always
         volumes:
             - ./fody-backend/conf:/opt/conf
@@ -53,8 +53,8 @@ services:
         image: intelmq-fody-spa
         container_name: intelmq-fody-spa
         build:
-            context: ./..
-            dockerfile: ./docker/Dockerfile.fody
+            context: .
+            dockerfile: Dockerfile.fody
         restart: always
         ports:
             - 1380:8080
@@ -68,8 +68,8 @@ services:
         image: intelmq-contactdb
         container_name: intelmq-contactdb
         build:
-            context: ./..
-            dockerfile: ./docker/Dockerfile.contactdb
+            context: .
+            dockerfile: Dockerfile.contactdb
         restart: always
         volumes:
           - ./contactdb/init:/docker-entrypoint-initdb.d
@@ -85,8 +85,8 @@ services:
         image: intelmq-eventdb
         container_name: intelmq-eventdb
         build:
-            context: ./..
-            dockerfile: ./docker/Dockerfile.eventdb
+            context: .
+            dockerfile: Dockerfile.eventdb
         volumes:
           - ./eventdb/init:/docker-entrypoint-initdb.d
         restart: always

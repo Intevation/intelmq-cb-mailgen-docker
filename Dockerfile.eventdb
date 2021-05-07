@@ -15,7 +15,7 @@ WORKDIR /opt/intelmq-mailgen
 RUN git checkout 546ef367b43e5f6479c28d99efc6d8cf2827cc25
 
 # Copy the init script into the container
-COPY docker/eventdb/initdb.sql /opt/initdb.sql
+COPY eventdb/initdb.sql /opt/initdb.sql
 
 # Importing the schema and data is done in the the contactdb/init.sh script.
 # This script is added to the container on startup and will be processed

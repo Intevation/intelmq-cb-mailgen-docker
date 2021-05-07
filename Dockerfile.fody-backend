@@ -30,7 +30,7 @@ RUN pip3 install pygpgme hug pyxarf
 # Create config inside the container
 RUN mkdir /etc/intelmq-mailgen
 
-COPY docker/fody-backend/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
+COPY fody-backend/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
 
 RUN mkdir -p /etc/intelmq/mailgen/templates
 
