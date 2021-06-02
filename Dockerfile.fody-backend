@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 
 # Install dependencies and stuff
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git python3-pip python3-psycopg2 python3-dateutil swig libgpgme-dev
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git python3-pip python3-psycopg2 python3-dateutil swig libgpgme-dev sqlite3
 
 WORKDIR /opt
 
@@ -16,6 +16,10 @@ RUN git clone https://github.com/Intevation/intelmq-mailgen.git
 
 # Clone the fody backend
 RUN git clone https://github.com/Intevation/intelmq-fody-backend.git
+
+ENV FODY_SESSION_CONFIG /etc/intelmq/fody-session.conf
+
+COPY fody-backend/conf/fody-session.conf /etc/intelmq/fody-session.conf
 
 WORKDIR /opt/intelmq-mailgen
 
@@ -39,6 +43,10 @@ RUN mkdir -p /etc/intelmq/mailgen/formats
 RUN cp /opt/intelmq-mailgen/templates/* /etc/intelmq/mailgen/templates
 
 RUN cp /opt/intelmq-mailgen/example_scripts/* /etc/intelmq/mailgen/formats
+
+RUN mkdir /opt/conf
+
+RUN /opt/intelmq-fody-backend/fody-adduser --user admin --password secret
 
 WORKDIR /opt/intelmq-fody-backend
 
