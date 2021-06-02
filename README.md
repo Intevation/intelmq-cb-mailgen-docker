@@ -33,7 +33,7 @@ IntelMQ-Manager needs credentials to login.
 The default user is ```admin``` with the password ```secret```. For more users login to the docker container named ``` intelmq-base``` and follow the intstructions in the [documentation](https://intelmq.readthedocs.io/en/maintenance/user/intelmq-api.html#id6)
 ## ContactDB
 
-Using the contactdb depends on data that can change daily. The directory name contains the current date so rebuilding the container with an image on an other date than the image was build leaves the databse empty.
+Using the contactdb depends on data that can change daily. The directory name contains the current date so rebuilding the container with an image on an other date than the image was build leaves the database empty.
 
 Rebuild the image to get an up to date database.
 
