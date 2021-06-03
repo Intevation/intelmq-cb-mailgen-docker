@@ -58,8 +58,6 @@ services:
         restart: always
         ports:
             - 1380:8080
-        # volumes:
-        #   - ../intelmq-fody:/opt/src/intelmq-fody
         depends_on:
             - fody-backend
         networks:

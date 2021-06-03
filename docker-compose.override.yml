@@ -1,0 +1,14 @@
+version: "3"
+services:
+    fody-backend:
+        # volumes: 
+        #     - ${FODY_BACKEND_SRC}:/opt/intelmq-fody-backend
+        build:
+            args:
+                REVISION: "master" 
+    fody:
+        # volumes: 
+        #     - ${FODY_SRC}:/opt/src/intelmq-fody
+        build:
+            args:
+                REVISION: "master" 
