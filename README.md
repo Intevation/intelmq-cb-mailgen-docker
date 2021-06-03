@@ -51,7 +51,16 @@ The ```--no-cache``` flags prevents docker from using old intermediate images.
 Creates and starts the containers.
 Add ```-d``` to run in background.
 
-The Fody (frontend) container starts with yarn in development mode. Changes in the code automaccaly trigger a refresh in the browser. Only if dependensies change a login to the container is required to restart the yarn dev server:
+The Fody (frontend) container starts with yarn in development mode. Changes in the code automaccaly trigger a refresh in the browser. Only if dependencies change a login to the container is required to restart the yarn dev server:
+
+```
+docker exec -ti intelmq-fody-spa /bin/bash
+    $ kill `pidof node`
+    $ yarn
+    $ yarn run dev 2>&1 &
+```
+
+Do not kill the ```tail``` process. It keeps the container alive when killing node processes.
 
 ### General
 
