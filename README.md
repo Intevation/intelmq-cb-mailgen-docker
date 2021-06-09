@@ -11,6 +11,7 @@ enviroment for intelmq and fody.
 - [Usage](#Usage)
     - [Scenario 1](#scenario-1-default)
     - [Scenario 2](#scenario-2)
+    - [Scenario 3](#scenario-3)
     - [General](#General)
 ## Introduction
 
@@ -61,6 +62,17 @@ docker exec -ti intelmq-fody-spa /bin/bash
 ```
 
 Do not kill the ```tail``` process. It keeps the container alive when killing node processes.
+
+### Scenario 3
+
+Building images and containers with self built intelmq packages (intelmq-certbund-contact, intemq-fody-backend, intemq-fody), it assumed that the packages are available under ```./packages```.
+
+```
+mkdir packages
+cp $PATH_TO_PKGS/* packages/
+docker-compse -f docker-compose.yml -f docker-compose.pkg.yml build
+docker-compse -f docker-compose.yml -f docker-compose.pkg.yml up
+```
 
 ### General
 
