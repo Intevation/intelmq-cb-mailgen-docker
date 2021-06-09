@@ -1,0 +1,19 @@
+version: "3"
+services:
+    intelmq:
+        image: intelmq-base-pkg
+        build:
+            context: .
+            dockerfile: Dockerfile.intelmq.pkg
+    fody:
+        entrypoint: ["echo", "Service disabled."]
+        restart: "no"
+        #build:
+        #    context: .
+        #    dockerfile: Dockerfile.fody.pkg
+    fody-backend:
+        entrypoint: ["echo", "Service disabled."]
+        restart: "no"
+networks:
+    intelmq-pkg:
+        driver: bridge
