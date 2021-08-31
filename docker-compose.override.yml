@@ -1,14 +1,22 @@
 version: "3"
 services:
+    intelmq:
+        ports:
+            - 1337:80
+            - 1381:81
     fody-backend:
         # volumes: 
         #     - ${FODY_BACKEND_SRC}:/opt/intelmq-fody-backend
+        ports:
+            - 1340:8002
         build:
             args:
                 REVISION: "master" 
     fody:
         # volumes: 
         #     - ${FODY_SRC}:/opt/src/intelmq-fody
+        ports:
+            - 1380:8080
         build:
             args:
                 REVISION: "master" 
