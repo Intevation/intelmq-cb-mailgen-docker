@@ -89,6 +89,18 @@ services:
             - intelmq
         networks:
             - intelmq
+    dsmtpd:
+        image: intelmq-dsmtpd
+        container_name: intelmq-dsmtpd
+        build:
+            context: .
+            dockerfile: Dockerfile.dsmtpd
+        volumes:
+            - ./mails:/opt/mails
+        ports:
+            - 1025:1025
+        networks:
+            - intelmq
 
 networks: 
     intelmq:
