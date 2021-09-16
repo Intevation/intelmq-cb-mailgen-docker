@@ -1,0 +1,53 @@
+FROM ubuntu:20.04
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y apache2 libapache2-mod-wsgi-py3 dpkg-dev wget locales
+
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8     
+
+# Copy the intelmq packages into the container
+COPY packages/* /opt/packages/
+
+# Add local file system repository
+RUN echo deb [trusted=yes] file:/opt/packages ./ >> /etc/apt/sources.list
+
+WORKDIR /opt/packages
+
+# Create a Packages file
+RUN dpkg-scanpackages -m . > Packages
+# Add sebix repo to sources
+RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
+
+# Add the key
+RUN wget -nv \
+    https://download.opensuse.org/repositories/home:sebix:intelmq/xUbuntu_20.04/Release.key \
+    -O - | apt-key add -
+
+# Remove the excludes file. Intelmq-certbund-contact need the doc :) ; see https://github.com/Intevation/intelmq-certbund-contact/issues/16
+RUN rm /etc/dpkg/dpkg.cfg.d/excludes
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew install -q -y intelmq-fody intelmq-fody-backend python3-dateutil
+
+COPY fody-backend/conf/contactdb.pkg.conf /etc/intelmq/contactdb-serve.conf
+COPY fody-backend/conf/eventdb.pkg.conf /etc/intelmq/eventdb-serve.conf
+COPY fody-backend/conf/ticketdb.pkg.conf /etc/intelmq/tickets-serve.conf
+COPY fody-backend/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
+
+RUN mkdir /opt/conf
+
+RUN touch /opt/conf/fody-session.sqlite
+
+RUN chown www-data /opt/conf/fody-session.sqlite
+
+RUN chmod 777 /opt
+RUN chmod 777 /opt/conf
+
+RUN fody-adduser --user admin --password secret
+
+EXPOSE 8666 8000
+
+CMD ["apachectl", "-D", "FOREGROUND"]
+
