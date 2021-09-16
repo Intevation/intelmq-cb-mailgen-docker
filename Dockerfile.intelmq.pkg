@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y apache2 libapache2-mod-wsgi-py3 dpkg-dev wget jq
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y apache2 libapache2-mod-wsgi-py3 dpkg-dev wget jq python3-bs4
 
 # Copy the intelmq packages into the container
 COPY packages/* /opt/packages/
@@ -39,10 +39,14 @@ RUN jq '(..|objects|select(has("redis_cache_host"))).redis_cache_host |= "intelm
 RUN mv /etc/intelmq/defaults.conf /etc/intelmq/defaults.conf.orig
 
 RUN mv /etc/intelmq/defaults.redis.conf /etc/intelmq/defaults.conf
+RUN chown intelmq:intelmq /etc/intelmq/defaults.conf
+RUN chmod g+w /etc/intelmq/defaults.conf
 
 RUN mv /etc/intelmq/runtime.conf /etc/intelmq/runtime.conf.orig
 
 RUN mv /etc/intelmq/runtime.redis.conf /etc/intelmq/runtime.conf
+RUN chown intelmq:intelmq /etc/intelmq/runtime.conf
+RUN chmod g+w /etc/intelmq/runtime.conf
 
 # Expose the ports used.
 EXPOSE 80 5432

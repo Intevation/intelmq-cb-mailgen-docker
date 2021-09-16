@@ -96,7 +96,7 @@ services:
             context: .
             dockerfile: Dockerfile.dsmtpd
         volumes:
-            - ./mails:/opt/mails
+            - ../mails:/opt/mails
         ports:
             - 1025:1025
         networks:
