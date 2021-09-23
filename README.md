@@ -101,7 +101,10 @@ Starts already existing containers
 
 ### Using the applications
 
-The IntelMQ-Manager is listening on port 1337 and the Fody frontend is available on port 1380 per default.
+The IntelMQ-Manager is listening on port 1337 and the Fody frontend is available on port 1380 per default:
+
+* IntelMQ-Manager: http://localhost:1337/intelmq-manager/
+* IntelMQ-Fody: http://localhost:1380/
 
 IntelMQ-Manager and Fody need credentials to login.
 The default user is ```admin``` with the password ```secret```. For more users login to the docker container named ``` intelmq-base``` or ```intelmq-fody-backend``` and follow the intstructions in the [documentation](https://intelmq. readthedocs.io/en/maintenance/user/intelmq-api.html#id6) for IntelMQ-Manager and [TODO]() for Fody.
