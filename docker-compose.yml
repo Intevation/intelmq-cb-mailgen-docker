@@ -101,6 +101,28 @@ services:
             - 1025:1025
         networks:
             - intelmq
+    webinput-csv-backend:
+        image: intelmq-webinput-csv-backend
+        container_name: intelmq-webinput-csv-backend
+        build:
+            context: .
+            dockerfile: Dockerfile.webinput-csv-backend
+        restart: always
+        volumes:
+            - ./webinput-csv-backend/conf:/opt/conf
+        networks:
+            - intelmq
+    webinput-csv:
+        image: intelmq-webinput-csv-spa
+        container_name: intelmq-webinput-csv
+        build:
+            context: .
+            dockerfile: Dockerfile.webinput-csv
+        restart: always
+        depends_on:
+            - webinput-csv-backend
+        networks:
+            - intelmq
 
 networks: 
     intelmq:

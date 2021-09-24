@@ -11,12 +11,28 @@ services:
             - 1340:8002
         build:
             args:
-                REVISION: "master" 
+                REVISION: "master"
     fody:
-        # volumes: 
+        # volumes:
         #     - ${FODY_SRC}:/opt/src/intelmq-fody
         ports:
             - 1380:8080
         build:
             args:
-                REVISION: "master" 
+                REVISION: "master"
+    webinput-csv-backend:
+        # volumes:
+        #     - ${WEBINPUT_CSV_BACKEND_SRC}:/opt/intelmq-webinput-csv
+        ports:
+            - 1341:8002
+        build:
+            args:
+                REVISION: "master"
+    webinput-csv:
+        # volumes:
+        #     - ${WEBINPUT_CSV_SRC}:/opt/src/intelmq-webinput-csv
+        ports:
+            - 1382:8080
+        build:
+            args:
+                REVISION: "master"
