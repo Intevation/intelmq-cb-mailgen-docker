@@ -23,7 +23,7 @@ RUN useradd -d /opt/intelmq -U -s /bin/bash intelmq \
 
 # Checkout the intelmq master as the stable branch
 # and install.
-RUN git checkout master && pip3 install -e .
+RUN git checkout 2.3.3 && pip3 install -e .
 
 # Run intelmqsetup to get a complete enviroment
 RUN intelmqsetup
