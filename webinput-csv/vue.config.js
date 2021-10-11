@@ -12,7 +12,7 @@ module.exports = {
     },
     proxy: {
       "/api": {
-        target: "http://intelmq-webinput-csv-backend:8002/webinput"
+        target: "http://intelmq-webinput-csv-backend:8002"
       }
     }
   }
