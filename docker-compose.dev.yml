@@ -23,4 +23,4 @@ services:
         ports:
             - 1382:8080
         volumes:
-            - ${WEBINPUT_CSV_SRC}:/opt/src/intelmq-webinput-csv
+            - ${WEBINPUT_CSV_SRC}:/opt/src/intelmq-webinput-csv/client

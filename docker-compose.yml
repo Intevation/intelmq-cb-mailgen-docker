@@ -12,11 +12,11 @@ services:
         networks: 
             - intelmq
     intelmq:
-        image: intelmq-base
-        container_name: intelmq-base
+        image: intelmq-manager
+        container_name: intelmq-manager
         build:
             context: .
-            dockerfile: Dockerfile.intelmq
+            dockerfile: intelmq/Dockerfile
         restart: always
         depends_on:
             - redis
@@ -31,7 +31,7 @@ services:
         container_name: intelmq-fody-backend
         build:
             context: .
-            dockerfile: Dockerfile.fody-backend
+            dockerfile: fody-backend/Dockerfile
         restart: always
         volumes:
             - ./fody-backend/conf:/opt/conf
@@ -49,7 +49,7 @@ services:
         container_name: intelmq-fody
         build:
             context: .
-            dockerfile: Dockerfile.fody
+            dockerfile: fody/Dockerfile
         restart: always
         depends_on:
             - fody-backend
@@ -60,7 +60,7 @@ services:
         container_name: intelmq-contactdb
         build:
             context: .
-            dockerfile: Dockerfile.contactdb
+            dockerfile: contactdb/Dockerfile
         restart: always
         volumes:
           - ./contactdb/init:/docker-entrypoint-initdb.d
@@ -77,7 +77,7 @@ services:
         container_name: intelmq-eventdb
         build:
             context: .
-            dockerfile: Dockerfile.eventdb
+            dockerfile: eventdb/Dockerfile
         volumes:
           - ./eventdb/init:/docker-entrypoint-initdb.d
         restart: always
@@ -94,7 +94,7 @@ services:
         container_name: intelmq-dsmtpd
         build:
             context: .
-            dockerfile: Dockerfile.dsmtpd
+            dockerfile: dsmtpd/Dockerfile
         volumes:
             - ../mails:/opt/mails
         ports:
@@ -106,7 +106,7 @@ services:
         container_name: intelmq-webinput-csv-backend
         build:
             context: .
-            dockerfile: Dockerfile.webinput-csv-backend
+            dockerfile: webinput-csv-backend/Dockerfile
         restart: always
         volumes:
             - ./webinput-csv-backend/conf:/opt/conf
@@ -117,7 +117,7 @@ services:
         container_name: intelmq-webinput-csv
         build:
             context: .
-            dockerfile: Dockerfile.webinput-csv
+            dockerfile: webinput-csv/Dockerfile
         restart: always
         depends_on:
             - webinput-csv-backend

@@ -26,7 +26,7 @@ COPY webinput-csv-backend/webinput_csv.conf /etc/intelmq/webinput_csv.conf
 
 RUN mkdir -p /opt/intelmq/etc
 
-COPY base/intelmq-config/harmonization.conf /opt/intelmq/etc/harmonization.conf
+COPY intelmq/intelmq-config/harmonization.conf /opt/intelmq/etc/harmonization.conf
 
 WORKDIR /opt/intelmq-webinput-csv
 

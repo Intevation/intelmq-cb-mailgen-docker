@@ -1,17 +1,17 @@
 version: "3"
 services:
     intelmq:
-        image: intelmq-base-pkg
+        image: intelmq-manager-pkg
         build:
             context: .
-            dockerfile: Dockerfile.intelmq.pkg
+            dockerfile: intelmq/Dockerfile.pkg
         ports:
             - 1337:80
     fody:
         image: intelmq-fody-pkg
         build:
             context: .
-            dockerfile: Dockerfile.fody.pkg
+            dockerfile: fody/Dockerfile.pkg
         ports:
             - 1380:8000
             - 1366:8666
@@ -19,6 +19,6 @@ services:
         image: intelmq-fody-backend-pkg
         build:
             context: .
-            dockerfile: Dockerfile.fody-backend.pkg
+            dockerfile: fody-backend/Dockerfile.pkg
         entrypoint: ["echo", "Service disabled."]
         restart: "no"
