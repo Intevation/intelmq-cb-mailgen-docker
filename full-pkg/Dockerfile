@@ -26,7 +26,7 @@ RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq:/23
 RUN rm /etc/dpkg/dpkg.cfg.d/excludes
 
 # Install intemq and intemq-certbund-contact
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-manager=2.3.1-2 intelmq=2.3.3-1 intelmq-api=2.3.1-1 intelmq-certbund-contact intelmq-fody intelmq-fody-backend intelmq-mailgen intelmq-webinput-csv-client intelmq-webinput-csv-backend
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-manager=2.3.1-2 intelmq=2.3.3-1 intelmq-api=2.3.1-1 intelmq-certbund-contact intelmq-fody intelmq-fody-backend intelmq-mailgen intelmq-webinput-csv-client intelmq-webinput-csv-backend python3-bs4
  
 # Add a new api user
 RUN intelmq-api-adduser --user admin --password secret
@@ -55,6 +55,7 @@ COPY fody-backend/conf/contactdb.pkg.conf /etc/intelmq/contactdb-serve.conf
 COPY fody-backend/conf/eventdb.pkg.conf /etc/intelmq/eventdb-serve.conf
 COPY fody-backend/conf/ticketdb.pkg.conf /etc/intelmq/tickets-serve.conf
 COPY fody-backend/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
+COPY webinput-csv-backend/webinput_csv.conf /etc/intelmq/webinput_csv.conf
 
 RUN sed -i -e "/Listen/s/localhost:8666/127.0.0.1:8666/g" /etc/apache2/sites-available/001-fody.conf
 # Expose the ports used.
