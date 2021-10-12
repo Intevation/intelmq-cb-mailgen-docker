@@ -1,3 +1,50 @@
 FROM ubuntu:20.04
 
-CMD ["echo", "Service diabled"]
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y apache2 libapache2-mod-wsgi-py3 dpkg-dev wget locales
+
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8     
+
+# Copy the intelmq packages into the container
+COPY packages/* /opt/packages/
+
+# Add local file system repository
+RUN echo deb [trusted=yes] file:/opt/packages ./ >> /etc/apt/sources.list
+
+WORKDIR /opt/packages
+
+# Create a Packages file
+RUN dpkg-scanpackages -m . > Packages
+# Add sebix repo to sources
+RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
+RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq:/233/xUbuntu_20.04/ /" >> /etc/apt/sources.list
+
+# Add the key
+RUN wget -nv \
+    https://download.opensuse.org/repositories/home:sebix:intelmq/xUbuntu_20.04/Release.key \
+    -O - | apt-key add -
+
+# Remove the excludes file. Intelmq-certbund-contact need the doc :) ; see https://github.com/Intevation/intelmq-certbund-contact/issues/16
+RUN rm /etc/dpkg/dpkg.cfg.d/excludes
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew install -q -y intelmq=2.3.3-1  intelmq-webinput-csv-client intelmq-webinput-csv-backend
+
+RUN mkdir /opt/conf
+
+RUN touch /opt/conf/webinput-session.sqlite
+
+RUN chown www-data /opt/conf/webinput-session.sqlite
+
+RUN chmod 777 /opt
+RUN chmod 777 /opt/conf
+
+COPY webinput-csv-backend/webinput_csv.conf /etc/intelmq/webinput_csv.conf
+
+RUN webinput-adduser --user admin --password secret
+
+EXPOSE 8667 80
+
+CMD ["apachectl", "-D", "FOREGROUND"]

@@ -22,3 +22,18 @@ services:
             dockerfile: fody-backend/Dockerfile.pkg
         entrypoint: ["echo", "Service disabled."]
         restart: "no"
+    webinput-csv:
+        image: intelmq-webinput-csv-pkg
+        build:
+            context: .
+            dockerfile: webinput-csv/Dockerfile.pkg
+        ports:
+            - 1382:80
+            - 1341:8667
+    webinput-csv-backend:
+        image: intelmq-webinput-csv-backend-pkg
+        build:
+            context: .
+            dockerfile: webinput-csv-backend/Dockerfile.pkg
+        entrypoint: ["echo", "Service disabled."]
+        restart: "no"
