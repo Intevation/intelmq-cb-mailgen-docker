@@ -6,15 +6,15 @@ services:
             context: .
             dockerfile: intelmq/Dockerfile.pkg
         ports:
-            - 1337:80
+            - 1380:80
     fody:
         image: intelmq-fody-pkg
         build:
             context: .
             dockerfile: fody/Dockerfile.pkg
         ports:
-            - 1380:8000
-            - 1366:8666
+            - 1382:8000
+            - 1340:8666
     fody-backend:
         image: intelmq-fody-backend-pkg
         build:
@@ -28,7 +28,7 @@ services:
             context: .
             dockerfile: webinput-csv/Dockerfile.pkg
         ports:
-            - 1382:80
+            - 1383:80
             - 1341:8667
     webinput-csv-backend:
         image: intelmq-webinput-csv-backend-pkg

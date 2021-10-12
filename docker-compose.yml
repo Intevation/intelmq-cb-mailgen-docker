@@ -98,7 +98,7 @@ services:
         volumes:
             - ../mails:/opt/mails
         ports:
-            - 1025:1025
+            - 1325:1025
         networks:
             - intelmq
     webinput-csv-backend:

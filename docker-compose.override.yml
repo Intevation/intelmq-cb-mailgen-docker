@@ -2,7 +2,7 @@ version: "3"
 services:
     intelmq:
         ports:
-            - 1337:80
+            - 1380:80
             - 1381:81
     fody-backend:
         # volumes: 
@@ -16,7 +16,7 @@ services:
         # volumes:
         #     - ${FODY_SRC}:/opt/src/intelmq-fody
         ports:
-            - 1380:8080
+            - 1382:8080
         build:
             args:
                 REVISION: "master"
@@ -32,7 +32,7 @@ services:
         # volumes:
         #     - ${WEBINPUT_CSV_SRC}:/opt/src/intelmq-webinput-csv
         ports:
-            - 1382:8080
+            - 1383:8080
         build:
             args:
                 REVISION: "master"
