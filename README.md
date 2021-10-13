@@ -8,12 +8,17 @@ enviroment for intelmq and fody.
 ## Contents
 
 - [Introduction](#Introduction)
-- [Usage](#Usage)
+- [Building Packages](#building-packages)
+- [Setup Scenarios](#setup-scenarios)
     - [Scenario 1](#scenario-1-default)
     - [Scenario 2](#scenario-2)
     - [Scenario 3](#scenario-3)
     - [Scenario 4](#scenario-4)
     - [General](#General)
+    - [The Containers](#the-containers)
+    - [Using the applications](#using-the-applications)
+- [ContactDB](#contactdb)
+
 ## Introduction
 
 This repository contains docker environments for building packages and using a full intelmq setup with different scenarios.
@@ -115,7 +120,7 @@ docker compose -f docker-compose.yml -f docker-compose.full-pkg.yml build
 docker compose -f docker-compose.yml -f docker-compose.full-pkg.yml up
 ```
 
-## General
+### General
 
 ```docker-compose down```
 
