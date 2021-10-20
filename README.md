@@ -10,6 +10,7 @@ enviroment for intelmq and fody.
 - [Introduction](#Introduction)
 - [Building Packages](#building-packages)
 - [Setup Scenarios](#setup-scenarios)
+    - [Configuration env](#configuration-env)
     - [Scenario 1](#scenario-1-default)
     - [Scenario 2](#scenario-2)
     - [Scenario 3](#scenario-3)
@@ -61,6 +62,45 @@ Ports on the host machine for the applications and APIs:
 * intelmq-webinput-csv: 1383
 * intelmq-webinput-csv-backend: 1341 (not in all scenarios)
 
+### Configuration env
+
+The complete stack is mostly configured via the .env-file and has four 'sections'.
+
+The first section configures the paths to develpment directories contianing the source of the components 'fody', 'fody-backend', 'webinput-csv' and 'webinput-csv-backend'.
+```
+# Mounted source directories in dev variant
+DEV_FODY_SRC=../intelmq-fody
+DEV_FODY_BACKEND_SRC=../intelmq-fody-backend
+DEV_WEBINPUT_CSV_SRC=../intelmq-webinput-csv/client
+DEV_WEBINPUT_CSV_BACKEND_SRC=../intelmq-webinput-csv
+```
+
+The second section configures the paths to rules, templates and formats of CERT-BUND bots and mailgen. These paths are mounted in all scenarios. The content can be changed during runtime, but remember to restart bots on change.
+```
+# Mounted directories for rule and mailgen development in all variants
+DEV_CERTBUND_RULES=./intelmq/rules
+DEV_CERTBUND_TEMPLATES=./intelmq/templates
+DEV_CERTBUND_FORMATS=./intelmq/formats
+```
+
+In the third section the repository revisions for the default scenario are configured.
+```
+# Revisions for source variant
+SOURCE_INTELMQ_REVISION=2.3.3
+SOURCE_INTELMQ_API_REVISION=2.3.1
+SOURCE_INTELMQ_MANAGER_REVISION=2.3.1
+SOURCE_FODY_REVISION=master
+SOURCE_FODY_BACKEND_REVISION=master
+SOURCE_WEBINPUT_CSV_REVISION=master
+SOURCE_WEBINPUT_CSV_BACKEND_REVISION=master
+```
+
+The last section defines a switch to integrate a basic but complete CERT-BUND bot and mailgen configuration that applies to all scenarios at build time.
+```
+# Switch to integrate certbund bot and mailgen configuration
+USE_CERTBUND=false
+```
+
 ### Scenario 1 (default)
 
 ```docker compose build --no-cache```
@@ -73,7 +113,6 @@ The ```--no-cache``` flags prevents docker from using old intermediate images.
 Creates and starts the containers.
 Add ```-d``` to run in background.
 
-To adjust the repository revision of fody or webinput-csv adjust the ```REVISION```  build arg in [docker-compose.override.yml](./docker-compose.override.yml).
 
 ### Scenario 2
 
