@@ -57,9 +57,31 @@ COPY fody-backend/conf/ticketdb.pkg.conf /etc/intelmq/tickets-serve.conf
 COPY fody-backend/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
 COPY webinput-csv-backend/webinput_csv.conf /etc/intelmq/webinput_csv.conf
 
+# Use the build argument as switch to configure the cert-bund bots and mailgen
+# Override the var in the .env file.
+ARG USE_CERTBUND=false
+
+WORKDIR /opt
+
+# Add the configs
+ADD intelmq/intelmq-config /opt/intelmq-config
+ADD intelmq/rules /opt/rules
+ADD intelmq/templates /opt/templates
+COPY intelmq/intelmq-config/cron /etc/cron.d/mailgen
+
+# Execute the setup script using the switch from above.
+COPY intelmq/setup-certbund.sh /opt/setup-certbund.sh
+RUN chmod +x setup-certbund.sh
+RUN ./setup-certbund.sh /etc/intelmq
+
 RUN sed -i -e "/Listen/s/localhost:8666/127.0.0.1:8666/g" /etc/apache2/sites-available/001-fody.conf
 # Expose the ports used.
+
+# Use the start script to run cron and apache.
+COPY intelmq/startpkg.sh /opt/startpkg.sh
+RUN chmod +x startpkg.sh
+
 EXPOSE 80 8000
 
 #Start the apache
-CMD ["apachectl", "-D", "FOREGROUND"]
+CMD ["./startpkg.sh"]

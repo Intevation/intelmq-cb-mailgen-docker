@@ -6,6 +6,8 @@ services:
         build:
             context: .
             dockerfile: full-pkg/Dockerfile
+            args:
+                USE_CERTBUND: $USE_CERTBUND
         ports:
             - 1481:8000
             - 1480:80
