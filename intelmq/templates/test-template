@@ -1,0 +1,22 @@
+${ticket_prefix}${ticket_number} Example Report about ${source.asn}
+
+EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE 
+
+Dear Sir or Madam,
+
+Each record includes the IP address of the affected system, a timestamp
+and the name of the related malware family. If available, the record
+also includes the source port, target IP, target port and target
+hostname for the connection most probably triggered by the malware
+to connect to a command-and-control server.
+
+We would like to ask you to check the issues reported and to take
+appropriate steps to get the infected hosts cleaned up or notify
+your customers accordingly.
+
+
+Please note:
+This is the automatically generated message ${ticket_prefix}${ticket_number}.
+Replying to the sender address is not possible.
+
+${events_as_csv}

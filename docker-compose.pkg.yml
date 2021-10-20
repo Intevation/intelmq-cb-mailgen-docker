@@ -5,6 +5,8 @@ services:
         build:
             context: .
             dockerfile: intelmq/Dockerfile.pkg
+            args:
+                USE_CERTBUND: $USE_CERTBUND
         ports:
             - 1380:80
     fody:
