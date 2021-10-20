@@ -1,6 +1,14 @@
 FROM ubuntu:20.04
 
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y apache2 libapache2-mod-wsgi-py3
+ARG INTELMQ_REVISION
+ARG INTELMQ_API_REVISION
+ARG INTELMQ_MANAGER_REVISION
+
+ENV INTELMQ_REVISION ${INTELMQ_REVISION}
+ENV INTELMQ_API_REVISION ${INTELMQ_API_REVISION}
+ENV INTELMQ_MANAGER_REVISION ${INTELMQ_MANAGER_REVISION}
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y apache2 libapache2-mod-wsgi-py3 cron
 
 # Install dependencies and stuff
 RUN apt-get update && apt-get install -y jq git \
@@ -95,17 +103,33 @@ RUN patch -p 1 -i import.patch
 
 RUN pip3 install -e .
 
-# Add config files to intelmq
-COPY intelmq/intelmq-config/* /opt/intelmq/etc/
-
 # Adjust ownership for configs
-RUN chgrp www-data /opt/intelmq/etc/*.conf /opt/intelmq/etc/manager/positions.conf
+#RUN chgrp www-data /opt/intelmq/etc/*.conf /opt/intelmq/etc/manager/positions.conf
 
-RUN chmod g+w /opt/intelmq/etc/*.conf /opt/intelmq/etc/manager/positions.conf
+#RUN chmod g+w /opt/intelmq/etc/*.conf /opt/intelmq/etc/manager/positions.conf
 
 RUN sqlite3 /var/lib/dbconfig-common/sqlite3/intelmq-api/intelmqapi
 
 RUN intelmq-api-adduser --user admin --password secret
+
+# Use the build argument as switch to configure the cert-bund bots and mailgen
+# Override the var in the .env file.
+ARG USE_CERTBUND=false
+
+WORKDIR /opt
+
+# Add the configs
+ADD intelmq/intelmq-config /opt/intelmq-config
+RUN sed -i '/logging_path/s/var\/log\/intelmq/opt\/intelmq\/var\/log/g' /opt/intelmq-config/defaults.conf
+RUN sed -i '/"file":/s/var\/lib\/intelmq/opt\/intelmq\/var\/lib/g' /opt/intelmq-config/runtime.conf
+ADD intelmq/rules /opt/rules
+ADD intelmq/templates /opt/templates
+COPY intelmq/intelmq-config/cron /etc/cron.d/mailgen
+
+# Execute the setup script using the switch from above.
+COPY intelmq/setup-certbund.sh /opt/setup-certbund.sh
+RUN chmod +x setup-certbund.sh
+RUN ./setup-certbund.sh /opt/intelmq/etc
 
 EXPOSE 80 81
 

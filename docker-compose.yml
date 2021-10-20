@@ -17,6 +17,8 @@ services:
         build:
             context: .
             dockerfile: intelmq/Dockerfile
+            args:
+                USE_CERTBUND: $USE_CERTBUND
         restart: always
         depends_on:
             - redis
@@ -24,6 +26,10 @@ services:
             INTELMQ_PIPELINE_DRIVER: "redis"
             INTELMQ_PIPELINE_HOST: "intelmq-redis"
             INTELMQ_REDIS_CACHE_HOST: "intelmq-redis"
+        volumes:
+            - $DEV_CERTBUND_RULES:/opt/rules
+            - $DEV_CERTBUND_FORMATS:/opt/formats
+            - $DEV_CERTBUND_TEMPLATES:/opt/templates
         networks:
             - intelmq
     fody-backend:

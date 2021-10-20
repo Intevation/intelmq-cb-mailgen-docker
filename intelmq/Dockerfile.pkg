@@ -64,7 +64,7 @@ COPY intelmq/intelmq-config/cron /etc/cron.d/mailgen
 # Execute the setup script using the switch from above.
 COPY intelmq/setup-certbund.sh /opt/setup-certbund.sh
 RUN chmod +x setup-certbund.sh
-RUN ./setup-certbund.sh
+RUN ./setup-certbund.sh /etc/intelmq
 
 # Use the start script to run cron and apache.
 COPY intelmq/startpkg.sh /opt/startpkg.sh
