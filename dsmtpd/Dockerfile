@@ -2,7 +2,13 @@ FROM ubuntu:20.04
 
 RUN apt-get update && apt-get install -y git python3-pip
 
-RUN apt-get update && apt-get install -y vim less
+# Install mutt to have a mail viewer on board.
+RUN apt-get update && apt-get install -y mutt
+
+# A "welcome message" lets the user know which command is used to see the mails.
+RUN echo "Run 'mutt -f /opt/mails/incoming' to see the mails send by intelmqmailgen." > /etc/motd
+
+RUN echo "cat /etc/motd" >> /root/.bashrc
 
 WORKDIR /opt
 
