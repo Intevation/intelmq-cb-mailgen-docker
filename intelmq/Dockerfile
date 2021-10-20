@@ -122,6 +122,7 @@ WORKDIR /opt
 ADD intelmq/intelmq-config /opt/intelmq-config
 RUN sed -i '/logging_path/s/var\/log\/intelmq/opt\/intelmq\/var\/log/g' /opt/intelmq-config/defaults.conf
 RUN sed -i '/"file":/s/var\/lib\/intelmq/opt\/intelmq\/var\/lib/g' /opt/intelmq-config/runtime.conf
+RUN sed -i 's/127.0.0.1/intelmq-redis/g' /opt/intelmq/etc/defaults.conf
 ADD intelmq/rules /opt/rules
 ADD intelmq/templates /opt/templates
 COPY intelmq/intelmq-config/cron /etc/cron.d/mailgen
