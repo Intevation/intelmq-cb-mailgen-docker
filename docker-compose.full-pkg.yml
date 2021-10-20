@@ -9,6 +9,10 @@ services:
         ports:
             - 1481:8000
             - 1480:80
+        volumes:
+            - $DEV_CERTBUND_RULES:/opt/rules
+            - $DEV_CERTBUND_FORMATS:/opt/formats
+            - $DEV_CERTBUND_TEMPLATES:/opt/templates
         restart: always
         networks: 
             - intelmq

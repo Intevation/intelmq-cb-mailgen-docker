@@ -8,19 +8,19 @@ services:
         ports:
             - 1340:8002
         volumes: 
-            - ${FODY_BACKEND_SRC}:/opt/intelmq-fody-backend
+            - $DEV_FODY_BACKEND_SRC:/opt/intelmq-fody-backend
     fody:
         ports:
             - 1382:8080
         volumes: 
-            - ${FODY_SRC}:/opt/src/intelmq-fody
+            - $DEV_FODY_SRC:/opt/src/intelmq-fody
     webinput-csv-backend:
         ports:
             - 1341:8002
         volumes:
-            - ${WEBINPUT_CSV_BACKEND_SRC}:/opt/intelmq-webinput-csv-backend
+            - $DEV_WEBINPUT_CSV_BACKEND_SRC:/opt/intelmq-webinput-csv-backend
     webinput-csv:
         ports:
             - 1383:8080
         volumes:
-            - ${WEBINPUT_CSV_SRC}:/opt/src/intelmq-webinput-csv/client
+            - $DEV_WEBINPUT_CSV_SRC:/opt/src/intelmq-webinput-csv/client

@@ -23,16 +23,18 @@ RUN useradd -d /opt/intelmq -U -s /bin/bash intelmq \
 
 # Checkout the intelmq master as the stable branch
 # and install.
-RUN git checkout 2.3.3 && pip3 install -e .
+RUN git checkout $INTELMQ_REVISION && pip3 install -e .
 
 # Run intelmqsetup to get a complete enviroment
 RUN intelmqsetup
 
 WORKDIR /opt
 
-RUN git clone https://github.com/Intevation/intelmq-api.git
+RUN git clone https://github.com/certtools/intelmq-api.git
 
 WORKDIR /opt/intelmq-api
+
+RUN git checkout $INTELMQ_API_REVISION
 
 RUN pip3 install -e .
 
@@ -49,7 +51,7 @@ RUN git clone https://github.com/certtools/intelmq-manager.git
 WORKDIR /opt/intelmq-manager
 
 # Checkout the intelmq master as the stable branch
-RUN git checkout 2.3.1
+RUN git checkout $INTELMQ_MANAGER_REVISION
 
 RUN pip3 install -e .
 

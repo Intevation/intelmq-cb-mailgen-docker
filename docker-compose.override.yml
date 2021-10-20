@@ -1,38 +1,43 @@
 version: "3"
 services:
     intelmq:
+        build:
+            args:
+                INTELMQ_REVISION: $SOURCE_INTELMQ_REVISION
+                INTELMQ_API_REVISION: $SOURCE_INTELMQ_API_REVISION
+                INTELMQ_MANAGER_REVISION: $SOURCE_INTELMQ_MANAGER_REVISION
         ports:
             - 1380:80
             - 1381:81
     fody-backend:
         # volumes: 
-        #     - ${FODY_BACKEND_SRC}:/opt/intelmq-fody-backend
+        #     - $FODY_BACKEND_SRC:/opt/intelmq-fody-backend
         ports:
             - 1340:8002
         build:
             args:
-                REVISION: "master"
+                REVISION: $SOURCE_FODY_BACKEND_REVISION
     fody:
         # volumes:
-        #     - ${FODY_SRC}:/opt/src/intelmq-fody
+        #     - $FODY_SRC:/opt/src/intelmq-fody
         ports:
             - 1382:8080
         build:
             args:
-                REVISION: "master"
+                REVISION: $SOURCE_FODY_REVISION
     webinput-csv-backend:
         # volumes:
-        #     - ${WEBINPUT_CSV_BACKEND_SRC}:/opt/intelmq-webinput-csv
+        #     - $WEBINPUT_CSV_BACKEND_SRC:/opt/intelmq-webinput-csv
         ports:
             - 1341:8002
         build:
             args:
-                REVISION: "master"
+                REVISION: $SOURCE_WEBINPUT_CSV_BACKEND_REVISION
     webinput-csv:
         # volumes:
-        #     - ${WEBINPUT_CSV_SRC}:/opt/src/intelmq-webinput-csv
+        #     - $WEBINPUT_CSV_SRC:/opt/src/intelmq-webinput-csv
         ports:
             - 1383:8080
         build:
             args:
-                REVISION: "master"
+                REVISION: $SOURCE_WEBINPUT_CSV_REVISION
