@@ -21,6 +21,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 	curl \
 	git \
 #	libapache2-mod-php \
+        locales \
 	man \
 	php \
 	python3 \
