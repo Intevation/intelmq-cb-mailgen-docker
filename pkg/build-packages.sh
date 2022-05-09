@@ -66,7 +66,7 @@ CO_VERSION=(
 
 for repo in $IMQ_BUILD_PACKAGES ; do
   git clone -n --no-single-branch https://github.com/intevation/$repo
-  git -C "$repo" checkout --detach ${CO_VERSION[$repo]}
+  git -C "$repo" checkout ${CO_VERSION[$repo]}
 done
 
 # copy a downloaded ripe database to dir 'ripe' if there is one in calling dir
