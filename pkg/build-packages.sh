@@ -19,6 +19,9 @@
 # release packages can be build (in contrast to development snapshot
 # build).
 
+# Abort on errors:
+set -eu -o pipefail
+
 DEFAULT_PKGS=(
   intelmq-certbund-contact
   intelmq-fody
