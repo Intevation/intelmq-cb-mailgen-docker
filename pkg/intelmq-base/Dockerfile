@@ -2,7 +2,8 @@ FROM ubuntu:focal
 
 LABEL authors="Gernot Schulz <gernot@intevation.de>,Sascha Wilde <wilde@intevation.de>"
 
-RUN apt-get update && apt-get install -y vim-tiny
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update && apt-get install -y vim-tiny
 
 ADD https://hg.intevation.de/adminton/raw-file/tip/logbuch-tools/logbuch-installer /root/
 RUN LOGBUCH_BATCHMODE=yes \
