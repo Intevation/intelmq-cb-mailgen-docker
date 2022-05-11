@@ -1,8 +1,10 @@
 FROM ubuntu:20.04
 
 ARG REVISION
+ARG INTELMQ_REVISION
 
 ENV REVISION ${REVISION}
+ENV INTELMQ_REVISION ${INTELMQ_REVISION}
 
 # Install dependencies and stuff
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git python3-pip sqlite3
@@ -10,7 +12,7 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git py
 WORKDIR /opt
 
 # Install dependencies
-RUN pip3 install intelmq==2.3.1 hug
+RUN pip3 install intelmq==$INTELMQ_REVISION hug
 
 RUN git clone https://github.com/Intevation/intelmq-webinput-csv.git
 
