@@ -31,6 +31,7 @@ RUN useradd -d /opt/intelmq -U -s /bin/bash intelmq \
 
 # Checkout the intelmq master as the stable branch
 # and install.
+RUN git config --global --add safe.directory /opt/intelmq
 RUN git checkout $INTELMQ_REVISION && pip3 install -e .
 
 # Run intelmqsetup to get a complete environment
@@ -47,9 +48,6 @@ RUN git checkout $INTELMQ_API_REVISION
 RUN pip3 install -e .
 
 RUN python3 contrib/initesqlite.py
-
-COPY intelmq/api-config/api-config.json /usr/local/lib/python3.8/dist-packages/etc/intelmq/api-config.json
-ENV INTELMQ_API_CONFIG /usr/local/lib/python3.8/dist-packages/etc/intelmq/api-config.json
 
 WORKDIR /opt
 
@@ -68,6 +66,10 @@ RUN cp -R html/* /var/www/html
 COPY intelmq/apache-config/intelmq.conf /etc/apache2/sites-available/000-default.conf
 
 RUN a2enmod proxy proxy_http
+
+# Needs to be done after the installation of intelmq-manager, as intelmq-manager installs intelmq-api again
+COPY intelmq/api-config/api-config.json /usr/local/lib/python3.8/dist-packages/etc/intelmq/api-config.json
+ENV INTELMQ_API_CONFIG /usr/local/lib/python3.8/dist-packages/etc/intelmq/api-config.json
 
 WORKDIR /opt
 
@@ -107,8 +109,6 @@ RUN pip3 install -e .
 #RUN chgrp www-data /opt/intelmq/etc/*.conf /opt/intelmq/etc/manager/positions.conf
 
 #RUN chmod g+w /opt/intelmq/etc/*.conf /opt/intelmq/etc/manager/positions.conf
-
-RUN sqlite3 /var/lib/dbconfig-common/sqlite3/intelmq-api/intelmqapi
 
 RUN intelmq-api-adduser --user admin --password secret
 

@@ -33,6 +33,7 @@ services:
         build:
             args:
                 REVISION: $SOURCE_WEBINPUT_CSV_BACKEND_REVISION
+                INTELMQ_REVISION: $SOURCE_INTELMQ_REVISION
     webinput-csv:
         # volumes:
         #     - $WEBINPUT_CSV_SRC:/opt/src/intelmq-webinput-csv
