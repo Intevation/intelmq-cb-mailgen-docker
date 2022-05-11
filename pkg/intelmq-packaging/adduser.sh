@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z "$HOST_UID" -o -z "$HOST_USERNAME" ]; then
+if [ -z "$HOST_UID" ] || [ -z "$HOST_USERNAME" ]; then
 cat << EOF
 			      USER ACCOUNT WARNING
 

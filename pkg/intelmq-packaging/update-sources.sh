@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo 'deb https://deb.nodesource.com/node_14.x focal main' \
      >/etc/apt/sources.list.d/nodesource.list
 apt-key add /tmp/nodesource.gpg.key

@@ -37,13 +37,13 @@ IMQ_BUILD_RELEASE=${IMQ_BUILD_RELEASE:-no}
 IMQ_BUILD_DIR=${IMQ_BUILD_DIR:-build-tmp}
 
 # Check if images for building packages exist.
-BASE_IMG=`docker image ls intelmq-base:focal | sed -n 2p`
+BASE_IMG=$(docker image ls intelmq-base:focal | sed -n 2p)
 if [ -z "$BASE_IMG" ] ; then
-  docker build -t intelmq-base:focal -f $SCRIPT_DIR/intelmq-base/Dockerfile $SCRIPT_DIR/intelmq-base
+  docker build -t intelmq-base:focal -f "$SCRIPT_DIR/intelmq-base/Dockerfile" "$SCRIPT_DIR/intelmq-base"
 fi
-PKG_IMG=`docker image ls intelmq-packaging:focal | sed -n 2p`
+PKG_IMG=$(docker image ls intelmq-packaging:focal | sed -n 2p)
 if [ -z "$PKG_IMG" ] ; then
-  docker build -t intelmq-packaging:focal -f $SCRIPT_DIR/intelmq-packaging/Dockerfile $SCRIPT_DIR/intelmq-packaging
+  docker build -t intelmq-packaging:focal -f "$SCRIPT_DIR/intelmq-packaging/Dockerfile" "$SCRIPT_DIR/intelmq-packaging"
 fi
 
 #name of the docker container
@@ -53,8 +53,8 @@ DC=${LOGNAME}.intelmqpackaging-tmp
 buildtmp=${HOME}/${IMQ_BUILD_DIR}
 
 # setup git checkout and right branch
-mkdir $buildtmp || { echo "Try (re)moving $buildtmp first" ; exit 1 ; }
-pushd $buildtmp
+mkdir "$buildtmp" || { echo "Try (re)moving $buildtmp first" ; exit 1 ; }
+pushd "$buildtmp"
 
 declare -A CO_VERSION
 CO_VERSION=(
@@ -68,13 +68,13 @@ CO_VERSION=(
   )
 
 for repo in $IMQ_BUILD_PACKAGES ; do
-  git clone -n --no-single-branch https://github.com/intevation/$repo
-  git -C "$repo" checkout ${CO_VERSION[$repo]}
+  git clone -n --no-single-branch "https://github.com/intevation/$repo"
+  git -C "$repo" checkout "${CO_VERSION[$repo]}"
 done
 
 # copy a downloaded ripe database to dir 'ripe' if there is one in calling dir
 popd
-ripeexport=`ls -d ripe/2???-??-?? 2>/dev/null | tail -1`
+ripeexport=$(ls -d ripe/2???-??-?? 2>/dev/null | tail -1)
 if [ -d "$ripeexport" ] ; then
     mkdir "$buildtmp/ripe"
     echo cp -a "$ripeexport" "$buildtmp/ripe"
@@ -114,9 +114,9 @@ EOF
 
 # create docker container and run all commands
 date > docker-run.log
-{ docker run  --name ${DC} \
-        --env=HOST_UID=$(id -u) --env=HOST_USERNAME=${LOGNAME} \
-        --volume=${buildtmp}:/build-pkg/ \
+{ docker run  --name "${DC}" \
+        --env=HOST_UID="$(id -u)" --env=HOST_USERNAME="${LOGNAME}" \
+        --volume="${buildtmp}":/build-pkg/ \
         intelmq-packaging:focal \
         bash -x /build-pkg/doit.sh 2>&1 | tee -a docker-run.log ; } \
     || exit 1
@@ -124,7 +124,7 @@ exit_code_docker=${PIPESTATUS[0]}
 
 # remove container
 sleep 2
-docker rm ${DC}
+docker rm "${DC}"
 
 echo
 if (($exit_code_docker)); then
@@ -134,7 +134,7 @@ else
 fi
 
 echo Find results including logs in temporary directory:
-echo pushd $buildtmp
+echo pushd "$buildtmp"
 popd
 
-exit $exit_code_docker
+exit "$exit_code_docker"

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 TMP=$(mktemp)
 TIMESTAMP="$(date +%Y%m%d%H%M%S)"
 
@@ -18,7 +20,7 @@ fatal()
 }
 
 clean_up () {
-  rm $TMP
+  rm "$TMP"
   exit
 }
 
@@ -31,7 +33,7 @@ format_changelog_entry () {
     local REF=$(git rev-parse HEAD)
   else
     local BRANCH=$(cut -d' ' -f2 .git/HEAD)
-    local REF=$(cat .git/${BRANCH})
+    local REF=$(cat ".git/${BRANCH}")
   fi
   # Format the changelog entry
   cat << EOF
@@ -56,9 +58,9 @@ test -d "$1" || fatal "$DIR does not exist."
 
 cd "$1"
 
-format_changelog_entry > $TMP
-cat debian/changelog  >> $TMP
-cp $TMP debian/changelog
+format_changelog_entry > "$TMP"
+cat debian/changelog  >> "$TMP"
+cp "$TMP" debian/changelog
 
 cat << EOF
 
