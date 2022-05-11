@@ -1,9 +1,8 @@
-# Files for intelmq container
+# Files for IntelMQ container
 
-Place all intelmq container related files here.
+Place all IntelMQ container related files here.
 
-## conf folder
+## `intelmq-config` folder
 
-The ```conf``` folder contains all relevant config files.
-Adjust the files to change the inital intelmq configuration.
-
+The ```intelmq-config``` folder contains all relevant configuration files.
+Adjust the files to change the initial IntelMQ configuration.

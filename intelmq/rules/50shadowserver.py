@@ -1,5 +1,5 @@
 """Sample notification rules for shadowserver feeds.
-The notitification directives are determined based on the feed.name
+The notification directives are determined based on the feed.name
 attribute of the event.
 """
 
@@ -10,7 +10,7 @@ def determine_directives(context):
     if context.section == "destination":
         return
 
-    # Find out which Shadowserver configuaration shall be used.
+    # Find out which Shadowserver configuration shall be used.
     # Usually the feed.name is set by the parser of the shadowserver data.
     shadowserver_params = shadowserver_mapping.get(context.get("feed.name"))
 

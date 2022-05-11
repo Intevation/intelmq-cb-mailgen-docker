@@ -12,7 +12,7 @@
 # By default all packages will be built, cf. DEFAULT_PKGS below.
 #
 # By setting the environment variable IMQ_BUILD_PACKAGES to a
-# whitespace seperated list of package names the set of packages to
+# whitespace separated list of package names the set of packages to
 # build can be customized.
 #
 # By setting the environment variable IMQ_BUILD_RELEASE to "yes"

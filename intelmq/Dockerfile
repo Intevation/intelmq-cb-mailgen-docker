@@ -33,7 +33,7 @@ RUN useradd -d /opt/intelmq -U -s /bin/bash intelmq \
 # and install.
 RUN git checkout $INTELMQ_REVISION && pip3 install -e .
 
-# Run intelmqsetup to get a complete enviroment
+# Run intelmqsetup to get a complete environment
 RUN intelmqsetup
 
 WORKDIR /opt
