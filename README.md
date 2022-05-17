@@ -101,6 +101,20 @@ The last section defines a switch to integrate a basic but complete CERT-BUND bo
 USE_CERTBUND=false
 ```
 
+#### IntelMQ 3
+To test the setup with IntelMQ 3, the following environment variables need to be set in the `.env` file:
+```
+SOURCE_INTELMQ_REVISION=3.0.2
+SOURCE_INTELMQ_PYPI_VERSION=3.0.2.post1
+SOURCE_INTELMQ_API_REVISION=3.0.1
+SOURCE_INTELMQ_MANAGER_REVISION=3.0.1
+SOURCE_INTELMQ_CERTBUND_CONTACT_REVISION=intelmq-v3
+USE_CERTBUND=true
+```
+
+# Switch to integrate certbund bot and mailgen configuration
+USE_CERTBUND=true
+
 ### Scenario 1 (default)
 
 ```
