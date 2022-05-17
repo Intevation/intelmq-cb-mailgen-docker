@@ -3,10 +3,14 @@ FROM ubuntu:20.04
 ARG INTELMQ_REVISION
 ARG INTELMQ_API_REVISION
 ARG INTELMQ_MANAGER_REVISION
+ARG INTELMQ_CERTBUND_CONTACT_REVISION
+ARG INTELMQ_MAILGEN_REVISION
 
 ENV INTELMQ_REVISION ${INTELMQ_REVISION}
 ENV INTELMQ_API_REVISION ${INTELMQ_API_REVISION}
 ENV INTELMQ_MANAGER_REVISION ${INTELMQ_MANAGER_REVISION}
+ENV INTELMQ_CERTBUND_CONTACT_REVISION ${INTELMQ_CERTBUND_CONTACT_REVISION}
+ENV INTELMQ_MAILGEN_REVISION ${INTELMQ_MAILGEN_REVISION}
 
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y apache2 libapache2-mod-wsgi-py3 cron
 
@@ -80,7 +84,7 @@ RUN git clone https://github.com/Intevation/intelmq-mailgen.git
 
 WORKDIR /opt/intelmq-mailgen
 
-RUN pip3 install -e .
+RUN git checkout $INTELMQ_MAILGEN_REVISION && pip3 install -e .
 
 WORKDIR /opt
 
@@ -92,9 +96,13 @@ WORKDIR /opt/intelmq-certbund-contact
 # Patch example rules to fix imports.
 COPY intelmq/import.patch .
 
-RUN patch -p 1 -i import.patch
+RUN git checkout $INTELMQ_CERTBUND_CONTACT_REVISION
+# if the condition is false, we don't want an exit code 1
+RUN bash -c "[ \"$INTELMQ_CERTBUND_CONTACT_REVISION\" != 'intelmq-v3' ] && patch -p 1 -i import.patch || :"
 
 RUN pip3 install -e .
+# with editable installations, installing a second intelmq package (for the intelmq/bots/experts/cerbund* structure) does not work. So we can work around by symlinking the files
+RUN bash -c "[ \"$INTELMQ_CERTBUND_CONTACT_REVISION\" == 'intelmq-v3' ] && cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_rules /opt/intelmq/intelmq/bots/experts/ && cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_contact /opt/intelmq/intelmq/bots/experts/ || :"
 
 RUN intelmq-api-adduser --user admin --password secret
 
