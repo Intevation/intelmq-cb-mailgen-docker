@@ -59,6 +59,6 @@ WORKDIR /opt/intelmq-fody-backend
 # Install coreutils for development purposes.
 RUN apt-get install -y coreutils
 
-# Start the backend using hug. 
+# Start the backend using hug.
 # !!! compose file overwrites this CMD !!!
 CMD ["hug", "-f", "./intelmq_fody_backend/serve.py", "-p", "8002"]
