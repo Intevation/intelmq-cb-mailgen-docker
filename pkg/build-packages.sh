@@ -101,6 +101,8 @@ cat >doit.sh<< EOF
 cd /build-pkg
 trap "chown -R \${HOST_UID}.\${HOST_UID} /build-pkg" EXIT
 
+set -e
+
 for i in $IMQ_BUILD_PACKAGES ; do
   echo Building \$i
   cd \$i
