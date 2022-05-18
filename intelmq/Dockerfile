@@ -15,6 +15,12 @@ RUN apt-get update && apt-get install -y jq git \
     python3-pip python3-psycopg2 \
     python3-bs4 sudo libgpgme-dev swig sqlite3
 
+# pip installs some packages (intelmq-api, intelmq-manager) into /usr/lib/python3.8/site-packages
+# instead of /usr/local/lib/python3.10/dist-packages (which is the default location, also in python's sitepath)
+# https://github.com/Intevation/intelmq-cb-mailgen-docker/issues/9
+# https://github.com/pypa/pip/issues/10805
+RUN ln -s /usr/local/lib/python3.8/dist-packages/ /usr/lib/python3.8/site-packages
+
 WORKDIR /opt
 
 # Clone intelmq
@@ -24,18 +30,13 @@ WORKDIR /opt/intelmq
 
 # add all relevant users and set access rules.
 RUN useradd -d /opt/intelmq -U -s /bin/bash intelmq \
-    && adduser intelmq sudo \
-    && adduser www-data sudo \
-    && echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
+    && usermod -aG intelmq www-data \
     && sudo chown -R intelmq:intelmq /opt/intelmq
 
 # Checkout the intelmq master as the stable branch
 # and install.
 RUN git config --global --add safe.directory /opt/intelmq
 RUN git checkout $INTELMQ_REVISION && pip3 install -e .
-
-# Run intelmqsetup to get a complete environment
-RUN intelmqsetup
 
 WORKDIR /opt
 
@@ -47,6 +48,10 @@ RUN git checkout $INTELMQ_API_REVISION
 
 RUN pip3 install -e .
 
+# intelmqsetup expects the files there (not compatible to editable pip installations yet)
+RUN mkdir -p /opt/intelmq-api/etc/intelmq/ && cp /opt/intelmq-api/contrib/api-sudoers.conf /opt/intelmq-api/etc/intelmq/api-sudoers.conf
+COPY intelmq/api-config/api-config.json /opt/intelmq-api/etc/intelmq/api-config.json
+
 RUN python3 contrib/initesqlite.py
 
 WORKDIR /opt
@@ -56,31 +61,17 @@ RUN git clone https://github.com/certtools/intelmq-manager.git
 
 WORKDIR /opt/intelmq-manager
 
-# Checkout the intelmq master as the stable branch
-RUN git checkout $INTELMQ_MANAGER_REVISION
-
-RUN pip3 install -e .
+RUN git checkout $INTELMQ_MANAGER_REVISION && pip3 install -e .
 
 RUN cp -R html/* /var/www/html
-
+RUN cp /opt/intelmq-api/contrib/api-apache.conf /etc/apache2/conf-available/api-apache.conf \
+    && cp /opt/intelmq-manager/contrib/manager-apache.conf /etc/apache2/conf-available/manager-apache.conf
 COPY intelmq/apache-config/intelmq.conf /etc/apache2/sites-available/000-default.conf
 
+# Run intelmqsetup to get a complete environment
+RUN intelmqsetup
+
 RUN a2enmod proxy proxy_http
-
-# Needs to be done after the installation of intelmq-manager, as intelmq-manager installs intelmq-api again
-COPY intelmq/api-config/api-config.json /usr/local/lib/python3.8/dist-packages/etc/intelmq/api-config.json
-ENV INTELMQ_API_CONFIG /usr/local/lib/python3.8/dist-packages/etc/intelmq/api-config.json
-
-WORKDIR /opt
-
-# Copy to webserver location
-
-WORKDIR /opt/intelmq/etc
-
-# Add manager configs to make the UI work
-RUN mkdir manager
-
-RUN touch /opt/intelmq/etc/manager/positions.conf
 
 WORKDIR /opt
 
@@ -105,11 +96,6 @@ RUN patch -p 1 -i import.patch
 
 RUN pip3 install -e .
 
-# Adjust ownership for configs
-#RUN chgrp www-data /opt/intelmq/etc/*.conf /opt/intelmq/etc/manager/positions.conf
-
-#RUN chmod g+w /opt/intelmq/etc/*.conf /opt/intelmq/etc/manager/positions.conf
-
 RUN intelmq-api-adduser --user admin --password secret
 
 # Use the build argument as switch to configure the cert-bund bots and mailgen
@@ -120,9 +106,6 @@ WORKDIR /opt
 
 # Add the configs
 ADD intelmq/intelmq-config /opt/intelmq-config
-RUN sed -i '/logging_path/s/var\/log\/intelmq/opt\/intelmq\/var\/log/g' /opt/intelmq-config/defaults.conf
-RUN sed -i '/"file":/s/var\/lib\/intelmq/opt\/intelmq\/var\/lib/g' /opt/intelmq-config/runtime.conf
-RUN sed -i 's/127.0.0.1/intelmq-redis/g' /opt/intelmq/etc/defaults.conf
 ADD intelmq/rules /opt/rules
 ADD intelmq/templates /opt/templates
 COPY intelmq/intelmq-config/cron /etc/cron.d/mailgen
