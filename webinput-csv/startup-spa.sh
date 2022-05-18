@@ -1,5 +1,5 @@
 #! /bin/sh
-echo $PWD
+echo "$PWD"
 yarn 2>&1
 yarn serve 2>&1 &
 tail -F anything
