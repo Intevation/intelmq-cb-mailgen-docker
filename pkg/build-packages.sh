@@ -74,7 +74,8 @@ done
 
 # copy a downloaded ripe database to dir 'ripe' if there is one in calling dir
 popd
-ripeexport=$(ls -d ripe/2???-??-?? 2>/dev/null | tail -1)
+# ls may return empty result, leading to exit code 2
+ripeexport=`ls -d ripe/2???-??-?? 2>/dev/null ||: | tail -1`
 if [ -d "$ripeexport" ] ; then
     mkdir "$buildtmp/ripe"
     echo cp -a "$ripeexport" "$buildtmp/ripe"
