@@ -105,6 +105,8 @@ for i in $IMQ_BUILD_PACKAGES ; do
   echo Building \$i
   cd \$i
   if [ "$setupcmd" ] ; then
+    # git complains "fatal: unsafe repository ('...' is owned by someone else)"
+    git config --global --add safe.directory /build-pkg/\$i
     $setupcmd || exit
   fi
   dpkg-buildpackage -us -uc || exit
