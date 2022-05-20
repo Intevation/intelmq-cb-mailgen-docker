@@ -74,7 +74,8 @@ done
 
 # copy a downloaded ripe database to dir 'ripe' if there is one in calling dir
 popd
-ripeexport=$(ls -d ripe/2???-??-?? 2>/dev/null | tail -1)
+# ls may return empty result, leading to exit code 2
+ripeexport=`ls -d ripe/2???-??-?? 2>/dev/null ||: | tail -1`
 if [ -d "$ripeexport" ] ; then
     mkdir "$buildtmp/ripe"
     echo cp -a "$ripeexport" "$buildtmp/ripe"
@@ -100,10 +101,14 @@ cat >doit.sh<< EOF
 cd /build-pkg
 trap "chown -R \${HOST_UID}.\${HOST_UID} /build-pkg" EXIT
 
+set -e
+
 for i in $IMQ_BUILD_PACKAGES ; do
   echo Building \$i
   cd \$i
   if [ "$setupcmd" ] ; then
+    # git complains "fatal: unsafe repository ('...' is owned by someone else)"
+    git config --global --add safe.directory /build-pkg/\$i
     $setupcmd || exit
   fi
   dpkg-buildpackage -us -uc || exit
