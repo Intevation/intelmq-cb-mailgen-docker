@@ -26,6 +26,9 @@ services:
             - 1341:8002
         volumes:
             - $DEV_WEBINPUT_CSV_BACKEND_SRC:/opt/intelmq-webinput-csv-backend
+        build:
+            args:
+                INTELMQ_VERSION: $SOURCE_INTELMQ_PYPI_VERSION
     webinput-csv:
         ports:
             - 1383:8080
