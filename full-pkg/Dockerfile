@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive"  apt-get install -y wget gnupg apache2 locales 
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive"  apt-get install -y wget gnupg apache2 locales
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -22,12 +22,9 @@ RUN wget -nv \
 RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
 RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq:/233/xUbuntu_20.04/ /" >> /etc/apt/sources.list
 
-# Remove the excludes file. Intelmq-certbund-contact need the doc :) ; see https://github.com/Intevation/intelmq-certbund-contact/issues/16
-RUN rm /etc/dpkg/dpkg.cfg.d/excludes
-
-# Install intemq and intemq-certbund-contact
+# Install intelmq and intelmq-certbund-contact
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-manager=2.3.1-2 intelmq=2.3.3-1 intelmq-api=2.3.1-1 intelmq-certbund-contact intelmq-fody intelmq-fody-backend intelmq-mailgen intelmq-webinput-csv-client intelmq-webinput-csv-backend python3-bs4
- 
+
 # Add a new api user
 RUN intelmq-api-adduser --user admin --password secret
 RUN fody-adduser --user admin --password secret

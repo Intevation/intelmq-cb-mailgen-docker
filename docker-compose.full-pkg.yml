@@ -11,14 +11,9 @@ services:
         ports:
             - 1481:8000
             - 1480:80
-        volumes:
-            - $DEV_CERTBUND_RULES:/opt/rules
-            - $DEV_CERTBUND_FORMATS:/opt/formats
-            - $DEV_CERTBUND_TEMPLATES:/opt/templates
         restart: always
-        networks: 
-            - intelmq
     intelmq:
+        # what is this for?
         image: intelmq-manager-full-pkg
         build:
             context: .
@@ -53,3 +48,8 @@ services:
             dockerfile: webinput-csv-backend/Dockerfile.pkg
         entrypoint: ["echo", "Service disabled."]
         restart: "no"
+    eventdb:
+        image: intelmq-eventdb-pkg
+        build:
+            context: .
+            dockerfile: eventdb/Dockerfile.full-pkg

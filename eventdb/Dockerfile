@@ -1,4 +1,4 @@
-FROM postgres:11
+FROM postgres:14
 
 # Install git to be able to clone the mailgen repo
 RUN apt-get update && apt-get install -y git
