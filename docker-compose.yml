@@ -42,7 +42,7 @@ services:
         volumes:
             - ./fody-backend/conf:/opt/conf
         depends_on:
-            - eventdb
+            - mailgen
         environment:
             EVENTDB_SERVE_CONF_FILE: "/opt/conf/eventdb.conf"
             CONTACTDB_SERVE_CONF_FILE: "/opt/conf/contactdb.conf"
@@ -78,14 +78,14 @@ services:
             - intelmq
         networks:
             - intelmq
-    eventdb:
-        image: intelmq-eventdb
-        container_name: intelmq-eventdb
+    mailgen:
+        image: intelmq-mailgen
+        container_name: intelmq-mailgen
         build:
             context: .
-            dockerfile: eventdb/Dockerfile
+            dockerfile: mailgen/Dockerfile
         volumes:
-          - ./eventdb/init:/docker-entrypoint-initdb.d
+          - ./mailgen/init:/docker-entrypoint-initdb.d
         restart: always
         environment:
             POSTGRES_PASSWORD: secret

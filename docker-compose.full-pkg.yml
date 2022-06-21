@@ -48,8 +48,8 @@ services:
             dockerfile: webinput-csv-backend/Dockerfile.pkg
         entrypoint: ["echo", "Service disabled."]
         restart: "no"
-    eventdb:
-        image: intelmq-eventdb-pkg
+    mailgen:
+        image: intelmq-mailgen-pkg
         build:
             context: .
-            dockerfile: eventdb/Dockerfile.full-pkg
+            dockerfile: mailgen/Dockerfile.full-pkg
