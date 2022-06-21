@@ -86,9 +86,10 @@ DEV_CERTBUND_FORMATS=./intelmq/formats
 In the third section the repository revisions for the default scenario are configured.
 ```
 # Revisions for source variant
-SOURCE_INTELMQ_REVISION=2.3.3
-SOURCE_INTELMQ_API_REVISION=2.3.1
-SOURCE_INTELMQ_MANAGER_REVISION=2.3.1
+SOURCE_INTELMQ_REVISION=3.0.2
+SOURCE_INTELMQ_PYPI_VERSION=3.0.2.post1
+SOURCE_INTELMQ_API_REVISION=3.0.1
+SOURCE_INTELMQ_MANAGER_REVISION=3.0.1
 SOURCE_FODY_REVISION=master
 SOURCE_FODY_BACKEND_REVISION=master
 SOURCE_WEBINPUT_CSV_REVISION=master
@@ -99,17 +100,6 @@ The last section defines a switch to integrate a basic but complete CERT-BUND bo
 ```
 # Switch to integrate certbund bot and mailgen configuration
 USE_CERTBUND=false
-```
-
-#### IntelMQ 3
-To test the setup with IntelMQ 3, the following environment variables need to be set in the `.env` file:
-```
-SOURCE_INTELMQ_REVISION=3.0.2
-SOURCE_INTELMQ_PYPI_VERSION=3.0.2.post1
-SOURCE_INTELMQ_API_REVISION=3.0.1
-SOURCE_INTELMQ_MANAGER_REVISION=3.0.1
-SOURCE_INTELMQ_CERTBUND_CONTACT_REVISION=intelmq-v3
-USE_CERTBUND=true
 ```
 
 # Switch to integrate certbund bot and mailgen configuration
