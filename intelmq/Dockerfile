@@ -88,7 +88,7 @@ RUN git checkout $INTELMQ_MAILGEN_REVISION && pip3 install -e .
 
 WORKDIR /opt
 
-# Clone and Install certbund-contact to add the BOTS to intelmq
+# Clone and Install certbund-contact
 RUN git clone https://github.com/Intevation/intelmq-certbund-contact.git
 
 WORKDIR /opt/intelmq-certbund-contact
