@@ -20,7 +20,6 @@ WORKDIR /opt/packages
 RUN dpkg-scanpackages -m . > Packages
 # Add sebix repo to sources
 RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
-RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq:/233/xUbuntu_20.04/ /" >> /etc/apt/sources.list
 
 # Add the key
 RUN wget -nv \
