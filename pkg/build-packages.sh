@@ -103,15 +103,22 @@ trap "chown -R \${HOST_UID}.\${HOST_UID} /build-pkg" EXIT
 
 set -e
 
-for i in $IMQ_BUILD_PACKAGES ; do
-  echo Building \$i
-  cd \$i
+for package in $IMQ_BUILD_PACKAGES ; do
+  echo Building \$package
+  cd \$package
   if [ "$setupcmd" ] ; then
     # git complains "fatal: unsafe repository ('...' is owned by someone else)"
-    git config --global --add safe.directory /build-pkg/\$i
-    $setupcmd || exit
+    git config --global --add safe.directory /build-pkg/\$package
+    $setupcmd
   fi
-  dpkg-buildpackage -us -uc || exit
+  if grep -q quilt debian/source/format; then
+    full_version=\$(dpkg-parsechangelog --show-field Version)
+    short_version=\$(echo \$full_version | cut -f 1 -d-)
+    git config tar.tar.xz.command "xz -c"
+    git archive --format=tar.xz --prefix=\$package/ HEAD > ../\${package}_\${short_version}.orig.tar.xz
+    git archive --format=tar.xz --prefix=debian/ HEAD:debian/ > ../\${package}_\${full_version}.debian.tar.xz
+  fi
+  dpkg-buildpackage -us -uc
   cd ..
 done
 
