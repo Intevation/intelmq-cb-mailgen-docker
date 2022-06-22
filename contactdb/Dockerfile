@@ -1,4 +1,4 @@
-FROM postgres:11
+FROM postgres:14
 
 # Install python3 deps and stuff
 RUN apt-get update && apt-get install -y git curl python3-pip python3-psycopg2
