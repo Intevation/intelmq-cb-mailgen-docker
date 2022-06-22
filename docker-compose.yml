@@ -9,7 +9,7 @@ services:
             - redis-server
             - /usr/local/etc/redis/redis.conf
         restart: always
-        networks: 
+        networks:
             - intelmq
     intelmq:
         image: intelmq-manager
@@ -130,6 +130,6 @@ services:
         networks:
             - intelmq
 
-networks: 
+networks:
     intelmq:
         driver: bridge
