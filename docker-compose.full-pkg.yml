@@ -48,6 +48,11 @@ services:
             dockerfile: webinput-csv-backend/Dockerfile.pkg
         entrypoint: ["echo", "Service disabled."]
         restart: "no"
+    contactdb:
+        image: intelmq-contactdb
+        build:
+            context: .
+            dockerfile: contactdb/Dockerfile.full-pkg
     mailgen:
         image: intelmq-mailgen-pkg
         build:
