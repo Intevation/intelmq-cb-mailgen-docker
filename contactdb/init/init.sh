@@ -4,7 +4,7 @@ set -e
 
 createdb --encoding=UTF8 --template=template0 contactdb
 
-psql -f /opt/intelmq-certbund-contact/sql/initdb.sql contactdb
+gunzip -c /usr/share/doc/intelmq-certbund-contact/sql/initdb.sql.gz | psql -f - contactdb
 
 psql -c "CREATE ROLE intelmq WITH login PASSWORD 'secret';"
 psql -c "CREATE ROLE fody WITH login PASSWORD 'secret';"
@@ -15,4 +15,4 @@ psql -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO fody;" contactdb
 date=$(date +%F)
 cd "$date"
 
-python3 ../intelmq-certbund-contact/intelmq_certbund_contact/ripe/ripe_import.py --conninfo dbname=contactdb --ripe-delegated-file=../delegated-ripencc-latest --restrict-to-country DE --verbose
+python3 /usr/bin/ripe_import.py --conninfo dbname=contactdb --ripe-delegated-file=../delegated-ripencc-latest --restrict-to-country DE --verbose
