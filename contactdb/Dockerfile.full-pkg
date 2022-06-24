@@ -3,7 +3,7 @@ FROM postgres:14
 WORKDIR /opt
 
 # install requirements for downloading and adding the APT key
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y wget apt-transport-https gnupg
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y wget apt-transport-https gnupg curl
 
 # Add sebix repo to sources
 RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
