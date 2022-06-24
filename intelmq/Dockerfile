@@ -15,7 +15,7 @@ ENV INTELMQ_MAILGEN_REVISION ${INTELMQ_MAILGEN_REVISION}
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y apache2 libapache2-mod-wsgi-py3 cron
 
 # Install dependencies and stuff
-RUN apt-get update && apt-get install -y jq git \
+RUN apt-get update && apt-get install -y git \
     python3-pip python3-psycopg2 \
     python3-bs4 sudo libgpgme-dev swig sqlite3
 
@@ -37,8 +37,7 @@ RUN useradd -d /opt/intelmq -U -s /bin/bash intelmq \
     && usermod -aG intelmq www-data \
     && sudo chown -R intelmq:intelmq /opt/intelmq
 
-# Checkout the intelmq master as the stable branch
-# and install.
+# Checkout the correct revision and install.
 RUN git config --global --add safe.directory /opt/intelmq
 RUN git checkout $INTELMQ_REVISION && pip3 install -e .
 
