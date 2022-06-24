@@ -153,7 +153,7 @@ Do not kill the `tail` process. It keeps the container alive when killing node p
 
 ### Scenario 3
 
-Building images and containers with self built intelmq packages (intelmq-certbund-contact, intemq-fody-backend, intemq-fody), it assumed that the packages are available under `./packages`. Upstream packages from sebix repository are used as backup for all packages not existing locally.
+Building images and containers with self built intelmq packages (intelmq-certbund-contact, intemq-fody-backend, intemq-fody), it assumed that the packages are available under `./packages`. Upstream packages from sebix and Intevation repository are used as backup for all packages not existing locally.
 
 ```
 mkdir packages

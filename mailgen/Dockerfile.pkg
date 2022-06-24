@@ -1,0 +1,20 @@
+FROM ubuntu:20.04
+
+
+# install requirements for downloading and adding the APT key
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y wget apt-transport-https gnupg dpkg-dev
+
+# Copy the packages into the container
+COPY packages/* /opt/packages/
+# Add local file system repository
+RUN echo deb [trusted=yes] file:/opt/packages ./ >> /etc/apt/sources.list
+WORKDIR /opt/packages
+# Create a Packages file
+RUN dpkg-scanpackages -m . > Packages
+
+# Get intevations apt key
+RUN wget -O - https://ssl.intevation.de/Intevation-Distribution-Key-2021.asc | apt-key add -
+
+RUN echo "deb https://apt.intevation.de focal intelmq-testing" >> /etc/apt/sources.list
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-mailgen

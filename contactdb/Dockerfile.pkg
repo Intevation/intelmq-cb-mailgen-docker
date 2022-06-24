@@ -1,0 +1,33 @@
+FROM postgres:14
+
+# install requirements for downloading and adding the APT key
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y wget apt-transport-https gnupg curl dpkg-dev
+
+# Copy the packages into the container
+COPY packages/* /opt/packages/
+# Add local file system repository
+RUN echo deb [trusted=yes] file:/opt/packages ./ >> /etc/apt/sources.list
+WORKDIR /opt/packages
+# Create a Packages file
+RUN dpkg-scanpackages -m . > Packages
+
+WORKDIR /opt
+
+# Add sebix repo to sources
+RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
+RUN wget -O - https://download.opensuse.org/repositories/home:sebix:intelmq/xUbuntu_20.04/Release.key | apt-key add -
+# Add Intevation apt repo
+RUN echo "deb https://apt.intevation.de focal intelmq-testing" >> /etc/apt/sources.list
+RUN wget -O - https://ssl.intevation.de/Intevation-Distribution-Key-2021.asc | apt-key add -
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-certbund-contact
+
+# Use ripe_download to get the data
+RUN /usr/bin/ripe_download
+
+# Get additional data
+RUN curl -O -L http://ftp.ripe.net/ripe/stats/delegated-ripencc-latest
+
+# Importing the schema and data is done in the the contactdb/init.sh script.
+# This script is added to the container on startup and will be processed
+# automatically ONCE! (see postgres image docs for details)
