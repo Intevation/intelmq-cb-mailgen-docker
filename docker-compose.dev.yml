@@ -10,12 +10,20 @@ services:
             - 1380:80
             - 1381:81
         volumes:
-            - $DEV_CERTBUND_BOTS:/opt/intelmq-certbund-contact
+            - $DEV_CERTBUND_CONTACT_SRC:/opt/intelmq-certbund-contact
+            - $DEV_INTELMQ_SRC:/opt/intelmq
+            - $DEV_INTELMQ_API_SRC:/opt/intelmq-api
+            - $DEV_INTELMQ_MANAGER_SRC:/opt/intelmq-manager
     fody-backend:
+        build:
+            args:
+                INTELMQ_MAILGEN_REVISION: $SOURCE_INTELMQ_MAILGEN_REVISION
+                REVISION: $SOURCE_FODY_BACKEND_REVISION
         ports:
             - 1340:8002
         volumes: 
             - $DEV_FODY_BACKEND_SRC:/opt/intelmq-fody-backend
+            - $DEV_MAILGEN_SRC:/opt/intelmq-mailgen
     fody:
         ports:
             - 1382:8080
@@ -34,3 +42,21 @@ services:
             - 1383:8080
         volumes:
             - $DEV_WEBINPUT_CSV_SRC:/opt/src/intelmq-webinput-csv/client
+    contactdb:
+        build:
+            args:
+                INTELMQ_REVISION: $SOURCE_INTELMQ_REVISION
+                INTELMQ_CERTBUND_CONTACT_REVISION: $SOURCE_INTELMQ_CERTBUND_CONTACT_REVISION
+        volumes:
+            - $DEV_INTELMQ_SRC:/opt/intelmq
+            - $DEV_CERTBUND_CONTACT_SRC:/opt/intelmq-certbund-contact
+        ports:
+            - 1338:5432
+    mailgen:
+        build:
+            args:
+                INTELMQ_MAILGEN_REVISION: $SOURCE_INTELMQ_MAILGEN_REVISION
+        volumes:
+            - $DEV_MAILGEN_SRC:/opt/intelmq-mailgen
+        ports:
+            - 1339:5432
