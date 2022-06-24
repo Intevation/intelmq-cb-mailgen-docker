@@ -26,10 +26,7 @@ RUN wget -nv \
     https://download.opensuse.org/repositories/home:sebix:intelmq/xUbuntu_20.04/Release.key \
     -O - | apt-key add -
 
-# Remove the excludes file. Intelmq-certbund-contact need the doc :) ; see https://github.com/Intevation/intelmq-certbund-contact/issues/16
-RUN rm /etc/dpkg/dpkg.cfg.d/excludes
-
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew install -q -y intelmq=2.3.3-1  intelmq-webinput-csv-client intelmq-webinput-csv-backend
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew install -q -y intelmq intelmq-webinput-csv-client intelmq-webinput-csv-backend
 
 RUN mkdir /opt/conf
 
