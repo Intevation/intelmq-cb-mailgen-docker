@@ -44,3 +44,7 @@ services:
         build:
             args:
                 REVISION: $SOURCE_WEBINPUT_CSV_REVISION
+    database:
+        build:
+            args:
+                INTELMQ_MAILGEN_REVISION: $SOURCE_INTELMQ_MAILGEN_REVISION

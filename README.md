@@ -51,7 +51,7 @@ The script takes a couple of parameters given as environment variables.
 
 ## Setup Scenarios
 
-On the first startup, the two containers intelmq-contactdb and intelmq-fody-backend seem to hang. The reason is that the data import for the contactdb takes some time and the fody backend waits for the import to finish.
+On the first startup, the two containers intelmq-database and intelmq-fody-backend seem to hang. The reason is that the data import for the contactdb takes some time and the fody backend waits for the import to finish.
 
 Ports on the host machine for the applications and APIs:
 
@@ -194,7 +194,7 @@ docker-compose images
 Lists all images used for the services.
 
 ```
-docker rmi intelmq-base intelmq-contactdb intelmq-eventdb intelmq-fody-backend intelmq-fody-spa
+docker rmi intelmq-base intelmq-database intelmq-eventdb intelmq-fody-backend intelmq-fody-spa
 ```
 
 Removes the images.

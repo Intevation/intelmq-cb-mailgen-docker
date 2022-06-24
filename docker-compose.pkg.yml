@@ -22,11 +22,11 @@ services:
             dockerfile: fody-backend/Dockerfile.pkg
         entrypoint: ["echo", "Service disabled."]
         restart: "no"
-    contactdb:
-        image: intelmq-contactdb-pkg
+    database:
+        image: intelmq-database-pkg
         build:
             context: .
-            dockerfile: contactdb/Dockerfile.pkg
+            dockerfile: database/Dockerfile.pkg
         entrypoint: ["echo", "Service disabled."]
         restart: "no"
     mailgen:

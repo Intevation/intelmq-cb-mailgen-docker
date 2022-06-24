@@ -42,14 +42,14 @@ services:
         volumes:
             - ./fody-backend/conf:/opt/conf
         depends_on:
-            - mailgen
+            - database
         environment:
             EVENTDB_SERVE_CONF_FILE: "/opt/conf/eventdb.conf"
             CONTACTDB_SERVE_CONF_FILE: "/opt/conf/contactdb.conf"
             TICKETS_SERVE_CONF_FILE: "/opt/conf/ticketdb.conf"
         networks:
             - intelmq
-        command: ["wait-for-it.sh", "contactdb:5432", "-t", "0", "-s", "--", "hug", "-f", "./intelmq_fody_backend/serve.py", "-p", "8002"]
+        command: ["wait-for-it.sh", "database:5432", "-t", "0", "-s", "--", "hug", "-f", "./intelmq_fody_backend/serve.py", "-p", "8002"]
     fody:
         image: intelmq-fody-spa
         container_name: intelmq-fody
@@ -61,21 +61,19 @@ services:
             - fody-backend
         networks:
             - intelmq
-    contactdb:
-        image: intelmq-contactdb
-        container_name: intelmq-contactdb
+    database:
+        image: intelmq-database
+        container_name: intelmq-database
         build:
             context: .
-            dockerfile: contactdb/Dockerfile
+            dockerfile: database/Dockerfile
         restart: always
         volumes:
-          - ./contactdb/init:/docker-entrypoint-initdb.d
+          - ./database/init:/docker-entrypoint-initdb.d
         environment:
             POSTGRES_PASSWORD: secret
         ports:
             - 1338:5432
-        depends_on:
-            - intelmq
         networks:
             - intelmq
     mailgen:
@@ -85,14 +83,13 @@ services:
             context: .
             dockerfile: mailgen/Dockerfile
         volumes:
-          - ./mailgen/init:/docker-entrypoint-initdb.d
+          - ./mailgen/init:/opt/init
         restart: always
         environment:
             POSTGRES_PASSWORD: secret
-        ports:
-            - 1339:5432
         depends_on:
-            - intelmq
+            - database
+            - dsmtpd
         networks:
             - intelmq
     dsmtpd:

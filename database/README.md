@@ -1,6 +1,6 @@
-# Files for the contactdb container
+# Files for the database container
 
-Place all contactdb related files here.
+Place all files related to ContactDB and EventDB here.
 
 # init folder
 

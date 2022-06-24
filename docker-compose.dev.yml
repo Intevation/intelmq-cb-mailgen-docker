@@ -42,7 +42,7 @@ services:
             - 1383:8080
         volumes:
             - $DEV_WEBINPUT_CSV_SRC:/opt/src/intelmq-webinput-csv/client
-    contactdb:
+    database:
         build:
             args:
                 INTELMQ_REVISION: $SOURCE_INTELMQ_REVISION

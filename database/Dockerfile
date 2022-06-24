@@ -2,9 +2,11 @@ FROM postgres:14
 
 ARG INTELMQ_CERTBUND_CONTACT_REVISION
 ARG INTELMQ_REVISION
+ARG INTELMQ_MAILGEN_REVISION
 
 ENV INTELMQ_CERTBUND_CONTACT_REVISION ${INTELMQ_CERTBUND_CONTACT_REVISION}
 ENV INTELMQ_REVISION ${INTELMQ_REVISION}
+ENV INTELMQ_MAILGEN_REVISION ${INTELMQ_MAILGEN_REVISION}
 
 # Install python3 deps and stuff
 RUN apt-get update && apt-get install -y git curl python3-pip python3-psycopg2
@@ -31,6 +33,12 @@ RUN intelmq-certbund-contact/bin/ripe_download
 # Get additional data
 RUN curl -O -L http://ftp.ripe.net/ripe/stats/delegated-ripencc-latest
 
-# Importing the schema and data is done in the the contactdb/init.sh script.
+# install mailgen to get the notifications.sql file
+WORKDIR /opt
+# Clone the Mailgen repo
+RUN git clone https://github.com/intevation/intelmq-mailgen.git
+RUN cd /opt/intelmq-mailgen && git checkout $INTELMQ_MAILGEN_REVISION && pip3 install -e .
+
+# Importing the schema and data is done in the the database/init/init.sh script.
 # This script is added to the container on startup and will be processed
 # automatically ONCE! (see postgres image docs for details)

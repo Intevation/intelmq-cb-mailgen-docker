@@ -10,7 +10,7 @@ CERT-bund-Contact-Database-Expert:
     database: contactdb
     destination_queues:
       _default: [CERT-bund-Contact-Rules-Expert-queue]
-    host: intelmq-contactdb
+    host: intelmq-database
     password: secret
     port: 5432
     sections: source
