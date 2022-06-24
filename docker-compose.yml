@@ -12,8 +12,8 @@ services:
         networks:
             - intelmq
     intelmq:
-        image: intelmq-manager
-        container_name: intelmq-manager
+        image: intelmq
+        container_name: intelmq
         build:
             context: .
             dockerfile: intelmq/Dockerfile

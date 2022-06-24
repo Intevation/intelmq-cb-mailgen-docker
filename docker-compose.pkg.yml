@@ -1,7 +1,7 @@
 version: "3"
 services:
     intelmq:
-        image: intelmq-manager-pkg
+        image: intelmq-pkg
         build:
             context: .
             dockerfile: intelmq/Dockerfile.pkg

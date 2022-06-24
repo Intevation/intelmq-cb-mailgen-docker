@@ -1,25 +1,17 @@
 version: "3"
 services:
-    intelmq-full:
+    intelmq:
         image: intelmq-full
         container_name: intelmq-full
         build:
             context: .
-            dockerfile: full-pkg/Dockerfile
+            dockerfile: intelmq/Dockerfile.full-pkg
             args:
                 USE_CERTBUND: $USE_CERTBUND
         ports:
             - 1481:8000
             - 1480:80
         restart: always
-    intelmq:
-        # what is this for?
-        image: intelmq-manager-full-pkg
-        build:
-            context: .
-            dockerfile: intelmq/Dockerfile.full-pkg
-        entrypoint: ["echo", "Service disabled."]
-        restart: "no"
     fody:
         image: intelmq-fody-pkg
         build:
