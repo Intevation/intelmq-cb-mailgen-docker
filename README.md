@@ -239,3 +239,16 @@ Read the mails by entering the dsmtpd container and run:
 docker exec -ti dsmtpd bash
 mutt -f /opt/mails/incoming
 ```
+
+#### IntelMQ
+To use `intelmqctl` you need to set environment variables, which are normally set by `docker-compose`:
+```bash
+docker-exec -ti intelmq bash
+export INTELMQ_SOURCE_PIPELINE_BROKER="redis"
+export INTELMQ_PIPELINE_BROKER="redis"
+export INTELMQ_DESTIONATION_PIPELINE_BROKER="redis"
+export INTELMQ_PIPELINE_HOST=redis
+export INTELMQ_SOURCE_PIPELINE_HOST=redis
+export INTELMQ_DESTINATION_PIPELINE_HOST=redis
+export INTELMQ_REDIS_CACHE_HOST=redis
+```

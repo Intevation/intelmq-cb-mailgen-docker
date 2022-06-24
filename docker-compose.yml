@@ -22,10 +22,15 @@ services:
         restart: always
         depends_on:
             - redis
+            - database
         environment:
-            INTELMQ_PIPELINE_DRIVER: "redis"
-            INTELMQ_PIPELINE_HOST: "intelmq-redis"
-            INTELMQ_REDIS_CACHE_HOST: "intelmq-redis"
+            INTELMQ_SOURCE_PIPELINE_BROKER: "redis"
+            INTELMQ_PIPELINE_BROKER: "redis"
+            INTELMQ_DESTIONATION_PIPELINE_BROKER: "redis"
+            INTELMQ_PIPELINE_HOST: redis
+            INTELMQ_SOURCE_PIPELINE_HOST: redis
+            INTELMQ_DESTINATION_PIPELINE_HOST: redis
+            INTELMQ_REDIS_CACHE_HOST: redis
         volumes:
             - $DEV_CERTBUND_RULES:/opt/rules
             - $DEV_CERTBUND_FORMATS:/opt/formats
