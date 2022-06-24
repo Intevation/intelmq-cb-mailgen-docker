@@ -1,11 +1,15 @@
 #!/bin/bash
 
-set -e
+set -eu -o pipefail
 
 ### ContactDB
 createdb --encoding=UTF8 --template=template0 contactdb
 
-gunzip -c /usr/share/doc/intelmq-certbund-contact/sql/initdb.sql.gz | psql -f - contactdb
+if [ -f /opt/intelmq-certbund-contact/sql/initdb.sql ]; then
+    psql -f /opt/intelmq-certbund-contact/sql/initdb.sql contactdb
+else
+    gunzip -c /usr/share/doc/intelmq-certbund-contact/sql/initdb.sql.gz | psql -f - contactdb
+fi
 
 psql -c "CREATE ROLE intelmq WITH login PASSWORD 'secret';"
 psql -c "CREATE ROLE fody WITH login PASSWORD 'secret';"
@@ -16,17 +20,29 @@ psql -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO fody;" contactdb
 date=$(date +%F)
 cd "$date"
 
-python3 /usr/bin/ripe_import.py --conninfo dbname=contactdb --ripe-delegated-file=../delegated-ripencc-latest --restrict-to-country DE --verbose
+if [ -f /opt/intelmq-certbund-contact/intelmq_certbund_contact/ripe/ripe_import.py ]; then
+    ripe_import=/opt/intelmq-certbund-contact/intelmq_certbund_contact/ripe/ripe_import.py
+else
+    ripe_import=/usr/bin/ripe_import.py
+fi
+
+python3 $ripe_import --conninfo dbname=contactdb --ripe-delegated-file=../delegated-ripencc-latest --restrict-to-country DE --verbose
 
 ## EventDB
 createdb --encoding=UTF8 --template=template0 eventdb
 
-psql -f /opt/initdb.sql eventdb
+# It is save to use the initdb.sql shipped for testing as long as we do not modify the harmonization locally
+if [ -f /opt/intelmq/intelmq/tests/bin/initdb.sql ]; then
+    psql -f /opt/intelmq/intelmq/tests/bin/initdb.sql eventdb
+else
+    psql -f /usr/lib/python3/dist-packages/intelmq/tests/bin/initdb.sql eventdb
+fi
 
-psql -c "CREATE ROLE intelmq WITH login PASSWORD 'secret';"
-psql -c "CREATE ROLE fody WITH login PASSWORD 'secret';"
-
-psql -f /opt/intelmq-mailgen/sql/notifications.sql eventdb
+if [ -f /opt/intelmq-mailgen/sql/notifications.sql ]; then
+    psql -f /opt/intelmq-mailgen/sql/notifications.sql eventdb
+else
+    psql -f /usr/share/intelmq-mailgen/sql/notifications.sql eventdb
+fi
 
 psql -c "GRANT eventdb_send_notifications TO intelmq" eventdb
 psql -c "GRANT eventdb_insert TO intelmq" eventdb
