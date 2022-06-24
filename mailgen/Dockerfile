@@ -1,7 +1,11 @@
 FROM ubuntu:20.04
 
+ARG INTELMQ_MAILGEN_REVISION
+
+ENV INTELMQ_MAILGEN_REVISION ${INTELMQ_MAILGEN_REVISION}
+
 # Install git to be able to clone the mailgen repo
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git python3-pip python3-psycopg2
 
 WORKDIR /opt
 
@@ -10,6 +14,4 @@ RUN git clone https://github.com/intevation/intelmq-mailgen.git
 
 WORKDIR /opt/intelmq-mailgen
 
-# Checkout a version before pg_trgm was introduced since this creates errors
-# while setting up the database.
-RUN git checkout 546ef367b43e5f6479c28d99efc6d8cf2827cc25
+RUN git checkout $INTELMQ_MAILGEN_REVISION && pip3 install -e .
