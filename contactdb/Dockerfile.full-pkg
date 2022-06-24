@@ -1,5 +1,4 @@
-#FROM postgres:14
-FROM postgres:11
+FROM postgres:14
 
 WORKDIR /opt
 
