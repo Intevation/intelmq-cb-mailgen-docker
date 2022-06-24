@@ -7,7 +7,7 @@ ENV REVISION ${REVISION}
 ENV INTELMQ_MAILGEN_REVISION ${INTELMQ_MAILGEN_REVISION}
 
 # Install dependencies and stuff
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git python3-pip python3-psycopg2 python3-dateutil swig libgpgme-dev sqlite3
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git python3-pip python3-psycopg2 python3-dateutil swig libgpgme-dev sqlite3 python3-gpg
 
 WORKDIR /opt
 
@@ -36,7 +36,7 @@ COPY fody-backend/conf/fody-session.conf /etc/intelmq/fody-session.conf
 WORKDIR /opt
 
 # Install dependencies
-RUN pip3 install pygpgme hug pyxarf
+RUN pip3 install hug pyxarf
 
 # Create config inside the container
 RUN mkdir /etc/intelmq-mailgen
