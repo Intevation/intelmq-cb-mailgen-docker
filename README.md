@@ -153,7 +153,7 @@ Do not kill the `tail` process. It keeps the container alive when killing node p
 
 ### Scenario 3
 
-Building images and containers with self built intelmq packages (intelmq-certbund-contact, intemq-fody-backend, intemq-fody), it assumed that the packages are available under `./packages`.
+Building images and containers with self built intelmq packages (intelmq-certbund-contact, intemq-fody-backend, intemq-fody), it assumed that the packages are available under `./packages`. Upstream packages from sebix repository are used as backup for all packages not existing locally.
 
 ```
 mkdir packages
@@ -170,6 +170,8 @@ Building a setup of all the applications using the package repositories can be d
 docker compose -f docker-compose.yml -f docker-compose.full-pkg.yml build
 docker compose -f docker-compose.yml -f docker-compose.full-pkg.yml up
 ```
+
+The latest packages are used, no versions can be specified in this scenario.
 
 ### General
 
@@ -212,13 +214,28 @@ IntelMQ-Manager, Fody and Webinput-CSV need credentials to login.
 The default user is `admin` with the password `secret`. For more users
 login to the docker container running ` intelmq-api`,
 `intelmq-fody-backend` or `intelmq-webinput-csv-backend` and follow
-the intstructions in the documentation  for [IntelMQ-Manager](https://intelmq.readthedocs.io/en/maintenance/user/intelmq-api.html#id6),
+the instructions in the documentation  for [IntelMQ-Manager](https://intelmq.readthedocs.io/en/maintenance/user/intelmq-api.html#id6),
 [Fody](https://github.com/Intevation/intelmq-fody-backend#authentication) and
 [Webinput-csv](https://github.com/Intevation/intelmq-webinput-csv/blob/master/docs/INSTALL.md).
-## ContactDB
+
+#### ContactDB
 
 Using the contactdb depends on data that can change daily. The directory name contains the current date so rebuilding the container with an image on an other date than the image was build leaves the database empty.
 
 Rebuild the image with no cache to get an up to date database.
 
 Starting the setup with a fresh data import for the contactdb will take some time so please be patient.
+
+#### Mailgen
+
+Run mailgen in the mailgen container:
+```bash
+docker exec -ti mailgen bash
+intelmqcbmail
+```
+
+Read the mails by entering the dsmtpd container and run:
+```bash
+docker exec -ti dsmtpd bash
+mutt -f /opt/mails/incoming
+```

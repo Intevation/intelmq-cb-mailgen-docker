@@ -1,7 +1,7 @@
-# Files for the eventdb container
+# Files for the mailgen container
 
-Place all eventdb related files here.
+Place all mailgen related files here.
 
-# init.sh file
+## init.sh file
 
 The init script for the contact db setup.
