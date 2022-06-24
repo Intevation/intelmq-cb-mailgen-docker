@@ -97,12 +97,10 @@ WORKDIR /opt/intelmq-certbund-contact
 COPY intelmq/import.patch .
 
 RUN git checkout $INTELMQ_CERTBUND_CONTACT_REVISION
-# if the condition is false, we don't want an exit code 1
-RUN bash -c "[ \"$INTELMQ_CERTBUND_CONTACT_REVISION\" != 'intelmq-v3' ] && patch -p 1 -i import.patch || :"
 
 RUN pip3 install -e .
 # with editable installations, installing a second intelmq package (for the intelmq/bots/experts/cerbund* structure) does not work. So we can work around by symlinking the files
-RUN bash -c "[ \"$INTELMQ_CERTBUND_CONTACT_REVISION\" == 'intelmq-v3' ] && cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_rules /opt/intelmq/intelmq/bots/experts/ && cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_contact /opt/intelmq/intelmq/bots/experts/ || :"
+RUN bash -c "cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_rules /opt/intelmq/intelmq/bots/experts/ && cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_contact /opt/intelmq/intelmq/bots/experts/"
 
 RUN intelmq-api-adduser --user admin --password secret
 
