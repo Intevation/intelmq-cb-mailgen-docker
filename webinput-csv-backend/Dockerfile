@@ -1,18 +1,16 @@
 FROM ubuntu:20.04
 
 ARG REVISION
-ARG INTELMQ_VERSION
+ARG INTELMQ_PYPI_VERSION
 
 ENV REVISION ${REVISION}
-ENV INTELMQ_VERSION ${INTELMQ_VERSION}
+ENV INTELMQ_PYPI_VERSION ${INTELMQ_PYPI_VERSION}
 
 # Install dependencies and stuff
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git python3-pip sqlite3
+RUN pip3 install intelmq==$INTELMQ_PYPI_VERSION hug
 
 WORKDIR /opt
-
-# Install dependencies
-RUN pip3 install intelmq==$INTELMQ_VERSION hug
 
 RUN git clone https://github.com/Intevation/intelmq-webinput-csv.git
 

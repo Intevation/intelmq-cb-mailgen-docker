@@ -17,11 +17,9 @@ RUN git clone https://github.com/vishnubob/wait-for-it.git
 
 RUN cp wait-for-it/wait-for-it.sh /usr/bin
 
-# Clone Mailgen (used as dependency and can be executed inside the container
+# Clone Mailgen (used as dependency and can be executed inside the container)
 RUN git clone https://github.com/Intevation/intelmq-mailgen.git
-RUN cd intelmq-mailgen && git checkout $INTELMQ_MAILGEN_REVISION
-# Install mailgen
-RUN pip3 install -e .
+RUN cd intelmq-mailgen && git checkout $INTELMQ_MAILGEN_REVISION && pip3 install -e .
 
 WORKDIR /opt
 # Clone the fody backend
