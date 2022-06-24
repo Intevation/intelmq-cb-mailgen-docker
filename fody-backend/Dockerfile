@@ -39,7 +39,7 @@ RUN pip3 install hug pyxarf
 # Create config inside the container
 RUN mkdir /etc/intelmq-mailgen
 
-COPY fody-backend/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
+COPY mailgen/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
 
 RUN mkdir -p /etc/intelmq/mailgen/templates
 

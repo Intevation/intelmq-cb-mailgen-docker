@@ -20,21 +20,18 @@ services:
         build:
             context: .
             dockerfile: fody-backend/Dockerfile.pkg
-        entrypoint: ["echo", "Service disabled."]
         restart: "no"
     database:
         image: intelmq-database-pkg
         build:
             context: .
             dockerfile: database/Dockerfile.pkg
-        entrypoint: ["echo", "Service disabled."]
         restart: "no"
     mailgen:
         image: intelmq-mailgen-pkg
         build:
             context: .
             dockerfile: mailgen/Dockerfile.pkg
-        entrypoint: ["echo", "Service disabled."]
         restart: "no"
     webinput-csv:
         image: intelmq-webinput-csv-pkg
@@ -49,5 +46,4 @@ services:
         build:
             context: .
             dockerfile: webinput-csv-backend/Dockerfile.pkg
-        entrypoint: ["echo", "Service disabled."]
         restart: "no"

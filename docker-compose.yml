@@ -90,8 +90,6 @@ services:
         volumes:
           - ./mailgen/init:/opt/init
         restart: always
-        environment:
-            POSTGRES_PASSWORD: secret
         depends_on:
             - database
             - dsmtpd

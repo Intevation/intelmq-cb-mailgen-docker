@@ -20,7 +20,7 @@ RUN wget -O - https://download.opensuse.org/repositories/home:sebix:intelmq/xUbu
 RUN echo "deb https://apt.intevation.de focal intelmq-testing" >> /etc/apt/sources.list
 RUN wget -O - https://ssl.intevation.de/Intevation-Distribution-Key-2021.asc | apt-key add -
 
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-certbund-contact mailgen
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-certbund-contact intelmq-mailgen
 
 # Use ripe_download to get the data
 RUN /usr/bin/ripe_download
