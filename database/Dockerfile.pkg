@@ -14,7 +14,7 @@ RUN dpkg-scanpackages -m . > Packages
 
 WORKDIR /opt
 
-# Add sebix repo to sources
+# Add sebix repo to sources as backup for all packages missing in local repository
 RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
 RUN wget -O - https://download.opensuse.org/repositories/home:sebix:intelmq/xUbuntu_20.04/Release.key | apt-key add -
 # Add Intevation apt repo

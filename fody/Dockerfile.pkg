@@ -19,16 +19,15 @@ WORKDIR /opt/packages
 
 # Create a Packages file
 RUN dpkg-scanpackages -m . > Packages
-# Add sebix repo to sources
-RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
-
-# Add the key
-RUN wget -nv \
-    https://download.opensuse.org/repositories/home:sebix:intelmq/xUbuntu_20.04/Release.key \
-    -O - | apt-key add -
 
 # Remove the excludes file. Intelmq-certbund-contact need the doc :) ; see https://github.com/Intevation/intelmq-certbund-contact/issues/16
 RUN rm /etc/dpkg/dpkg.cfg.d/excludes
+# Add sebix repo to sources as backup for all packages missing in local repository
+RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
+RUN wget -nv -O - https://download.opensuse.org/repositories/home:sebix:intelmq/xUbuntu_20.04/Release.key | apt-key add -
+# Add Intevation apt repo
+RUN echo "deb https://apt.intevation.de focal intelmq-testing" >> /etc/apt/sources.list
+RUN wget -nv -O - https://ssl.intevation.de/Intevation-Distribution-Key-2021.asc | apt-key add -
 
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew install -q -y intelmq-fody intelmq-fody-backend python3-dateutil
 
