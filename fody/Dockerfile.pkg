@@ -11,8 +11,9 @@ ENV LC_ALL en_US.UTF-8
 # Copy the intelmq packages into the container
 COPY packages/* /opt/packages/
 
-# Add local file system repository
+# Add local file system repository and favor it over other sources
 RUN echo deb [trusted=yes] file:/opt/packages ./ >> /etc/apt/sources.list
+RUN echo "Package: *\nPin: origin \"\"\nPin-Priority: 999" > /etc/apt/preferences.d/local-repository
 
 WORKDIR /opt/packages
 
