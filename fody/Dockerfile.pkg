@@ -20,8 +20,6 @@ WORKDIR /opt/packages
 # Create a Packages file
 RUN dpkg-scanpackages -m . > Packages
 
-# Remove the excludes file. Intelmq-certbund-contact need the doc :) ; see https://github.com/Intevation/intelmq-certbund-contact/issues/16
-RUN rm /etc/dpkg/dpkg.cfg.d/excludes
 # Add sebix repo to sources as backup for all packages missing in local repository
 RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
 RUN wget -nv -O - https://download.opensuse.org/repositories/home:sebix:intelmq/xUbuntu_20.04/Release.key | apt-key add -
@@ -50,4 +48,3 @@ RUN fody-adduser --user admin --password secret
 EXPOSE 8666 8000
 
 CMD ["apachectl", "-D", "FOREGROUND"]
-
