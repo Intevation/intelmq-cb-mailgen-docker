@@ -17,8 +17,9 @@ psql -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO intelmq;" contactdb
 psql -c "GRANT ALL ON ALL TABLES IN SCHEMA public TO fody;" contactdb
 psql -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO fody;" contactdb
 
-date=$(date +%F)
-cd "$date"
+# use the directory created by ripe_download at the build stage. If ripe_download was called multiple times on different days, select the latest directory.
+latest_ripe_download="$(ls -t1 /opt/ripe_download | head -n 1)"
+cd "/opt/ripe_download/$latest_ripe_download"
 
 if [ -f /opt/intelmq-certbund-contact/intelmq_certbund_contact/ripe/ripe_import.py ]; then
     ripe_import=/opt/intelmq-certbund-contact/intelmq_certbund_contact/ripe/ripe_import.py
@@ -26,7 +27,7 @@ else
     ripe_import=/usr/bin/ripe_import.py
 fi
 
-python3 $ripe_import --conninfo dbname=contactdb --ripe-delegated-file=../delegated-ripencc-latest --restrict-to-country DE --verbose
+python3 $ripe_import --conninfo dbname=contactdb --ripe-delegated-file=/opt/delegated-ripencc-latest --restrict-to-country DE --verbose
 
 ## EventDB
 createdb --encoding=UTF8 --template=template0 eventdb

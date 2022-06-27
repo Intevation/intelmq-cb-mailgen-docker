@@ -28,7 +28,7 @@ RUN git clone https://github.com/Intevation/intelmq-certbund-contact.git
 RUN cd intelmq-certbund-contact && git checkout $INTELMQ_CERTBUND_CONTACT_REVISION && pip3 install -e .
 
 # Use ripe_download to get the data
-RUN intelmq-certbund-contact/bin/ripe_download
+RUN mkdir ripe_download && cd ripe_download && ripe_download
 
 # Get additional data
 RUN curl -O -L http://ftp.ripe.net/ripe/stats/delegated-ripencc-latest
