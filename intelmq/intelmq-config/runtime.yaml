@@ -64,9 +64,6 @@ cymru-whois-expert:
       _default: [CERT-bund-Contact-Database-Expert-queue, file-output-queue]
     overwrite: true
     redis_cache_db: 5
-    redis_cache_host: intelmq-redis
-    redis_cache_password: null
-    redis_cache_port: 6379
     redis_cache_ttl: 86400
   run_mode: continuous
 deduplicator-expert:
@@ -85,8 +82,6 @@ deduplicator-expert:
     filter_keys: raw,time.observation
     filter_type: blacklist
     redis_cache_db: 6
-    redis_cache_host: intelmq-redis
-    redis_cache_port: 6379
     redis_cache_ttl: 86400
   run_mode: continuous
 feodo-tracker-browse-collector:
@@ -175,9 +170,7 @@ gethostbyname-2-expert:
   run_mode: continuous
 global:
   destination_pipeline_broker: redis
-  process_manager: intelmq
   source_pipeline_broker: redis
-  ssl_ca_certificate: null
   statistics_database: 3
   statistics_host: 127.0.0.1
   statistics_password: null

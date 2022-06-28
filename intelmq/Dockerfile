@@ -92,9 +92,6 @@ RUN git clone https://github.com/Intevation/intelmq-certbund-contact.git
 
 WORKDIR /opt/intelmq-certbund-contact
 
-# Patch example rules to fix imports.
-COPY intelmq/import.patch .
-
 RUN git checkout $INTELMQ_CERTBUND_CONTACT_REVISION
 
 RUN pip3 install -e .
@@ -112,8 +109,6 @@ WORKDIR /opt
 # Add the configs
 ADD intelmq/intelmq-config /opt/intelmq-config
 ADD intelmq/rules /opt/rules
-ADD intelmq/templates /opt/templates
-COPY intelmq/intelmq-config/cron /etc/cron.d/mailgen
 
 # Execute the setup script using the switch from above.
 COPY intelmq/setup-certbund.sh /opt/setup-certbund.sh
