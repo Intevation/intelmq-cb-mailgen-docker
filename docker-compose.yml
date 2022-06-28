@@ -27,6 +27,7 @@ services:
             INTELMQ_SOURCE_PIPELINE_HOST: redis
             INTELMQ_DESTINATION_PIPELINE_HOST: redis
             INTELMQ_REDIS_CACHE_HOST: redis
+            USE_CERTBUND: $USE_CERTBUND
         volumes:
             - $DEV_CERTBUND_RULES:/opt/rules
             - $DEV_CERTBUND_FORMATS:/opt/formats

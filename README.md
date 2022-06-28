@@ -194,7 +194,7 @@ docker-compose images
 Lists all images used for the services.
 
 ```
-docker rmi intelmq-base intelmq-database intelmq-eventdb intelmq-fody-backend intelmq-fody-spa
+docker rmi intelmq-base intelmq-database intelmq-database intelmq-fody-backend intelmq-fody-spa
 ```
 
 Removes the images.
