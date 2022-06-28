@@ -169,10 +169,11 @@ gethostbyname-2-expert:
       _default: [cymru-whois-expert-queue]
   run_mode: continuous
 global:
-  destination_pipeline_broker: redis
-  source_pipeline_broker: redis
+  source_pipeline_host: redis
+  destination_pipeline_host: redis
+  redis_cache_host: redis
+  statistics_host: redis
   statistics_database: 3
-  statistics_host: 127.0.0.1
   statistics_password: null
   statistics_port: 6379
 spamhaus-drop-collector:
