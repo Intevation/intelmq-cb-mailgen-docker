@@ -44,7 +44,7 @@ SQL-Output:
     autocommit: true
     database: eventdb
     engine: postgresql
-    host: intelmq-eventdb
+    host: intelmq-database
     jsondict_as_string: true
     password: secret
     port: 5432
