@@ -52,7 +52,7 @@ RUN git checkout $INTELMQ_API_REVISION
 RUN pip3 install -e .
 
 # intelmqsetup expects the files there (not compatible to editable pip installations yet)
-RUN mkdir -p /opt/intelmq-api/etc/intelmq/ && cp /opt/intelmq-api/contrib/api-sudoers.conf /opt/intelmq-api/etc/intelmq/api-sudoers.conf
+RUN mkdir -p /opt/intelmq-api/etc/intelmq/ && cp /opt/intelmq-api/contrib/api-sudoers.conf /opt/intelmq-api/etc/intelmq/api-sudoers.conf && cp /opt/intelmq-api/contrib/api-apache.conf /opt/intelmq-api/etc/intelmq/api-apache.conf
 COPY intelmq/api-config/api-config.json /opt/intelmq-api/etc/intelmq/api-config.json
 
 RUN python3 contrib/initesqlite.py
@@ -61,14 +61,14 @@ WORKDIR /opt
 
 # Clone intelmq manager
 RUN git clone https://github.com/certtools/intelmq-manager.git
+# intelmqsetup expects the files there (not compatible to editable pip installations yet)
+RUN mkdir -p /opt/intelmq-manager/etc/intelmq/ && cp /opt/intelmq-manager/contrib/manager-apache.conf /opt/intelmq-manager/etc/intelmq/manager-apache.conf
 
 WORKDIR /opt/intelmq-manager
 
 RUN git checkout $INTELMQ_MANAGER_REVISION && pip3 install -e .
+# HTML is built and placed at expected destination by intelmqsetup with IntelMQ > 3.0.2.
 
-RUN cp -R html/* /var/www/html
-RUN cp /opt/intelmq-api/contrib/api-apache.conf /etc/apache2/conf-available/api-apache.conf \
-    && cp /opt/intelmq-manager/contrib/manager-apache.conf /etc/apache2/conf-available/manager-apache.conf
 COPY intelmq/apache-config/intelmq.conf /etc/apache2/sites-available/000-default.conf
 
 # Run intelmqsetup to get a complete environment

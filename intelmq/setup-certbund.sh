@@ -25,13 +25,16 @@ with open('$1/runtime.yaml', 'r+') as fpruntime:
             del runtime[botid]['parameters']['redis_cache_host']
     yaml.dump(runtime, fpruntime)
 EOPY
+    if [ "$1" == "/opt/intelmq/etc" ]; then
+        chown -R intelmq:intelmq /opt/intelmq
+    fi
 fi
 
-chown -R intelmq:intelmq /etc/intelmq/*
-chmod -R 664 /etc/intelmq/*
+chown -R intelmq:intelmq $1/*
+chmod -R 664 $1/*{.conf,.yaml}
 
-intelmqctl upgrade-config
-intelmqctl -q check --no-connections
+sudo -u intelmq intelmqctl upgrade-config
+sudo -u intelmq intelmqctl -q check --no-connections
 
 # make configuration upgrades if necessary
 sudo -u intelmq intelmqctl upgrade-config
