@@ -4,12 +4,8 @@ ARG REVISION
 
 ENV REVISION ${REVISION}
 
-RUN apt-get update && apt-get install -y curl gnupg
-RUN echo "deb https://deb.nodesource.com/node_14.x focal main" >/etc/apt/sources.list.d/nodesource.list
-
-RUN curl -fsSL -O https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-
-RUN apt-key add nodesource.gpg.key
+COPY common/setup-apt.sh /opt/
+RUN /opt/setup-apt.sh node
 
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y nodejs git
 

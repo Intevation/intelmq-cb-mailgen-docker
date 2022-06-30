@@ -1,25 +1,15 @@
 FROM ubuntu:20.04
 
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive"  apt-get install -y wget gnupg apache2 locales
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive"  apt-get install -y locales
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-
-# Get intevations apt key
-RUN wget -O - https://ssl.intevation.de/Intevation-Distribution-Key-2021.asc | apt-key add -
-
-RUN echo "deb https://apt.intevation.de focal intelmq-testing" >> /etc/apt/sources.list
-
-# Get sebixs  apt-key
-RUN wget -nv \
-    https://download.opensuse.org/repositories/home:sebix:intelmq/xUbuntu_20.04/Release.key \
-    -O - | apt-key add -
-
-# Add sebix repo to sources
-RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
+COPY common/setup-apt.sh /opt/
+RUN /opt/setup-apt.sh intelmq
+RUN /opt/setup-apt.sh intevation
 
 # Install intelmq and intelmq-certbund-contact
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-manager intelmq intelmq-api intelmq-certbund-contact intelmq-fody intelmq-fody-backend intelmq-mailgen intelmq-webinput-csv-client intelmq-webinput-csv-backend python3-bs4

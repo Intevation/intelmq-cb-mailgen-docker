@@ -1,25 +1,13 @@
 FROM ubuntu:20.04
 
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y apache2 libapache2-mod-wsgi-py3 dpkg-dev wget python3-bs4
-
 # Copy the intelmq packages into the container
 COPY packages/* /opt/packages/
 
-# Add local file system repository and favor it over other sources
-RUN echo deb [trusted=yes] file:/opt/packages ./ >> /etc/apt/sources.list
-RUN echo "Package: *\nPin: origin \"\"\nPin-Priority: 999" > /etc/apt/preferences.d/local-repository
-
-WORKDIR /opt/packages
-
-# Create a Packages file
-RUN dpkg-scanpackages -m . > Packages
-
-# Add sebix repo to sources as backup for all packages missing in local repository
-RUN echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list
-RUN wget -nv -O - https://download.opensuse.org/repositories/home:sebix:intelmq/xUbuntu_20.04/Release.key | apt-key add -
-# Add Intevation apt repo
-RUN echo "deb https://apt.intevation.de focal intelmq-testing" >> /etc/apt/sources.list
-RUN wget -nv -O - https://ssl.intevation.de/Intevation-Distribution-Key-2021.asc | apt-key add -
+COPY common/setup-apt.sh /opt/
+RUN /opt/setup-apt.sh local
+# Add remote repositories as backup for all packages missing in local repository
+RUN /opt/setup-apt.sh intelmq
+RUN /opt/setup-apt.sh intevation
 
 # Install intelmq and intelmq-certbund-contact
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-manager intelmq intelmq-api intelmq-certbund-contact
