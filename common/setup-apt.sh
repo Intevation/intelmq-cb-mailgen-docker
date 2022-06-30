@@ -14,6 +14,10 @@ if [ "$1" == "intelmq" ]; then
     # Add sebix repo to sources
     echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/xUbuntu_20.04/ /" >> /etc/apt/sources.list.d/intelmq.list
     wget -O - https://download.opensuse.org/repositories/home:sebix:intelmq/xUbuntu_20.04/Release.key | apt-key add -
+    if [ "$INTELMQ_UNSTABLE_REPOSITORY" == "true" ]; then
+        echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq:/unstable/xUbuntu_20.04/ /" >> /etc/apt/sources.list.d/intelmq.list
+        wget -O - https://download.opensuse.org/repositories/home:sebix:intelmq:unstable/xUbuntu_20.04/Release.key | apt-key add -
+    fi
 elif [ "$1" == "intevation" ]; then
     # Add Intevation apt repo
     echo "deb https://apt.intevation.de focal intelmq-testing" > /etc/apt/sources.list.d/intevation.list

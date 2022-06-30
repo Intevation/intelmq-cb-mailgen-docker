@@ -96,6 +96,12 @@ SOURCE_WEBINPUT_CSV_REVISION=master
 SOURCE_WEBINPUT_CSV_BACKEND_REVISION=master
 ```
 
+In the fourth section, the [IntelMQ unstable repository](https://software.opensuse.org/download.html?project=home%3Asebix%3Aintelmq%3Aunstable&package=intelmq) can be optionally activated (in addition to the default stable repository) to test pre-releases of IntelMQ:
+```
+# Set to true for using the IntelMQ unstable repository
+INTELMQ_UNSTABLE_REPOSITORY=false
+```
+
 The last section defines a switch to integrate a basic but complete CERT-BUND bot and mailgen configuration that applies to all scenarios at build time.
 ```
 # Switch to integrate certbund bot and mailgen configuration

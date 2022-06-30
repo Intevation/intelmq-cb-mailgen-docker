@@ -1,5 +1,8 @@
 FROM ubuntu:20.04
 
+ARG INTELMQ_UNSTABLE_REPOSITORY
+ENV INTELMQ_UNSTABLE_REPOSITORY ${INTELMQ_UNSTABLE_REPOSITORY}
+
 # Copy the intelmq packages into the container
 COPY packages/* /opt/packages/
 
