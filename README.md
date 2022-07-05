@@ -55,7 +55,7 @@ On the first startup, the two containers intelmq-database and intelmq-fody-backe
 
 Ports on the host machine for the applications and APIs:
 
-* intelmq-manager: 1380
+* intelmq-manager: 1380 (path `/intelmq-manager`)
 * intelmq-api: 1381 (not in all scenarios)
 * intelmq-fody: 1382
 * intelmq-fody-backend: 1340 (not in all scenarios)
@@ -111,7 +111,7 @@ USE_CERTBUND=false
 # Switch to integrate certbund bot and mailgen configuration
 USE_CERTBUND=true
 
-### Scenario 1 (default)
+### Scenario 1: From source (default)
 
 ```
 docker compose build --no-cache
@@ -128,7 +128,7 @@ Creates and starts the containers.
 Add `-d` to run in background.
 
 
-### Scenario 2
+### Scenario 2: Development ('dev')
 
 Using the docker containers for development requires a local checkout of fody and fody-backend. Mounting them as volume is specified in the `docker-compose.dev.yml` and the path to the source code is defined in the `.env` file.
 
@@ -157,7 +157,7 @@ docker exec -ti intelmq-fody-spa /bin/bash
 
 Do not kill the `tail` process. It keeps the container alive when killing node processes.
 
-### Scenario 3
+### Scenario 3: Local packages ('pkg')
 
 Building images and containers with self built intelmq packages (intelmq-certbund-contact, intemq-fody-backend, intemq-fody), it assumed that the packages are available under `./packages`. Upstream packages from sebix and Intevation repository are used as backup for all packages not existing locally.
 
@@ -168,7 +168,7 @@ docker compose -f docker-compose.yml -f docker-compose.pkg.yml build
 docker compose -f docker-compose.yml -f docker-compose.pkg.yml up
 ```
 
-### Scenario 4
+### Scenario 4: Repository packages ('full-pkg')
 
 Building a setup of all the applications using the package repositories can be done with
 
@@ -239,6 +239,7 @@ Run mailgen in the mailgen container:
 docker exec -ti mailgen bash
 intelmqcbmail
 ```
+The default entrypoint calls intelmqcbmail every five minutes.
 
 Read the mails by entering the dsmtpd container and run:
 ```bash
@@ -249,14 +250,7 @@ mutt -f /opt/mails/incoming
 #### IntelMQ
 To use `intelmqctl` you need to set environment variables, which are normally set by `docker-compose`:
 ```bash
-docker-exec -ti intelmq bash
-export INTELMQ_SOURCE_PIPELINE_BROKER="redis"
-export INTELMQ_PIPELINE_BROKER="redis"
-export INTELMQ_DESTIONATION_PIPELINE_BROKER="redis"
-export INTELMQ_PIPELINE_HOST=redis
-export INTELMQ_SOURCE_PIPELINE_HOST=redis
-export INTELMQ_DESTINATION_PIPELINE_HOST=redis
-export INTELMQ_REDIS_CACHE_HOST=redis
+docker exec --env-file=.env -ti intelmq bash
 ```
 
 ## Tests
