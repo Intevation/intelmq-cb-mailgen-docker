@@ -1,8 +1,7 @@
 version: "3"
 services:
     intelmq:
-        image: intelmq-full
-        container_name: intelmq-full
+        image: intelmq-full-pkg
         build:
             context: .
             dockerfile: intelmq/Dockerfile.full-pkg
