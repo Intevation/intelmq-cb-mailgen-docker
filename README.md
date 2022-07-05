@@ -258,3 +258,11 @@ export INTELMQ_SOURCE_PIPELINE_HOST=redis
 export INTELMQ_DESTINATION_PIPELINE_HOST=redis
 export INTELMQ_REDIS_CACHE_HOST=redis
 ```
+
+## Tests
+
+To run the tests, call `testall.sh`:
+```
+./testall.sh
+```
+Or execute the tests per container by executing the single commands from this file.

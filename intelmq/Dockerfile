@@ -115,6 +115,9 @@ COPY intelmq/setup-certbund.sh /opt/setup-certbund.sh
 RUN chmod +x setup-certbund.sh
 RUN ./setup-certbund.sh /opt/intelmq/etc
 
+# Add test script
+COPY intelmq/test.sh /opt/
+
 EXPOSE 80 81
 
 COPY intelmq/startup.sh /opt/startup.sh
