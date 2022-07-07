@@ -5,19 +5,17 @@ services:
         build:
             context: .
             dockerfile: intelmq/Dockerfile.full-pkg
-            args:
-                USE_CERTBUND: $USE_CERTBUND
         ports:
-            - 1481:8000
-            - 1480:80
-        restart: always
+            - 1380:80
+            - 1381:80
     fody:
         image: intelmq-fody-pkg
         build:
             context: .
             dockerfile: fody/Dockerfile.full-pkg
-        entrypoint: ["echo", "Service disabled."]
-        restart: "no"
+        ports:
+            - 1382:8000
+            - 1340:8000
     fody-backend:
         image: intelmq-fody-backend-pkg
         build:

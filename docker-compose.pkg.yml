@@ -7,6 +7,7 @@ services:
             dockerfile: intelmq/Dockerfile.pkg
         ports:
             - 1380:80
+            - 1381:80
     fody:
         image: intelmq-fody-pkg
         build:
@@ -14,7 +15,7 @@ services:
             dockerfile: fody/Dockerfile.pkg
         ports:
             - 1382:8000
-            - 1340:8666
+            - 1340:8000
     fody-backend:
         image: intelmq-fody-backend-pkg
         build:
