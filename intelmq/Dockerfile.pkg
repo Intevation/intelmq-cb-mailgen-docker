@@ -37,6 +37,9 @@ RUN ./setup-certbund.sh /etc/intelmq
 COPY intelmq/startpkg.sh /opt/startpkg.sh
 RUN chmod +x startpkg.sh
 
+# Add test script
+COPY intelmq/test.sh /opt/
+
 # Expose the webserver
 EXPOSE 80
 
