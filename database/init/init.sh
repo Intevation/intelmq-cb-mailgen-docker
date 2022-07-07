@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu -o pipefail
+set -xeu -o pipefail
 
 ### ContactDB
 createdb --encoding=UTF8 --template=template0 contactdb
@@ -8,7 +8,7 @@ createdb --encoding=UTF8 --template=template0 contactdb
 if [ -f /opt/intelmq-certbund-contact/sql/initdb.sql ]; then
     psql -f /opt/intelmq-certbund-contact/sql/initdb.sql contactdb
 else
-    gunzip -c /usr/share/doc/intelmq-certbund-contact/sql/initdb.sql.gz | psql -f - contactdb
+    psql -f /usr/share/intelmq-certbund-contact/sql/initdb.sql contactdb
 fi
 
 psql -c "CREATE ROLE intelmq WITH login PASSWORD 'secret';"
@@ -19,15 +19,10 @@ psql -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO fody;" contactdb
 
 # use the directory created by ripe_download at the build stage. If ripe_download was called multiple times on different days, select the latest directory.
 latest_ripe_download="$(ls -t1 /opt/ripe_download | head -n 1)"
-cd "/opt/ripe_download/$latest_ripe_download"
-
-if [ -f /opt/intelmq-certbund-contact/intelmq_certbund_contact/ripe/ripe_import.py ]; then
-    ripe_import=/opt/intelmq-certbund-contact/intelmq_certbund_contact/ripe/ripe_import.py
-else
-    ripe_import=/usr/bin/ripe_import.py
-fi
-
-python3 $ripe_import --conninfo dbname=contactdb --ripe-delegated-file=/opt/delegated-ripencc-latest --restrict-to-country DE --verbose
+pushd "/opt/ripe_download/$latest_ripe_download"
+# At this stage, the server is only reachable with the socket. https://hub.docker.com/_/postgres section "Initialization scripts"
+ripe_import --conninfo 'host=/var/run/postgresql/ dbname=contactdb user=fody' --ripe-delegated-file=/opt/delegated-ripencc-latest --restrict-to-country DE --verbose
+popd
 
 ## EventDB
 createdb --encoding=UTF8 --template=template0 eventdb

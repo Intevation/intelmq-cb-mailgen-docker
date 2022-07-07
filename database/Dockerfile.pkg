@@ -3,6 +3,8 @@ FROM postgres:14
 ARG INTELMQ_UNSTABLE_REPOSITORY
 ENV INTELMQ_UNSTABLE_REPOSITORY ${INTELMQ_UNSTABLE_REPOSITORY}
 
+WORKDIR /opt
+
 # Copy the packages into the container
 COPY packages/* /opt/packages/
 

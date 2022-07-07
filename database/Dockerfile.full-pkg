@@ -1,9 +1,10 @@
 FROM postgres:14
 
-WORKDIR /opt
-
 ARG INTELMQ_UNSTABLE_REPOSITORY
 ENV INTELMQ_UNSTABLE_REPOSITORY ${INTELMQ_UNSTABLE_REPOSITORY}
+
+WORKDIR /opt
+
 
 COPY common/setup-apt.sh /opt/
 RUN /opt/setup-apt.sh intelmq
