@@ -1,6 +1,7 @@
 version: "3"
 services:
     intelmq:
+        image: intelmq-dev
         build:
             args:
                 INTELMQ_REVISION: $SOURCE_INTELMQ_REVISION
@@ -16,35 +17,25 @@ services:
             - $DEV_INTELMQ_SRC:/opt/intelmq
             - $DEV_INTELMQ_API_SRC:/opt/intelmq-api
             - $DEV_INTELMQ_MANAGER_SRC:/opt/intelmq-manager
+    fody:
+        image: intelmq-fody-dev
+        ports:
+            - 1382:8080
+        volumes:
+            - $DEV_FODY_SRC:/opt/src/intelmq-fody
     fody-backend:
+        image: intelmq-fody-backend-dev
         build:
             args:
                 INTELMQ_MAILGEN_REVISION: $SOURCE_INTELMQ_MAILGEN_REVISION
                 REVISION: $SOURCE_FODY_BACKEND_REVISION
         ports:
             - 1340:8002
-        volumes: 
+        volumes:
             - $DEV_FODY_BACKEND_SRC:/opt/intelmq-fody-backend
             - $DEV_MAILGEN_SRC:/opt/intelmq-mailgen
-    fody:
-        ports:
-            - 1382:8080
-        volumes: 
-            - $DEV_FODY_SRC:/opt/src/intelmq-fody
-    webinput-csv-backend:
-        ports:
-            - 1341:8002
-        volumes:
-            - $DEV_WEBINPUT_CSV_BACKEND_SRC:/opt/intelmq-webinput-csv-backend
-        build:
-            args:
-                INTELMQ_PYPI_VERSION: $SOURCE_INTELMQ_PYPI_VERSION
-    webinput-csv:
-        ports:
-            - 1383:8080
-        volumes:
-            - $DEV_WEBINPUT_CSV_SRC:/opt/src/intelmq-webinput-csv/client
     database:
+        image: intelmq-database-dev
         build:
             args:
                 INTELMQ_REVISION: $SOURCE_INTELMQ_REVISION
@@ -55,6 +46,7 @@ services:
         ports:
             - 1338:5432
     mailgen:
+        image: intelmq-mailgen-dev
         build:
             args:
                 INTELMQ_MAILGEN_REVISION: $SOURCE_INTELMQ_MAILGEN_REVISION
@@ -62,3 +54,18 @@ services:
             - $DEV_MAILGEN_SRC:/opt/intelmq-mailgen
         ports:
             - 1339:5432
+    webinput-csv:
+        image: intelmq-webinput-csv-dev
+        ports:
+            - 1383:8080
+        volumes:
+            - $DEV_WEBINPUT_CSV_SRC:/opt/src/intelmq-webinput-csv/client
+    webinput-csv-backend:
+        image: intelmq-webinput-csv-backend-dev
+        ports:
+            - 1341:8002
+        volumes:
+            - $DEV_WEBINPUT_CSV_BACKEND_SRC:/opt/intelmq-webinput-csv-backend
+        build:
+            args:
+                INTELMQ_PYPI_VERSION: $SOURCE_INTELMQ_PYPI_VERSION

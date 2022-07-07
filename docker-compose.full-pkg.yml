@@ -5,45 +5,33 @@ services:
         build:
             context: .
             dockerfile: intelmq/Dockerfile.full-pkg
-        ports:
-            - 1380:80
-            - 1381:80
     fody:
-        image: intelmq-fody-pkg
+        image: intelmq-fody-full-pkg
         build:
             context: .
             dockerfile: fody/Dockerfile.full-pkg
-        ports:
-            - 1382:8000
-            - 1340:8000
     fody-backend:
-        image: intelmq-fody-backend-pkg
+        image: intelmq-fody-backend-full-pkg
         build:
             context: .
             dockerfile: fody-backend/Dockerfile.pkg
-        entrypoint: ["echo", "Service disabled."]
-        restart: "no"
-    webinput-csv:
-        image: intelmq-webinput-csv-spa-pkg
-        build:
-            context: .
-            dockerfile: webinput-csv/Dockerfile.full-pkg
-        entrypoint: ["echo", "Service disabled."]
-        restart: "no"
-    webinput-csv-backend:
-        image: intelmq-fody-backend-pkg
-        build:
-            context: .
-            dockerfile: webinput-csv-backend/Dockerfile.pkg
-        entrypoint: ["echo", "Service disabled."]
-        restart: "no"
     database:
-        image: intelmq-database
+        image: intelmq-database-full-pkg
         build:
             context: .
             dockerfile: database/Dockerfile.full-pkg
     mailgen:
-        image: intelmq-mailgen-pkg
+        image: intelmq-mailgen-full-pkg
         build:
             context: .
             dockerfile: mailgen/Dockerfile.full-pkg
+    webinput-csv:
+        image: intelmq-webinput-csv-full-pkg
+        build:
+            context: .
+            dockerfile: webinput-csv/Dockerfile.full-pkg
+    webinput-csv-backend:
+        image: intelmq-fody-backend-full-pkg
+        build:
+            context: .
+            dockerfile: webinput-csv-backend/Dockerfile.pkg

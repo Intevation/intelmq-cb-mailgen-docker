@@ -11,14 +11,6 @@ services:
         ports:
             - 1380:80
             - 1381:81
-    fody-backend:
-        # volumes: 
-        #     - $FODY_BACKEND_SRC:/opt/intelmq-fody-backend
-        ports:
-            - 1340:8002
-        build:
-            args:
-                REVISION: $SOURCE_FODY_BACKEND_REVISION
     fody:
         # volumes:
         #     - $FODY_SRC:/opt/src/intelmq-fody
@@ -27,6 +19,26 @@ services:
         build:
             args:
                 REVISION: $SOURCE_FODY_REVISION
+    fody-backend:
+        # volumes:
+        #     - $FODY_BACKEND_SRC:/opt/intelmq-fody-backend
+        ports:
+            - 1340:8002
+        build:
+            args:
+                REVISION: $SOURCE_FODY_BACKEND_REVISION
+    database:
+        build:
+            args:
+                INTELMQ_MAILGEN_REVISION: $SOURCE_INTELMQ_MAILGEN_REVISION
+    webinput-csv:
+        # volumes:
+        #     - $WEBINPUT_CSV_SRC:/opt/src/intelmq-webinput-csv
+        ports:
+            - 1383:8080
+        build:
+            args:
+                REVISION: $SOURCE_WEBINPUT_CSV_REVISION
     webinput-csv-backend:
         # volumes:
         #     - $WEBINPUT_CSV_BACKEND_SRC:/opt/intelmq-webinput-csv
@@ -36,15 +48,3 @@ services:
             args:
                 REVISION: $SOURCE_WEBINPUT_CSV_BACKEND_REVISION
                 INTELMQ_PYPI_VERSION: $SOURCE_INTELMQ_PYPI_VERSION
-    webinput-csv:
-        # volumes:
-        #     - $WEBINPUT_CSV_SRC:/opt/src/intelmq-webinput-csv
-        ports:
-            - 1383:8080
-        build:
-            args:
-                REVISION: $SOURCE_WEBINPUT_CSV_REVISION
-    database:
-        build:
-            args:
-                INTELMQ_MAILGEN_REVISION: $SOURCE_INTELMQ_MAILGEN_REVISION

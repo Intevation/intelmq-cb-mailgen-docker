@@ -173,8 +173,8 @@ docker compose -f docker-compose.yml -f docker-compose.pkg.yml up
 Building a setup of all the applications using the package repositories can be done with
 
 ```
-docker compose -f docker-compose.yml -f docker-compose.full-pkg.yml build
-docker compose -f docker-compose.yml -f docker-compose.full-pkg.yml up
+docker compose -f docker-compose.yml -f docker-compose.pkg.yml -f docker-compose.full-pkg.yml build
+docker compose -f docker-compose.yml -f docker-compose.pkg.yml -f docker-compose.full-pkg.yml up
 ```
 
 The latest packages are used, no versions can be specified in this scenario.
