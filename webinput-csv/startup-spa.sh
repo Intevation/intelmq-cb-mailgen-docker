@@ -1,5 +1,8 @@
-#! /bin/sh
+#! /bin/bash
+
+set -xeu -o pipefail
+
 echo "$PWD"
+
 yarn 2>&1
-yarn serve 2>&1 &
-tail -F anything
+yarn run dev 2>&1
