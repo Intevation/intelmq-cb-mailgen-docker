@@ -55,3 +55,5 @@ wget -O - http://localhost/intelmq-manager/ > /dev/null
 # Test API Login
 token=$(wget -O - --post-data '{"username": "admin", "password": "secret"}' --header "Content-Type: application/json" http://localhost/intelmq/v1/api/login/ 2>/dev/null | jq .login_token | tr -d '"')
 wget -O - --header "Authorization: $token" http://localhost/intelmq/v1/api/queues > /dev/null
+
+echo "IntelMQ tests completed successfully!"
