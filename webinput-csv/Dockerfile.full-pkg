@@ -1,3 +1,35 @@
 FROM ubuntu:20.04
 
-CMD ["echo", "Service disabled"]
+ARG INTELMQ_UNSTABLE_REPOSITORY
+ENV INTELMQ_UNSTABLE_REPOSITORY ${INTELMQ_UNSTABLE_REPOSITORY}
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y locales
+
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+COPY common/setup-apt.sh /opt/
+RUN /opt/setup-apt.sh intelmq
+RUN /opt/setup-apt.sh intevation
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew install -q -y intelmq intelmq-webinput-csv-client intelmq-webinput-csv-backend
+
+RUN mkdir /opt/conf
+
+RUN touch /opt/conf/webinput-session.sqlite
+
+RUN chown www-data /opt/conf/webinput-session.sqlite
+
+RUN chmod 777 /opt
+RUN chmod 777 /opt/conf
+
+COPY webinput-csv-backend/webinput_csv.conf /etc/intelmq/webinput_csv.conf
+
+RUN webinput-adduser --user admin --password secret
+
+EXPOSE 8667 80
+
+CMD ["apachectl", "-D", "FOREGROUND"]

@@ -1,3 +1,42 @@
 FROM ubuntu:20.04
 
-CMD ["echo", "Service disabled"]
+ARG INTELMQ_UNSTABLE_REPOSITORY
+ENV INTELMQ_UNSTABLE_REPOSITORY ${INTELMQ_UNSTABLE_REPOSITORY}
+
+COPY common/setup-apt.sh /opt/
+RUN /opt/setup-apt.sh intelmq
+RUN /opt/setup-apt.sh intevation
+
+# Install intelmq and intelmq-certbund-contact
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-manager intelmq intelmq-api intelmq-certbund-contact
+
+# Add a new api user
+RUN intelmq-api-adduser --user admin --password secret
+
+# Use the build argument as switch to configure the cert-bund bots and mailgen
+# Override the var in the .env file.
+ARG USE_CERTBUND=false
+
+WORKDIR /opt
+
+# Add the configs
+ADD intelmq/intelmq-config /opt/intelmq-config
+ADD intelmq/rules /opt/rules
+
+# Execute the setup script using the switch from above.
+COPY intelmq/setup-certbund.sh /opt/setup-certbund.sh
+RUN chmod +x setup-certbund.sh
+RUN ./setup-certbund.sh /etc/intelmq
+
+# Use the start script to run apache.
+COPY intelmq/startpkg.sh /opt/startpkg.sh
+RUN chmod +x startpkg.sh
+
+# Add test script
+COPY intelmq/test.sh /opt/
+
+# Expose the webserver
+EXPOSE 80
+
+#Start the apache
+CMD ["./startpkg.sh"]
