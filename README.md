@@ -250,7 +250,7 @@ mutt -f /opt/mails/incoming
 #### IntelMQ
 To use `intelmqctl` you need to set environment variables, which are normally set by `docker-compose`:
 ```bash
-docker exec --env-file=.env -ti intelmq bash
+docker exec --env-file=.env -ti --network intelmq-cb-mailgen-docker_intelmq intelmq bash
 ```
 
 ## Tests
