@@ -22,10 +22,12 @@ RUN /opt/setup-apt.sh intevation
 
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew install -q -y intelmq-fody intelmq-fody-backend python3-dateutil
 
+# configurations required for fody
 COPY fody-backend/conf/contactdb.pkg.conf /etc/intelmq/contactdb-serve.conf
 COPY fody-backend/conf/eventdb.pkg.conf /etc/intelmq/eventdb-serve.conf
 COPY fody-backend/conf/ticketdb.pkg.conf /etc/intelmq/tickets-serve.conf
-COPY fody-backend/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
+# checkicket_api reads mailgen configuration
+COPY mailgen/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
 
 RUN mkdir /opt/conf
 
