@@ -19,7 +19,6 @@ services:
             dockerfile: intelmq/Dockerfile
             args:
                 USE_CERTBUND: $USE_CERTBUND
-                INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
         restart: always
         depends_on:
             - redis
@@ -41,8 +40,6 @@ services:
         build:
             context: .
             dockerfile: fody/Dockerfile
-            args:
-                INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
         restart: always
         depends_on:
             - fody-backend
@@ -72,8 +69,6 @@ services:
         build:
             context: .
             dockerfile: database/Dockerfile
-            args:
-                INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
         restart: always
         volumes:
           - ./database/init:/docker-entrypoint-initdb.d
@@ -115,8 +110,6 @@ services:
         build:
             context: .
             dockerfile: webinput-csv/Dockerfile
-            args:
-                INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
         restart: always
         depends_on:
             - webinput-csv-backend

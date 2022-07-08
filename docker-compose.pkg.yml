@@ -5,6 +5,8 @@ services:
         build:
             context: .
             dockerfile: intelmq/Dockerfile.pkg
+            args:
+                INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
         ports:
             - 1380:80
             - 1381:80
@@ -13,6 +15,8 @@ services:
         build:
             context: .
             dockerfile: fody/Dockerfile.pkg
+            args:
+                INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
         ports:
             - 1382:8000
             - 1340:8000
@@ -28,18 +32,22 @@ services:
         build:
             context: .
             dockerfile: database/Dockerfile.pkg
-        restart: "no"
+            args:
+                INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
     mailgen:
         image: intelmq-mailgen-pkg
         build:
             context: .
             dockerfile: mailgen/Dockerfile.pkg
-        restart: "no"
+            args:
+                INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
     webinput-csv:
         image: intelmq-webinput-csv-pkg
         build:
             context: .
             dockerfile: webinput-csv/Dockerfile.pkg
+            args:
+                INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
         ports:
             - 1383:80
             - 1341:8667
