@@ -1,7 +1,7 @@
 module.exports = {
   lintOnSave: "error",
   devServer: {
-    public: 'localhost:1382',
+    public: 'localhost:1383',
     hotOnly: true,
     disableHostCheck: true,
     inline: true,

@@ -131,6 +131,8 @@ services:
         restart: always
         volumes:
             - ./webinput-csv-backend/conf:/opt/conf
+        depends_on:
+            - intelmq
         networks:
             - intelmq
 

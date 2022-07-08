@@ -42,8 +42,5 @@ WORKDIR /opt/intelmq-webinput-csv
 # Install coreutils for development purposes.
 RUN apt-get install -y coreutils
 
-RUN ls -al
-RUN ls -al intelmq_webinput_csv
 # Start the backend using hug. 
-# !!! compose file overwrites this CMD !!!
 CMD ["hug", "-f", "./intelmq_webinput_csv/serve.py", "-p", "8002"]
