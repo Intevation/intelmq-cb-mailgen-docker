@@ -2,8 +2,6 @@
 
 set -xeu -o pipefail
 
-sudo apt install -y wget uuid-runtime jq
-
 password=$(uuidgen)
 
 # Tests adduser script
