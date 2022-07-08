@@ -79,8 +79,8 @@ The second section configures the paths to rules, templates and formats of CERT-
 ```
 # Mounted directories for rule and mailgen development in all variants
 DEV_CERTBUND_RULES=./intelmq/rules
-DEV_CERTBUND_TEMPLATES=./intelmq/templates
-DEV_CERTBUND_FORMATS=./intelmq/formats
+DEV_CERTBUND_TEMPLATES=./mailgen/templates
+DEV_CERTBUND_FORMATS=./mailgen/formats
 ```
 
 In the third section the repository revisions for the default scenario are configured.
