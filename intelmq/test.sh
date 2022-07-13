@@ -2,7 +2,11 @@
 
 set -xeu -o pipefail
 
-apt install -y wget python3-pytest-cov python3-cerberus python3-requests-mock postgresql-client uuid-runtime
+apt install -y wget python3-pytest-cov python3-cerberus python3-requests-mock postgresql-client uuid-runtime jq
+
+# Clear IntelMQ logs
+log_dir=$(python3 -c "import intelmq; print(intelmq.DEFAULT_LOGGING_PATH)")
+rm $log_dir/*
 
 su - intelmq << SHT
 set -xeu -o pipefail
@@ -10,6 +14,9 @@ intelmq_tests_path=\$(python3 -c 'import intelmq.tests; print(intelmq.tests.__fi
 # ignore errors because of https://github.com/certtools/intelmq/issues/2206
 # make the tests a bit shorter for now
 INTELMQ_PIPELINE_HOST=redis pytest-3 "\$intelmq_tests_path"/bots/experts/abusix/ ||:
+# run 'intelmqctl' once to create the log file with correct permissions, see https://github.com/certtools/intelmq/issues/2176
+# debug should always return an exit code 0
+intelmqctl debug
 SHT
 
 
@@ -26,7 +33,6 @@ file_output=$(python3 -c "from ruamel.yaml import YAML; import intelmq; yaml = Y
 grep "$uuid" "$file_output"
 
 # check for errors
-log_dir=$(python3 -c "import intelmq; print(intelmq.DEFAULT_LOGGING_PATH)")
 set +e
 grep ERROR $log_dir/*.log
 if [ $? -eq 0 ]; then
