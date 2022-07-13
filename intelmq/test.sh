@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -xeu -o pipefail
+set -eu -o pipefail
+test -n "${DEBUG-}" && set -x
 
 apt install -y wget python3-pytest-cov python3-cerberus python3-requests-mock postgresql-client uuid-runtime jq
 

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -xeu -o pipefail
+set -eu -o pipefail
+test -n "${DEBUG-}" && set -x
 
 password=$(uuidgen)
 
