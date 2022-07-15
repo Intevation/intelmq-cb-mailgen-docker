@@ -24,6 +24,10 @@ RUN mkdir -p /etc/intelmq/mailgen/formats
 RUN cp /opt/intelmq-mailgen/templates/* /etc/intelmq/mailgen/templates
 RUN cp /opt/intelmq-mailgen/example_scripts/* /etc/intelmq/mailgen/formats
 
+# Generate gpg key
+COPY generate-pgp-key.sh /opt/
+RUN /opt/generate-pgp-key.sh
+
 # Add wait-for-it.
 # Used in compose environments to give the database time to start.
 RUN git clone https://github.com/vishnubob/wait-for-it.git
