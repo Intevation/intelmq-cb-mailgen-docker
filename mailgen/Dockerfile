@@ -21,11 +21,13 @@ RUN mkdir /etc/intelmq
 COPY mailgen/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
 RUN mkdir -p /etc/intelmq/mailgen/templates
 RUN mkdir -p /etc/intelmq/mailgen/formats
-RUN cp /opt/intelmq-mailgen/templates/* /etc/intelmq/mailgen/templates
-RUN cp /opt/intelmq-mailgen/example_scripts/* /etc/intelmq/mailgen/formats
+RUN cp /opt/intelmq-mailgen/templates/* /etc/intelmq/mailgen/templates/
+RUN cp /opt/intelmq-mailgen/example_scripts/* /etc/intelmq/mailgen/formats/
+# provides test-template
+COPY mailgen/templates/* /etc/intelmq/mailgen/templates/
 
 # Generate gpg key
-COPY generate-pgp-key.sh /opt/
+COPY mailgen/generate-pgp-key.sh /opt/
 RUN /opt/generate-pgp-key.sh
 
 # Add wait-for-it.
