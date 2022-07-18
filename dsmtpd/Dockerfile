@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y git python3-pip
 RUN apt-get update && apt-get install -y mutt
 
 # A "welcome message" lets the user know which command is used to see the mails.
-RUN echo "Run 'mutt -f /opt/mails/incoming' to see the mails send by intelmqmailgen." > /etc/motd
+RUN echo "Run 'mutt -f /opt/mails/incoming' to see the mails sent by intelmq-mailgen. View the logs at /var/log/dsmtpd.log." > /etc/motd
 
 RUN echo "cat /etc/motd" >> /root/.bashrc
 
@@ -18,4 +18,6 @@ WORKDIR /opt/dsmtpd
 
 RUN pip3 install .
 
-CMD ["dsmtpd", "-p", "1025", "-i", "0.0.0.0", "-d", "../mails/incoming"]
+COPY dsmtpd/run.sh /opt/
+
+CMD ["/opt/run.sh"]
