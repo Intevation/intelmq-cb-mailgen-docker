@@ -42,4 +42,11 @@ sudo apt install -y wget uuid-runtime jq
 # Run webinput csv tests
 ./webinput-csv/test.sh
 
+if [ "$USE_CERTBUND" == "true" ]; then
+    # Run mailgen tests
+    docker exec -ti intelmq touch /tmp/intelmqcbmail_disabled
+    ./mailgen/test.sh
+    docker exec -ti intelmq rm /tmp/intelmqcbmail_disabled
+fi
+
 echo "All tests completed successfully!"
