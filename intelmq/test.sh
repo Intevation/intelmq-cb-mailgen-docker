@@ -3,6 +3,12 @@
 set -eu -o pipefail
 test -n "${DEBUG-}" && set -x
 
+function end_test {
+    read line file <<<$(caller)
+    echo "IntelMQ test failed at $file:$line."
+}
+trap end_test ERR
+
 apt install -y wget python3-pytest-cov python3-cerberus python3-requests-mock postgresql-client uuid-runtime jq netcat
 
 # Clear IntelMQ logs

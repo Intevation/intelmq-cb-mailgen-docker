@@ -3,6 +3,12 @@
 set -eu -o pipefail
 test -n "${DEBUG-}" && set -x
 
+function end_test {
+    read line file <<<$(caller)
+    echo "Fody Test failed at $file:$line."
+}
+trap end_test ERR
+
 password=$(uuidgen)
 
 # Tests adduser script
