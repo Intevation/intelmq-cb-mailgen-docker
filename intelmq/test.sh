@@ -3,7 +3,7 @@
 set -eu -o pipefail
 test -n "${DEBUG-}" && set -x
 
-apt install -y wget python3-pytest-cov python3-cerberus python3-requests-mock postgresql-client uuid-runtime jq
+apt install -y wget python3-pytest-cov python3-cerberus python3-requests-mock postgresql-client uuid-runtime jq netcat
 
 # Clear IntelMQ logs
 log_dir=$(python3 -c "import intelmq; print(intelmq.DEFAULT_LOGGING_PATH)")

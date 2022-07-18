@@ -17,6 +17,15 @@ if [ "$USE_CERTBUND" == "true" ]; then
     # clean the database for mailgen tests
     # TRUNCATE would try to acquire an exclusive lock, which is blocked by fody, so delete all entries from the tables
     docker exec --env-file=.env -e DEBUG=${DEBUG-} -ti intelmq-database psql eventdb -c "DELETE FROM directives; DELETE FROM events;"
+
+    # The database takes several minutes after its first start to complete initialization. Check it's availability in the beginning to avoid errors later
+    set +e
+    echo | nc -vw 0 localhost 1338
+    if [ $? -ne 0 ]; then
+        echo "Database is not yet ready. Exiting."
+        exit 1
+    fi
+    set -e
 fi
 
 # clear deduplicator cache
