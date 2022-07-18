@@ -17,6 +17,9 @@ psql -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO intelmq;" contactdb
 psql -c "GRANT ALL ON ALL TABLES IN SCHEMA public TO fody;" contactdb
 psql -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO fody;" contactdb
 
+psql -c "CREATE ROLE root WITH SUPERUSER LOGIN;" contactdb
+psql -c "GRANT ALL ON ALL TABLES IN SCHEMA public TO root;" contactdb
+
 # use the directory created by ripe_download at the build stage. If ripe_download was called multiple times on different days, select the latest directory.
 latest_ripe_download="$(ls -t1 /opt/ripe_download | head -n 1)"
 pushd "/opt/ripe_download/$latest_ripe_download"
@@ -46,3 +49,6 @@ psql -c "GRANT INSERT,SELECT ON ALL TABLES IN SCHEMA public TO intelmq;" eventdb
 psql -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO fody;" eventdb
 psql -c "GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO intelmq;" eventdb
 psql -c "GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO fody;" eventdb
+
+psql -c "ALTER ROLE root WITH SUPERUSER LOGIN;" eventdb
+psql -c "GRANT ALL ON ALL TABLES IN SCHEMA public TO root;" eventdb

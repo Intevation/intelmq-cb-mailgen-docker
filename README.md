@@ -259,4 +259,8 @@ To run the tests, call `testall.sh`:
 ```
 ./testall.sh
 ```
+Please note that this clears
+- all data in the database tables `events` and `directives`
+- all data in the redis database
+
 Or execute the tests per container by executing the single commands from this file.
