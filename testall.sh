@@ -26,6 +26,9 @@ if [ "$USE_CERTBUND" == "true" ]; then
         exit 1
     fi
     set -e
+
+    # Suspend mailgen. Lock will be removed after successful fun of mailgen tests
+    docker exec -ti intelmq-mailgen touch /tmp/intelmqcbmail_disabled
 fi
 
 # clear deduplicator cache
@@ -44,9 +47,7 @@ sudo apt install -y wget uuid-runtime jq
 
 if [ "$USE_CERTBUND" == "true" ]; then
     # Run mailgen tests
-    docker exec -ti intelmq touch /tmp/intelmqcbmail_disabled
     ./mailgen/test.sh
-    docker exec -ti intelmq rm /tmp/intelmqcbmail_disabled
 fi
 
 echo "All tests completed successfully!"
