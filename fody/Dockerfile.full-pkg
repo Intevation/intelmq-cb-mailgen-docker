@@ -15,7 +15,8 @@ COPY common/setup-apt.sh /opt/
 RUN /opt/setup-apt.sh intelmq
 RUN /opt/setup-apt.sh intevation
 
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew install -q -y intelmq-fody intelmq-fody-backend
+# install python3-dateutil explicitly until https://github.com/Intevation/intelmq-fody-backend/commit/dabeb6d801fd1d25dafc352f668bae20cc35aa1a hits the repositories (0.9.2-2)
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew install -q -y intelmq-fody intelmq-fody-backend python3-dateutil
 
 # configurations required for fody
 COPY fody-backend/conf/contactdb.pkg.conf /etc/intelmq/contactdb-serve.conf
