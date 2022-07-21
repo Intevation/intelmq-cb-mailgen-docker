@@ -19,7 +19,7 @@ services:
                 INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
         ports:
             - 1382:8000
-            - 1340:8000
+            - 1340:8666
     fody-backend:
         image: intelmq-fody-backend-pkg
         build:

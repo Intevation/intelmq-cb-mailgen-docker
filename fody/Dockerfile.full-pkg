@@ -7,36 +7,26 @@ COPY common/setup-apt.sh /opt/
 RUN /opt/setup-apt.sh intelmq
 RUN /opt/setup-apt.sh intevation
 
-# Install intelmq and intelmq-certbund-contact
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-manager intelmq intelmq-api intelmq-certbund-contact
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew install -q -y intelmq-fody intelmq-fody-backend
 
-# Add a new api user
-RUN intelmq-api-adduser --user admin --password secret
+# configurations required for fody
+COPY fody-backend/conf/contactdb.pkg.conf /etc/intelmq/contactdb-serve.conf
+COPY fody-backend/conf/eventdb.pkg.conf /etc/intelmq/eventdb-serve.conf
+COPY fody-backend/conf/ticketdb.pkg.conf /etc/intelmq/tickets-serve.conf
+# checkticket_api reads mailgen configuration
+COPY mailgen/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
 
-# Use the build argument as switch to configure the cert-bund bots and mailgen
-# Override the var in the .env file.
-ARG USE_CERTBUND=false
+RUN mkdir /opt/conf
 
-WORKDIR /opt
+RUN touch /opt/conf/fody-session.sqlite
 
-# Add the configs
-ADD intelmq/intelmq-config /opt/intelmq-config
-ADD intelmq/rules /opt/rules
+RUN chown www-data /opt/conf/fody-session.sqlite
 
-# Execute the setup script using the switch from above.
-COPY intelmq/setup-certbund.sh /opt/setup-certbund.sh
-RUN chmod +x setup-certbund.sh
-RUN ./setup-certbund.sh /etc/intelmq
+RUN chmod 777 /opt
+RUN chmod 777 /opt/conf
 
-# Use the start script to run apache.
-COPY intelmq/startpkg.sh /opt/startpkg.sh
-RUN chmod +x startpkg.sh
+RUN fody-adduser --user admin --password secret
 
-# Add test script
-COPY intelmq/test.sh /opt/
+EXPOSE 8666 8000
 
-# Expose the webserver
-EXPOSE 80
-
-#Start the apache
-CMD ["./startpkg.sh"]
+CMD ["apachectl", "-D", "FOREGROUND"]
