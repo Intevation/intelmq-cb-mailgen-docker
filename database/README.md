@@ -13,3 +13,7 @@ will be executed on container startup.
 Schema definition for the eventdb. Used in the init-sh script.
 Do not place this script in the init folder. It has to be imported during the
 setup process, not standalone.
+
+# Logs
+
+postgres logs to `/var/log/postgresql` in the container.

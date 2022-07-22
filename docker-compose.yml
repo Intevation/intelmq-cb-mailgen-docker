@@ -78,6 +78,16 @@ services:
             - 1338:5432
         networks:
             - intelmq
+        command:
+            - "postgres"
+            - "-c"
+            - "logging_collector=on"
+            - "-c"
+            - "log_destination=stderr"
+            - "-c"
+            - "log_directory=/var/log/postgresql/"
+            - "-c"
+            - "log_statement=all"
     mailgen:
         image: intelmq-mailgen
         container_name: intelmq-mailgen
