@@ -266,3 +266,4 @@ Please note that this clears
 Or execute the tests per container by executing the single commands from this file.
 
 You can activate the debug mode (`set -x`) by using `DEBUG=1`.
+To skip the IntelMQ unittests (which take a while to complete, set `INTELMQ_SKIP_UNITTESTS=1` in `.env`.

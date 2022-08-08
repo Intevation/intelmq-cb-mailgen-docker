@@ -18,9 +18,8 @@ rm $log_dir/*
 su - intelmq << SHT
 set -xeu -o pipefail
 intelmq_tests_path=\$(python3 -c 'import intelmq.tests; print(intelmq.tests.__file__[:-11])')
-# ignore errors because of https://github.com/certtools/intelmq/issues/2206
-# make the tests a bit shorter for now
-INTELMQ_PIPELINE_HOST=redis pytest-3 "\$intelmq_tests_path"/bots/experts/abusix/ ||:
+# pytest.ini from the repo is only available in dev-setups. So let's add the relevant options (cov, warnings) to pytest as parameters here.
+test -n "${INTELMQ_SKIP_UNITTESTS-}" && INTELMQ_PIPELINE_HOST=redis pytest-3 --no-cov -p no:warnings "\$intelmq_tests_path"/
 # run 'intelmqctl' once to create the log file with correct permissions, see https://github.com/certtools/intelmq/issues/2176
 # debug should always return an exit code 0
 intelmqctl debug
