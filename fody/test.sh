@@ -18,14 +18,17 @@ password=$(uuidgen)
 wget --no-verbose -O - http://localhost:1382/ > /dev/null
 
 # Test API Login
-token=$(wget --no-verbose -O - --post-data '{"username": "admin", "password": "secret"}' --header "Content-Type: application/json" http://localhost:1340/api/login/ 2>/dev/null | jq .login_token | tr -d '"')
+token=$(wget --no-verbose -O - --post-data '{"username": "admin", "password": "secret"}' --header "Content-Type: application/json" http://localhost:1382/api/login/ 2>/dev/null | jq .login_token | tr -d '"')
 
 # Test ContactDB
+# 80.245.144.218 is the address of bsi.bund.de
+# owned by ORG-BFF1-RIPE (ITZBUND)
 ip_search=$(wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/contactdb/searchcidr?address=80.245.144.218)
-test "$ip_search" = '{"manual": [], "auto": [617]}'
+echo $ip_search | grep -E '^\{"manual": \[\], "auto": \[[0-9]+\]\}$'
+organisation=$(echo $ip_search | jq .auto[0])
 
-org_search=$(wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/contactdb/org/auto/617)
-echo "$org_search" | grep -E '\{"name": "ITZBUND", "sector_id": null, "comment": "", "ripe_org_hdl": "ORG-BFF1-RIPE", "ti_handle": "", "first_handle": "", "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+", "organisation_id": 617, "asns": \[\{"organisation_automatic_id": 617, "asn": 35704, "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+"\}\], "contacts": \[\{"contact_automatic_id": [0-9]+, "firstname": "", "lastname": "", "tel": "", "openpgp_fpr": "", "email": "lir@list.bfinv.de", "comment": "", "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+", "organisation_automatic_id": [0-9]+\}\], "national_certs": \[\], "networks": \[\{"network_id": [0-9]+, "address": "80.245.144.0/20", "comment": ""\}, \{"network_id": [0-9]+, "address": "2a09:1480::/29", "comment": ""\}\], "fqdns": \[\]\}'
+org_search=$(wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/contactdb/org/auto/$organisation)
+echo "$org_search" | grep -E '\{"name": "ITZBUND", "sector_id": null, "comment": "", "ripe_org_hdl": "ORG-BFF1-RIPE", "ti_handle": "", "first_handle": "", "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+", "organisation_id": [0-9]+, "asns": \[\{"organisation_automatic_id": [0-9]+, "asn": 35704, "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+"\}\], "contacts": \[\{"contact_automatic_id": [0-9]+, "firstname": "", "lastname": "", "tel": "", "openpgp_fpr": "", "email": "lir@list.bfinv.de", "comment": "", "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+", "organisation_automatic_id": [0-9]+\}\], "national_certs": \[\], "networks": \[\{"network_id": [0-9]+, "address": "80.245.144.0/20", "comment": ""\}, \{"network_id": [0-9]+, "address": "2a09:1480::/29", "comment": ""\}\], "fqdns": \[\]\}'
 email_search=$(wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/contactdb/email/lir@list.bfinv.de)
 test "$email_search" = '{"email": "lir@list.bfinv.de", "enabled": true, "tags": {}}'
 
