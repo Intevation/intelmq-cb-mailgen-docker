@@ -30,6 +30,7 @@ SHT
 intelmqctl check
 # Check the experts and outputs
 uuid=$(uuidgen)
+echo "The generated UUID is $uuid"
 intelmqctl run deduplicator-expert process -m "{\"extra.data\": \"$uuid\"}"
 intelmqctl start --group experts
 intelmqctl start --group outputs
