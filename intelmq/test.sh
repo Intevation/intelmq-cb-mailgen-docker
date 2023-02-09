@@ -39,8 +39,9 @@ sleep 2
 file_output=$(python3 -c "from ruamel.yaml import YAML; import intelmq; yaml = YAML(); runtime = yaml.load(open(intelmq.RUNTIME_CONF_FILE, 'r')); print(runtime['file-output']['parameters']['file'])")
 grep "$uuid" "$file_output"
 
-# check for errors
+# check for errors in logs. Disable the shell error trapping for the calls to grep
 set +e
+trap - ERR
 grep ERROR $log_dir/*.log
 if [ $? -eq 0 ]; then
     echo "ERRORs found in logs, see above" > /dev/stderr
@@ -52,6 +53,7 @@ if [ "$dumps" -ne 0 ]; then
     find $log_dir -name '*.dump' > /dev/stderr
     exit 1
 fi
+trap end_test ERR
 set -e
 
 if [ "$USE_CERTBUND" == "true" ]; then
