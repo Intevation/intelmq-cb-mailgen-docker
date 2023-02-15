@@ -21,8 +21,6 @@ WORKDIR /opt/src/intelmq-webinput-csv/client
 
 RUN git checkout $REVISION
 
-COPY webinput-csv/vue.config.js /opt/src/intelmq-webinput-csv/client/vue.config.js
-
 EXPOSE 8080
 
 CMD ["/opt/startup-spa.sh"]
