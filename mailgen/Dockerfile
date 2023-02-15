@@ -32,8 +32,8 @@ RUN /opt/generate-pgp-key.sh
 
 # Add wait-for-it.
 # Used in compose environments to give the database time to start.
-RUN git clone https://github.com/vishnubob/wait-for-it.git
+RUN git clone https://github.com/vishnubob/wait-for-it.git /opt/wait-for-it/
+RUN cp /opt/wait-for-it/wait-for-it.sh /usr/bin
 
-RUN cp wait-for-it/wait-for-it.sh /usr/bin
-
+# ./mailgen/init is mapped as volume in docker-compose.yml
 CMD ["bash", "/opt/init/run.sh"]
