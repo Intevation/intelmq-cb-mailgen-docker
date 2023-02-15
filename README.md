@@ -1,7 +1,7 @@
 # IntelMQ development environment
 
-Use dockerfiles and/or compose file to build up a complete development
-environment for IntelMQ and fody.
+Use Docker-Compose to build up a complete development and test
+environment for IntelMQ, Manager, fody, mailgen and webinput
 
 ### FOR DEVELOPMENT ONLY! CONTAINS INSECURE PLAINTEXT PASSWORDS!
 
@@ -11,14 +11,17 @@ environment for IntelMQ and fody.
 - [Building Packages](#building-packages)
 - [Setup Scenarios](#setup-scenarios)
     - [Configuration env](#configuration-env)
-    - [Scenario 1](#scenario-1-default)
-    - [Scenario 2](#scenario-2)
-    - [Scenario 3](#scenario-3)
-    - [Scenario 4](#scenario-4)
+    - [Scenario 1 ("Source")](#scenario-1-from-source-default)
+    - [Scenario 2 ("Development")](#scenario-2-development-dev)
+    - [Scenario 3 ("packages")](#scenario-3-local-packages-pkg)
+    - [Scenario 4 ("full packages")](#scenario-4-repository-packages-full-pkg)
     - [General](#General)
     - [The Containers](#the-containers)
-    - [Using the applications](#using-the-applications)
-- [ContactDB](#contactdb)
+- [Using the applications](#using-the-applications)
+    - [ContactDB](#contactdb)
+    - [Mailgen](#mailgen)
+    - [IntelMQ](#intelmq)
+- [Tests](#tests)
 
 ## Introduction
 
@@ -86,8 +89,8 @@ DEV_CERTBUND_FORMATS=./mailgen/formats
 In the third section the repository revisions for the default scenario are configured.
 ```
 # Revisions for source variant
-SOURCE_INTELMQ_REVISION=3.0.2
-SOURCE_INTELMQ_PYPI_VERSION=3.0.2.post1
+SOURCE_INTELMQ_REVISION=3.1.0
+SOURCE_INTELMQ_PYPI_VERSION=3.1.0
 SOURCE_INTELMQ_API_REVISION=3.0.1
 SOURCE_INTELMQ_MANAGER_REVISION=3.0.1
 SOURCE_FODY_REVISION=master
@@ -104,12 +107,11 @@ INTELMQ_UNSTABLE_REPOSITORY=false
 
 The last section defines a switch to integrate a basic but complete CERT-BUND bot and mailgen configuration that applies to all scenarios at build time.
 ```
-# Switch to integrate certbund bot and mailgen configuration
+# deactivated:
 USE_CERTBUND=false
-```
-
-# Switch to integrate certbund bot and mailgen configuration
+# Switch on the integration of certbund bot and mailgen configuration:
 USE_CERTBUND=true
+```
 
 ### Scenario 1: From source (default)
 
