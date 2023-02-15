@@ -21,8 +21,6 @@ WORKDIR /opt/src/intelmq-fody
 
 RUN git checkout $REVISION
 
-COPY fody/index.js /opt/src/intelmq-fody/config/index.js
-
 EXPOSE 8080
 
 CMD ["/opt/startup-spa.sh"]
