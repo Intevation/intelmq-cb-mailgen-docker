@@ -11,8 +11,21 @@ trap end_test ERR
 
 password=$(uuidgen)
 
+# check if the current setup has a separate backend container (dev). Disable the shell error trapping for the calls to grep
+set +e
+trap - ERR
+docker ps | grep intelmq-webinput-csv-backend
+if [ $? -eq 1 ]; then
+    # has no backend
+    webinput_csv_backend_container=intelmq-webinput-csv
+else
+    webinput_csv_backend_container=intelmq-webinput-csv-backend
+fi
+trap end_test ERR
+set -e
+
 # Tests adduser script
-docker exec -ti intelmq-webinput-csv-backend webinput-adduser --user second --password "$password"
+docker exec -ti $webinput_csv_backend_container webinput-adduser --user second --password "$password"
 
 # Check Webinput CSV Frontend
 wget --no-verbose -O - http://localhost:1383/ > /dev/null
