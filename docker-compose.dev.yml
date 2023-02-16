@@ -14,7 +14,7 @@ services:
             - 1381:81
         volumes:
             - $DEV_CERTBUND_CONTACT_SRC:/opt/intelmq-certbund-contact
-            - $DEV_INTELMQ_SRC:/opt/intelmq
+            - $DEV_INTELMQ_SRC:/opt/intelmq_src
             - $DEV_INTELMQ_API_SRC:/opt/intelmq-api
             - $DEV_INTELMQ_MANAGER_SRC:/opt/intelmq-manager
     fody:

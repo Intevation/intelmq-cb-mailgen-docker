@@ -26,17 +26,18 @@ RUN ln -s /usr/local/lib/python3.8/dist-packages/ /usr/lib/python3.8/site-packag
 WORKDIR /opt
 
 # Clone intelmq
-RUN git clone https://github.com/certtools/intelmq.git
+RUN git clone https://github.com/certtools/intelmq.git /opt/intelmq_src
 
-WORKDIR /opt/intelmq
+WORKDIR /opt/intelmq_src
 
 # add all relevant users and set access rules.
+RUN mkdir /opt/intelmq
 RUN useradd -d /opt/intelmq -U -s /bin/bash intelmq \
     && usermod -aG intelmq www-data \
     && sudo chown -R intelmq:intelmq /opt/intelmq
 
 # Checkout the correct revision and install.
-RUN git config --global --add safe.directory /opt/intelmq
+RUN git config --global --add safe.directory /opt/intelmq_src
 RUN git checkout $INTELMQ_REVISION && pip3 install -e .
 
 WORKDIR /opt
@@ -92,9 +93,12 @@ WORKDIR /opt/intelmq-certbund-contact
 
 RUN git checkout $INTELMQ_CERTBUND_CONTACT_REVISION
 
+# python would load intelmq from /opt/intelmq-certbund-contact/intelmq/ if it had an __init__.py, so remove it
+RUN rm /opt/intelmq-certbund-contact/intelmq/__init__.py
 RUN pip3 install -e .
-# with editable installations, installing a second intelmq package (for the intelmq/bots/experts/cerbund* structure) does not work. So we can work around by symlinking the files
-RUN bash -c "cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_rules /opt/intelmq/intelmq/bots/experts/ && cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_contact /opt/intelmq/intelmq/bots/experts/"
+# with editable installations, installing a second intelmq package (for the intelmq/bots/experts/certbund* structure) does not work. So we can work around by symlinking the files
+# this is also in startup.sh for dev scenario, but is required here as well, otherwise intelmctl check fails (part of setup-certbund.sh)
+RUN bash -c "cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_rules /opt/intelmq_src/intelmq/bots/experts/ && cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_contact /opt/intelmq_src/intelmq/bots/experts/"
 
 RUN intelmq-api-adduser --user admin --password secret
 
