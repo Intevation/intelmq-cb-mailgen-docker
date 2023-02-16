@@ -4,8 +4,6 @@ set -eu -o pipefail
 
 wait-for-it.sh database:5432 -t 0 -s
 
-apt install python3-pkg-resources
-
 # for dev scenario:
 # ensure /opt/intelmq-mailgen/intelmqmail.egg-info/ exists, so that the package can be loaded
 pip3 install -e .

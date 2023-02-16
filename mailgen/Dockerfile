@@ -5,7 +5,9 @@ ARG INTELMQ_MAILGEN_REVISION
 ENV INTELMQ_MAILGEN_REVISION ${INTELMQ_MAILGEN_REVISION}
 
 # Install git to be able to clone the mailgen repo
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git python3-pip python3-psycopg2 python3-gpg
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git \
+    python3-pip python3-psycopg2 python3-gpg \
+    python3-pkg-resources
 
 WORKDIR /opt
 
