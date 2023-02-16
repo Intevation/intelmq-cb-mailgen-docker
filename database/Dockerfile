@@ -9,7 +9,7 @@ ENV INTELMQ_REVISION ${INTELMQ_REVISION}
 ENV INTELMQ_MAILGEN_REVISION ${INTELMQ_MAILGEN_REVISION}
 
 # Install python3 deps and stuff
-RUN apt-get update && apt-get install -y git curl python3-pip python3-psycopg2
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git curl python3-pip python3-psycopg2
 
 # pip installs some packages (intelmq-api, intelmq-manager) into /usr/lib/python3.8/site-packages
 # instead of /usr/local/lib/python3.10/dist-packages (which is the default location, also in python's sitepath)
