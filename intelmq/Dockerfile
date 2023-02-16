@@ -12,10 +12,8 @@ ENV INTELMQ_MANAGER_REVISION ${INTELMQ_MANAGER_REVISION}
 ENV INTELMQ_CERTBUND_CONTACT_REVISION ${INTELMQ_CERTBUND_CONTACT_REVISION}
 ENV INTELMQ_MAILGEN_REVISION ${INTELMQ_MAILGEN_REVISION}
 
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y apache2 libapache2-mod-wsgi-py3 cron
-
-# Install dependencies and stuff
-RUN apt-get update && apt-get install -y git \
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y \
+    apache2 libapache2-mod-wsgi-py3 cron git \
     python3-pip python3-psycopg2 \
     python3-bs4 sudo libgpgme-dev swig sqlite3
 
