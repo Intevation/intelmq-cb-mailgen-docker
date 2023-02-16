@@ -115,6 +115,9 @@ USE_CERTBUND=true
 
 ### Scenario 1: From source (default)
 
+This requires local copies of all programs.
+Correct `*_SRC` settings in the `.env` are required for this scenario to work (see configuration section above).
+
 ```
 docker compose build --no-cache
 ```
