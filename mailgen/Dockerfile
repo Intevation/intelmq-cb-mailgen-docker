@@ -23,7 +23,7 @@ RUN mkdir -p /etc/intelmq/mailgen/templates
 RUN mkdir -p /etc/intelmq/mailgen/formats
 RUN cp /opt/intelmq-mailgen/templates/* /etc/intelmq/mailgen/templates/
 RUN cp /opt/intelmq-mailgen/example_scripts/* /etc/intelmq/mailgen/formats/
-# provides test-template
+# provides test-template, in dev scenario this directory is overlayed by a volume
 COPY mailgen/templates/* /etc/intelmq/mailgen/templates/
 
 # Generate gpg key
