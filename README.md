@@ -248,7 +248,7 @@ The default entrypoint calls intelmqcbmail every five minutes.
 
 Read the mails by entering the dsmtpd container and run:
 ```bash
-docker exec -ti dsmtpd bash
+docker exec -ti intelmq-dsmtpd bash
 mutt -f /opt/mails/incoming
 ```
 
