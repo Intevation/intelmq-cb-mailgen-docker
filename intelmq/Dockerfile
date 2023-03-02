@@ -16,6 +16,9 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y \
     apache2 libapache2-mod-wsgi-py3 cron git \
     python3-pip python3-psycopg2 \
     python3-bs4 sudo libgpgme-dev swig sqlite3
+# installing python3-gpg leads to
+# pkg_resources.extern.packaging.version.InvalidVersion: Invalid version: '1.13.1-unknown' (package: gpg)
+# on any pip install call afterwards
 
 # pip installs some packages (intelmq-api, intelmq-manager) into /usr/lib/python3.8/site-packages
 # instead of /usr/local/lib/python3.10/dist-packages (which is the default location, also in python's sitepath)
