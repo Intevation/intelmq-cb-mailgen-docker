@@ -21,12 +21,7 @@ RUN git checkout $INTELMQ_MAILGEN_REVISION && pip3 install -e .
 # Install configuration
 RUN mkdir /etc/intelmq
 COPY mailgen/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
-RUN mkdir -p /etc/intelmq/mailgen/templates
-RUN mkdir -p /etc/intelmq/mailgen/formats
-RUN cp /opt/intelmq-mailgen/templates/* /etc/intelmq/mailgen/templates/
-RUN cp /opt/intelmq-mailgen/example_scripts/* /etc/intelmq/mailgen/formats/
-# provides test-template, in dev scenario this directory is overlayed by a volume
-COPY mailgen/templates/* /etc/intelmq/mailgen/templates/
+# /opt/templates and /opt/formats are provided by a docker volume mount
 
 # Generate gpg key
 COPY mailgen/generate-pgp-key.sh /opt/

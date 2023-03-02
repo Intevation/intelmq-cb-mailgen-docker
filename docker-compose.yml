@@ -95,7 +95,9 @@ services:
             context: .
             dockerfile: mailgen/Dockerfile
         volumes:
-          - ./mailgen/init:/opt/init
+            - ./mailgen/init:/opt/init
+            - $DEV_CERTBUND_FORMATS:/opt/formats
+            - $DEV_CERTBUND_TEMPLATES:/opt/templates
         restart: always
         depends_on:
             - database

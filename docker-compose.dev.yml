@@ -52,8 +52,8 @@ services:
                 INTELMQ_MAILGEN_REVISION: $SOURCE_INTELMQ_MAILGEN_REVISION
         volumes:
             - $DEV_MAILGEN_SRC:/opt/intelmq-mailgen
-            - $DEV_MAILGEN_SRC/example_scripts:/etc/intelmq/mailgen/formats
-            - $DEV_MAILGEN_SRC/templates:/etc/intelmq/mailgen/templates
+            - $DEV_MAILGEN_SRC/example_scripts:/opt/formats
+            - $DEV_MAILGEN_SRC/templates:/opt/templates
         ports:
             - 1339:5432
     webinput-csv:
