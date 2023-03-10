@@ -11,7 +11,7 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y nodejs
 
 RUN npm install --global yarn
 
-COPY webinput-csv/startup-spa.sh /opt/startup-spa.sh
+COPY webinput-csv/init /opt/init
 
 WORKDIR /opt/src/
 
@@ -23,5 +23,5 @@ RUN git checkout $REVISION
 
 EXPOSE 8080
 
-CMD ["/opt/startup-spa.sh"]
+CMD ["/opt/init/startup-spa.sh"]
 
