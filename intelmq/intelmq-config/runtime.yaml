@@ -235,3 +235,61 @@ url-expert:
     load_balance: true
     overwrite: false
   run_mode: continuous
+deduplicator-expert-oneshot:
+  description: Deduplicator is the bot responsible for detection and removal of duplicate
+    messages. Messages get cached for <redis_cache_ttl> seconds. If found in the cache,
+    it is assumed to be a duplicate.
+  enabled: true
+  group: Expert
+  groupname: experts
+  module: intelmq.bots.experts.deduplicator.expert
+  name: Deduplicator
+  parameters:
+    destination_queues:
+      _default: [taxonomy-expert-oneshot-queue]
+    filter_keys: raw,time.observation
+    filter_type: blacklist
+    redis_cache_db: 6
+    redis_cache_ttl: 86400
+  run_mode: continuous
+taxonomy-expert-oneshot:
+  description: Taxonomy is the bot responsible to apply the eCSIRT Taxonomy to all
+    events.
+  enabled: true
+  group: Expert
+  groupname: experts
+  module: intelmq.bots.experts.taxonomy.expert
+  name: Taxonomy
+  parameters:
+    destination_queues:
+      _default: [CERT-bund-Contact-Database-Expert-oneshot-queue]
+CERT-bund-Contact-Database-Expert-oneshot:
+  description: Retrieve contact information from a PostgreSQL database.
+  enabled: true
+  group: Expert
+  groupname: experts
+  module: intelmq.bots.experts.certbund_contact.expert
+  name: CERT-bund Contact Database
+  parameters:
+    database: contactdb
+    destination_queues:
+      _default: [CERT-bund-Contact-Rules-Expert-oneshot-queue]
+    host: intelmq-database
+    password: secret
+    port: 5432
+    sections: source
+    sslmode: allow
+    user: intelmq
+CERT-bund-Contact-Rules-Expert-oneshot:
+  description: Determine how and whom to notify about the event.
+  enabled: true
+  group: Expert
+  groupname: experts
+  module: intelmq.bots.experts.certbund_rules.expert
+  name: CERT-bund Contact Rules
+  parameters:
+    destination_queues:
+      _default: [SQL-Output-queue]
+    remove_contact_data: true
+    script_directory: /opt/rules/oneshot
+    sections: source
