@@ -27,9 +27,9 @@ jobs:
       uses: sudo-bot/action-docker-compose@latest
       with:
         cli-args: build --parallel
-    - name: docker-compose build
+    - name: docker-compose up
       uses: sudo-bot/action-docker-compose@latest
       with:
-        cli-args: up
+        cli-args: up -d
     - name: run tests
       run: ./testall.sh

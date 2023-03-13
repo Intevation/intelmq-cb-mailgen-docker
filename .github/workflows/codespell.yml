@@ -7,13 +7,9 @@ name: "Codespell spelling check"
 
 on:
   push:
-    branches: [develop, maintenance, master]
-    paths-ignore:
-      - '.github/**'
+    branches: [master]
   pull_request:
-    branches: [develop, maintenance]
-    paths-ignore:
-      - '.github/**'
+    branches: [master]
 
 jobs:
   codespell:
