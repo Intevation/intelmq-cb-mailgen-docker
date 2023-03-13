@@ -25,6 +25,7 @@ COPY mailgen/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
 
 # Generate gpg key
 COPY mailgen/generate-pgp-key.sh /opt/
+RUN mkdir -p /etc/intelmq/mailgen/
 RUN /opt/generate-pgp-key.sh
 
 # Add wait-for-it.
