@@ -1,0 +1,35 @@
+#Github Workflow to build with docker-compose
+#
+#SPDX-FileCopyrightText: 2023 Intevation GmbH
+#SPDX-License-Identifier: AGPL-3.0-or-later
+
+name: "Docker-Compose build"
+
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - '.github/**'
+  pull_request:
+    branches: [master]
+    paths-ignore:
+      - '.github/**'
+
+jobs:
+  docker:
+    name: Run docker-compose build
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: docker-compose build
+      uses: sudo-bot/action-docker-compose@latest
+      with:
+        cli-args: build --parallel
+    - name: docker-compose build
+      uses: sudo-bot/action-docker-compose@latest
+      with:
+        cli-args: up
+    - name: run tests
+      run: ./testall.sh
