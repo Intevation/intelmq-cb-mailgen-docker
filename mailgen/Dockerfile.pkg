@@ -8,7 +8,8 @@ RUN /opt/setup-apt.sh local
 # Add remote repositories as backup for all packages missing in local repository
 RUN /opt/setup-apt.sh intevation
 
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-mailgen git
+# install python3-pkg-resources until https://github.com/Intevation/intelmq-mailgen/commit/65aa510efb0bfa91afd21109404ec02fcd73b750 comes into effect
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-mailgen git python3-pkg-resources
 
 # Install configuration
 COPY mailgen/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
