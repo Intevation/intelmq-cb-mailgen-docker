@@ -61,7 +61,7 @@ services:
         ports:
             - 1383:8080
         volumes:
-            - $DEV_WEBINPUT_CSV_SRC:/opt/src/intelmq-webinput-csv
+            - $DEV_WEBINPUT_CSV_SRC:/opt/intelmq-webinput-csv
         entrypoint: /opt/init/startup-dev.sh
     webinput-csv-backend:
         image: intelmq-webinput-csv-backend-dev

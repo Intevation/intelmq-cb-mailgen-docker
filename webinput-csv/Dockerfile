@@ -13,11 +13,11 @@ RUN npm install --global yarn
 
 COPY webinput-csv/init /opt/init
 
-WORKDIR /opt/src/
+WORKDIR /opt/
 
 RUN git clone https://github.com/Intevation/intelmq-webinput-csv.git
 
-WORKDIR /opt/src/intelmq-webinput-csv/client
+WORKDIR /opt/intelmq-webinput-csv/client
 
 RUN git checkout $REVISION
 
