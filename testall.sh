@@ -16,7 +16,7 @@ trap end_test ERR
 if [ "$USE_CERTBUND" == "true" ]; then
     # clean the database for mailgen tests
     # TRUNCATE would try to acquire an exclusive lock, which is blocked by fody, so delete all entries from the tables
-    docker exec --env-file=.env -e DEBUG=${DEBUG-} -ti intelmq-database psql eventdb -c "DELETE FROM directives; DELETE FROM events;"
+    docker exec --env-file=.env -e DEBUG=${DEBUG-} intelmq-database psql eventdb -c "DELETE FROM directives; DELETE FROM events;"
 
     # The database takes several minutes after its first start to complete initialization. Check it's availability in the beginning to avoid errors later
     set +e
@@ -28,13 +28,13 @@ if [ "$USE_CERTBUND" == "true" ]; then
     set -e
 
     # Suspend mailgen. Lock will be removed after successful fun of mailgen tests
-    docker exec -ti intelmq-mailgen touch /tmp/intelmqcbmail_disabled
+    docker exec intelmq-mailgen touch /tmp/intelmqcbmail_disabled
 fi
 
 # clear deduplicator cache
-docker exec -ti intelmq-redis redis-cli -n 6 flushdb
+docker exec intelmq-redis redis-cli -n 6 flushdb
 # Run IntelMQ tests
-docker exec --env-file=.env -e DEBUG=${DEBUG-} -ti intelmq /opt/test.sh
+docker exec --env-file=.env -e DEBUG=${DEBUG-} intelmq /opt/test.sh
 
 # Prerequisites
 sudo apt install -y wget uuid-runtime jq
