@@ -272,3 +272,14 @@ Or execute the tests per container by executing the single commands from this fi
 
 You can activate the debug mode (`set -x`) by using `DEBUG=1`.
 To skip the IntelMQ unittests (which take a while to complete, set `INTELMQ_SKIP_UNITTESTS=1` in `.env`.
+
+## webinput-csv-intelmq-mailgen
+
+The container `webinput-csv-intelmq-mailgen` is special and not started by default. Only available as dev-version.
+It combines intelmq, intelmq-api, intelmq-manager, intelmq-certbund-contact, intelmq-mailgen and intelmq-webinput-csv in one container.
+Everything except fody.
+
+Start:
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build webinput-csv-intelmq-mailgen
+```

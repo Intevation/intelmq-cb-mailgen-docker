@@ -72,3 +72,51 @@ services:
         build:
             args:
                 INTELMQ_PYPI_VERSION: $SOURCE_INTELMQ_PYPI_VERSION
+    webinput-csv-intelmq-mailgen:
+        image: intelmq-webinput-csv-backend-mailgen-dev
+        build:
+            args:
+            context: .
+            dockerfile: webinput-csv-backend/mailgen.Dockerfile
+            args:
+                USE_CERTBUND: $USE_CERTBUND
+                INTELMQ_REVISION: $SOURCE_INTELMQ_REVISION
+                INTELMQ_API_REVISION: $SOURCE_INTELMQ_API_REVISION
+                INTELMQ_MANAGER_REVISION: $SOURCE_INTELMQ_MANAGER_REVISION
+                INTELMQ_CERTBUND_CONTACT_REVISION: $SOURCE_INTELMQ_CERTBUND_CONTACT_REVISION
+                INTELMQ_MAILGEN_REVISION: $SOURCE_INTELMQ_MAILGEN_REVISION
+        environment:
+            INTELMQ_SOURCE_PIPELINE_HOST: redis
+            INTELMQ_DESTINATION_PIPELINE_HOST: redis
+            INTELMQ_REDIS_CACHE_HOST: redis
+            USE_CERTBUND: $USE_CERTBUND
+        restart: always
+        depends_on:
+            - redis
+            - database
+            - dsmtpd
+        volumes:
+            - $DEV_CERTBUND_CONTACT_SRC:/opt/intelmq-certbund-contact
+            - $DEV_INTELMQ_SRC:/opt/intelmq_src
+            - $DEV_INTELMQ_API_SRC:/opt/intelmq-api
+            - $DEV_INTELMQ_MANAGER_SRC:/opt/intelmq-manager
+            - $DEV_MAILGEN_SRC:/opt/intelmq-mailgen
+            - $DEV_CERTBUND_FORMATS:/opt/formats
+            - $DEV_MAILGEN_SRC/templates:/opt/templates
+            - $DEV_CERTBUND_RULES:/opt/rules
+            - ./mailgen/init:/opt/mailgen-init
+            - ./webinput-csv-backend/conf:/opt/conf
+            - ./webinput-csv-backend/init-mailgen:/opt/init
+            - $DEV_WEBINPUT_CSV_SRC:/opt/intelmq-webinput-csv
+        networks:
+            - intelmq
+        ports:
+            - 1380:80
+            - 1381:81
+            - 1383:8080
+            - 1341:8002
+            - 1339:5432
+        extra_hosts:
+            - intelmq-webinput-csv-backend:127.0.0.1
+        profiles:
+            - donotstart
