@@ -1,0 +1,29 @@
+#Github Workflow to find and notify about misspellings
+#
+#SPDX-FileCopyrightText: 2023 Intevation GmbH
+#SPDX-License-Identifier: AGPL-3.0-or-later
+
+name: "Codespell spelling check"
+
+on:
+  push:
+    branches: [develop, maintenance, master]
+    paths-ignore:
+      - '.github/**'
+  pull_request:
+    branches: [develop, maintenance]
+    paths-ignore:
+      - '.github/**'
+
+jobs:
+  codespell:
+    name: Find and notify about common misspellings
+    runs-on: ubuntu-22.04
+    # This should not fail the whole workflow run
+    continue-on-error: true
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Run codespell
+      uses: codespell-project/actions-codespell@v1
