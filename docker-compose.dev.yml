@@ -100,7 +100,7 @@ services:
             - $DEV_INTELMQ_MANAGER_SRC:/opt/intelmq-manager
             - $DEV_MAILGEN_SRC:/opt/intelmq-mailgen
             - $DEV_CERTBUND_FORMATS:/opt/formats
-            - $DEV_MAILGEN_SRC/templates:/opt/templates
+            - $DEV_CERTBUND_TEMPLATES:/opt/templates
             - $DEV_CERTBUND_RULES:/opt/rules
             - ./mailgen/init:/opt/mailgen-init
             - ./webinput-csv-backend/conf:/opt/conf
@@ -109,9 +109,13 @@ services:
         networks:
             - intelmq
         ports:
+            # manager
             - 1380:80
+            # api
             - 1381:81
+            # webinput
             - 1383:8080
+            # webinput backend
             - 1341:8002
             - 1339:5432
         extra_hosts:

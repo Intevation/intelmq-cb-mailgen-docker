@@ -15,4 +15,4 @@ hug -f /opt/intelmq-webinput-csv/intelmq_webinput_csv/serve.py -p 8002 &
 
 # webinput client
 cd /opt/intelmq-webinput-csv/client/
-/opt/webinput-csv-init/startup-spa.sh
+/opt/webinput-csv-init/startup-dev.sh
