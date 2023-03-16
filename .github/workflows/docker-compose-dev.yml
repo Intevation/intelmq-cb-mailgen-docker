@@ -26,4 +26,4 @@ jobs:
     - name: docker-compose build
       uses: sudo-bot/action-docker-compose@latest
       with:
-        cli-args: build --parallel
+        cli-args: -f docker-compose.yml -f docker-compose.dev.yml build --parallel
