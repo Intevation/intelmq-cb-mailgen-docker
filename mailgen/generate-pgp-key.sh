@@ -3,8 +3,8 @@
 set -eu -o pipefail
 test -n "${DEBUG-}" && set -x
 
-# create gnupg homedir
-mkdir /etc/intelmq/mailgen/gnupghome/
+# create gnupg homedir, if it does not exist (dev scenarios)
+mkdir -p /etc/intelmq/mailgen/gnupghome/
 gpg="gpg --homedir /etc/intelmq/mailgen/gnupghome"
 
 # based on https://serverfault.com/a/960673/217116
