@@ -1,0 +1,7 @@
+${ticket_number} Custom oneshot report about ${classification.taxonomy}
+
+EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE
+
+ONESHOT
+
+${events_as_csv}
