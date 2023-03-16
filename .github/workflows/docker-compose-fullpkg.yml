@@ -3,7 +3,7 @@
 #SPDX-FileCopyrightText: 2023 Intevation GmbH
 #SPDX-License-Identifier: AGPL-3.0-or-later
 
-name: "Docker-Compose build"
+name: "Docker-Compose build full-pkg"
 
 on:
   push:
@@ -17,7 +17,7 @@ on:
 
 jobs:
   docker:
-    name: Run docker-compose build
+    name: Run docker-compose build full-pkg
     runs-on: ubuntu-22.04
 
     steps:
