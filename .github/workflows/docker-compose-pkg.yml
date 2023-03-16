@@ -23,6 +23,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+    - name: create empty packages directory
+      run: mkdir packages/
     - name: docker-compose build
       uses: sudo-bot/action-docker-compose@latest
       with:
