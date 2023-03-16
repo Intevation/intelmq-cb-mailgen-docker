@@ -29,7 +29,7 @@ trap end_test ERR
 set -e
 
 # Tests adduser script
-docker exec -ti $webinput_csv_backend_container webinput-adduser --user second --password "$password"
+docker exec $webinput_csv_backend_container webinput-adduser --user second --password "$password"
 
 # Check Webinput CSV Frontend
 wget --no-verbose -O - $API/ > /dev/null
