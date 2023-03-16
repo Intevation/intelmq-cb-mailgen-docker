@@ -5,7 +5,7 @@ test -n "${DEBUG-}" && set -x
 
 function end_test {
     read line file <<<$(caller)
-    echo "Mailgen test failed at $file:$line."
+    echo "Mailgen test failed at $file:$line. Run with DEBUG=1 to get more details of the failure."
     # restore original 10shadowservercsv.py script
     $docker intelmq-mailgen mv $script.bak $script
     $docker intelmq-mailgen cp $config.bak $config

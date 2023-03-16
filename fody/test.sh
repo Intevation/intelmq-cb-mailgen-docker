@@ -5,7 +5,7 @@ test -n "${DEBUG-}" && set -x
 
 function end_test {
     read line file <<<$(caller)
-    echo "Fody Test failed at $file:$line."
+    echo "Fody Test failed at $file:$line. Run with DEBUG=1 to get more details of the failure."
 }
 trap end_test ERR
 
