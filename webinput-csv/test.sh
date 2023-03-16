@@ -47,15 +47,16 @@ wget --no-verbose -O - --header "Authorization: $token" $API/api/harmonization/e
 wget --no-verbose -O - --header "Authorization: $token" $API/api/custom/fields | grep -o '"feed.code": "oneshot"'
 
 # Test injecting data
-docker exec -ti intelmq intelmqctl stop deduplicator-expert
-docker exec -ti intelmq intelmqctl clear deduplicator-expert-queue
+docker exec intelmq intelmqctl stop taxonomy-expert-oneshot
+docker exec intelmq intelmqctl clear taxonomy-expert-oneshot-queue
+docker exec intelmq intelmqctl clear taxonomy-expert-oneshot-queue-internal
 
 # Use a non ISO-formatted date to test datetime parsing
 yesterday=$(date --rfc-email --date='yesterday')
-wget --no-verbose -O - --header "Authorization: $token" --header "Content-Type: application/json;charset=utf-8" --post-data "{\"timezone\":\"+00:00\",\"data\":[{\"time.source\":\" $yesterday \",\"source.ip\":\"192.168.56.7\",\"source.asn\":\"65537\"}],\"custom\":{\"custom_classification.type\":\"blacklist\",\"custom_classification.identifier\":\"test\",\"custom_feed.code\":\"oneshot\",\"custom_feed.name\":\"oneshot-csv\"},\"dryrun\":true}" $API/api/upload | grep 'lines_invalid": 0'
+wget --no-verbose -O - --header "Authorization: $token" --header "Content-Type: application/json;charset=utf-8" --post-data "{\"timezone\":\"+00:00\",\"data\":[{\"time.source\":\" $yesterday \",\"source.ip\":\"192.168.56.7\",\"source.asn\":\"65537\",\"source.as_name\":\"Example AS\"}],\"custom\":{\"custom_classification.type\":\"blacklist\",\"custom_classification.identifier\":\"test\",\"custom_feed.code\":\"oneshot\",\"custom_feed.name\":\"oneshot-csv\"},\"dryrun\":true, \"username\": \"second\", \"password\": \"$password\"}" $API/api/upload | grep -F 'lines_invalid": 0, "errors": {}'
 
 # test if the data was correctly passed on to IntelMQ
-result=$(docker exec -ti intelmq intelmqctl run deduplicator-expert message get | grep -Ev 'deduplicator-expert|Waiting for a message|time.observation')
+result=$(docker exec intelmq intelmqctl run taxonomy-expert-oneshot message get | grep -Ev 'taxonomy-expert-oneshot|Waiting for a message|time.observation')
 expected_date=$(TZ=UTC date --iso-8601=seconds --date="$yesterday")
 expected="{
  \"classification.identifier\": \"test\",
@@ -63,6 +64,7 @@ expected="{
  \"feed.code\": \"oneshot\",
  \"feed.name\": \"oneshot-csv\",
  \"feed.provider\": \"my-organization\",
+ \"source.as_name\": \"Example AS\",
  \"source.asn\": 65537,
  \"source.ip\": \"192.168.56.7\",
  \"time.source\": \"$expected_date\"
