@@ -32,5 +32,5 @@ def create_notifications(context):
     # substituted into the template when the mail is created.
     substitutions = dict()
 
-    return context.mail_format_as_csv(table_format, template='oneshot',
+    return context.mail_format_as_csv(table_format, template_name='oneshot',
                                       substitutions=substitutions)

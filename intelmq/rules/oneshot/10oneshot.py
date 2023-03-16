@@ -110,7 +110,7 @@ def add_vulnerable_directives_to_context(context, match, matter):
                 # in order to cluster all events from the same report-batch.
                 directive.aggregate_by_field("time.observation")
                 # Always aggregate by Taxonomy
-                directive.aggregate_by_field(".classification.taxonomy")
+                directive.aggregate_by_field("classification.taxonomy")
                 context.add_directive(directive)
 
 
