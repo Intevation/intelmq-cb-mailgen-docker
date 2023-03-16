@@ -28,9 +28,9 @@ echo $ip_search | grep -E '^\{"manual": \[\], "auto": \[[0-9]+\]\}$'
 organisation=$(echo $ip_search | jq .auto[0])
 
 org_search=$(wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/contactdb/org/auto/$organisation)
-echo "$org_search" | grep -E '\{"name": "ITZBUND", "sector_id": null, "comment": "", "ripe_org_hdl": "ORG-BFF1-RIPE", "ti_handle": "", "first_handle": "", "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+", "organisation_id": [0-9]+, "asns": \[\{"organisation_automatic_id": [0-9]+, "asn": 35704, "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+"\}\], "contacts": \[\{"contact_automatic_id": [0-9]+, "firstname": "", "lastname": "", "tel": "", "openpgp_fpr": "", "email": "lir@list.bfinv.de", "comment": "", "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+", "organisation_automatic_id": [0-9]+\}\], "national_certs": \[\], "networks": \[\{"network_id": [0-9]+, "address": "80.245.144.0/20", "comment": ""\}, \{"network_id": [0-9]+, "address": "2a09:1480::/29", "comment": ""\}\], "fqdns": \[\]\}'
-email_search=$(wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/contactdb/email/lir@list.bfinv.de)
-test "$email_search" = '{"email": "lir@list.bfinv.de", "enabled": true, "tags": {}}'
+echo "$org_search" | grep -E '\{"name": "ITZBUND", "sector_id": null, "comment": "", "ripe_org_hdl": "ORG-BFF1-RIPE", "ti_handle": "", "first_handle": "", "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+", "organisation_id": [0-9]+, "asns": \[\{"organisation_automatic_id": [0-9]+, "asn": 35704, "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+"\}\], "contacts": \[\{"contact_automatic_id": [0-9]+, "firstname": "", "lastname": "", "tel": "", "openpgp_fpr": "", "email": "sub-lir-bund@itzbund.de", "comment": "", "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+", "organisation_automatic_id": [0-9]+\}\], "national_certs": \[\], "networks": \[\{"network_id": [0-9]+, "address": "80.245.144.0/20", "comment": ""\}, \{"network_id": [0-9]+, "address": "2a09:1480::/29", "comment": ""\}\], "fqdns": \[\]\}'
+email_search=$(wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/contactdb/email/sub-lir-bund@itzbund.de)
+test "$email_search" = '{"email": "sub-lir-bund@itzbund.de", "enabled": true, "tags": {}}'
 
 # Test EventDB
 wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/events/subqueries
@@ -41,7 +41,7 @@ if [ "$USE_CERTBUND" == "true" ]; then
     before=$(date --rfc-3339\=seconds --date="tomorrow 00:00" | grep -Eo '^[0-9-]{10} [0-9:]{5}')
     wget --no-verbose -O - --header "Authorization: $token" "http://localhost:1382/api/events/stats?time-observation_after=$after&time-observation_before=$before&source-ip_is=80.245.144.218&timeres=hour" | grep count
     # for the detailed search, just check if the address is somewhere -> result is complete
-    wget --no-verbose -O - --header "Authorization: $token" "http://localhost:1382/api/events/search?time-observation_after=$after&time-observation_before=$before&source-ip_is=80.245.144.218" | grep lir@list.bfinv.de
+    wget --no-verbose -O - --header "Authorization: $token" "http://localhost:1382/api/events/search?time-observation_after=$after&time-observation_before=$before&source-ip_is=80.245.144.218" | grep sub-lir-bund@itzbund.de
 fi
 
 echo "Fody tests completed successfully!"

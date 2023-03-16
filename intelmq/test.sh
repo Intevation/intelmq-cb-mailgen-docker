@@ -62,7 +62,7 @@ if [ "$USE_CERTBUND" == "true" ]; then
     # 80.245.144.218 == bsi.bund.de
     intelmqctl run CERT-bund-Contact-Database-Expert process -m "{\"time.observation\": \"$now\", \"source.asn\": 35704, \"source.ip\": \"80.245.144.218\", \"feed.name\": \"Open-Portmapper\"}"
     result=$(psql postgresql://intelmq:secret@database/eventdb -c "select extra -> 'certbund' from events where \"source.ip\" = '80.245.144.218' and \"time.observation\" =  '$now';" --csv --tuples-only)
-    test "\"{\"\"source_directives\"\": [{\"\"aggregate_identifier\"\": {\"\"source.asn\"\": 35704, \"\"time.observation\"\": \"\"$now\"\"}, \"\"event_data_format\"\": \"\"csv_Open-Portmapper\"\", \"\"medium\"\": \"\"email\"\", \"\"notification_format\"\": \"\"shadowserver\"\", \"\"notification_interval\"\": 86400, \"\"recipient_address\"\": \"\"lir@list.bfinv.de\"\", \"\"template_name\"\": \"\"test-template\"\"}]}\"" = "$result"
+    test "\"{\"\"source_directives\"\": [{\"\"aggregate_identifier\"\": {\"\"source.asn\"\": 35704, \"\"time.observation\"\": \"\"$now\"\"}, \"\"event_data_format\"\": \"\"csv_Open-Portmapper\"\", \"\"medium\"\": \"\"email\"\", \"\"notification_format\"\": \"\"shadowserver\"\", \"\"notification_interval\"\": 86400, \"\"recipient_address\"\": \"\"sub-lir-bund@itzbund.de\"\", \"\"template_name\"\": \"\"test-template\"\"}]}\"" = "$result"
 fi
 
 # Check IntelMQ Manager with status code
