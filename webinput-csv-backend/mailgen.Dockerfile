@@ -194,7 +194,7 @@ COPY intelmq/intelmq-config/harmonization.conf /opt/intelmq/etc/harmonization.co
 WORKDIR /opt/intelmq-webinput-csv
 
 # Install webinput
-RUN pip3 install .
+RUN pip3 install -e .
 
 WORKDIR /opt
 
