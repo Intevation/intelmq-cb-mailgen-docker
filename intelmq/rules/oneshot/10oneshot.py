@@ -13,9 +13,6 @@ LOGGING_SET = set()
 def determine_directives(context):
     context.logger.debug("============= 10oneshot.py ===========")
 
-    classification_identifier = context.get("classification.identifier")
-    classification_type = context.get("classification.type")
-
     if context.section == "destination":
         # We are not interested in notifying the contact for the destination of this event.
         return
@@ -53,26 +50,13 @@ def add_directives_to_context(context, matches, matter):
         # the same criterion (for instance IP - address),
         # this happens due to overlapping networks in the
         # contactdb
-        add_vulnerable_directives_to_context(context, match, matter)
+        add_directives_to_context_per_match(context, match, matter)
 
 
-def add_vulnerable_directives_to_context(context, match, matter):
+def add_directives_to_context_per_match(context, match, matter):
     # Let's have a look at the Organisations associated to this match:
-    context.logger.debug('%r', context.organisations_for_match(match))
+    context.logger.debug('organisations_for_match: %r', context.organisations_for_match(match))
     for org in context.organisations_for_match(match):
-        # Determine the Annotations for this Org.
-        org_annotations = org.annotations
-        context.logger.debug("Org Annotations: %r" % org_annotations)
-
-        is_government = False
-        is_critical = False
-
-        for annotation in org_annotations:
-            if annotation.tag == "government":
-                is_government = True
-            if annotation.tag == "critical":
-                is_critical = True
-
         # Now create the Directives
         #
         # An organisation may have multiple contacts, so we need to
@@ -80,24 +64,24 @@ def add_vulnerable_directives_to_context(context, match, matter):
         # many organisations will have only one.
         for contact in org.contacts:
             directive = Directive.from_contact(contact)
-            # Doing this defines "email" as medium and uses the
-            # contact's email attribute as the recipient_address.
-            # One could also do this by hand, see Directive in
-            # intelmq.bots.experts.certbund_contact.rulesupport
-            # If you like to know more details
+            context.logger.debug('Contact annotations: %r', contact.annotations)
 
-            # Now fill in more details of the directive, depending on
-            # the annotations of the directive and/or the type of the
-            # match
+            # if the field exists, assume it does not match
+            # if the field does not exist, assume it matches
+            target_group_matches = context.get('extra.target_groups') is None
+            # only run this block if relevant
+            if not target_group_matches:
+                for annotation in contact.annotations:
+                    context.logger.debug(f'Annotation {annotation.tag!r}')
+                    if not annotation.tag.startswith('Zielgruppe:'):
+                        continue
+                    if annotation.tag in context.get('extra.target_groups', []):
+                        context.logger.debug('Contact %r matches with contact tag %r the tags of the event %r.', contact.email, annotation, context.get('extra.target_groups', []))
+                        target_group_matches = True
+                        break
 
-            if is_critical:
-                pass  # Right now we are not generating Notifications for this group
-
-            elif is_government:
-                pass  # Right now we are not generating Notifications for this group
-
-            elif match.field == "geolocation.cc":
-                pass  # Right now we are not generating Notifications for this group
+            if not target_group_matches:
+                context.logger.debug('Ignoring contact %r as no contact tag %r matches the tags of the event %r.', contact.email, contact.annotations, context.get('extra.target_groups', []))
 
             else:
                 d = create_directive(notification_format="default",
