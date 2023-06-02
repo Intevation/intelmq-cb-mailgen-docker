@@ -20,6 +20,20 @@ psql -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO fody;" contactdb
 psql -c "CREATE ROLE root WITH SUPERUSER LOGIN;" contactdb
 psql -c "GRANT ALL ON ALL TABLES IN SCHEMA public TO root;" contactdb
 
+psql -c "INSERT INTO tag_name (tag_name_id, tag_name, tag_name_order) VALUES (1, 'Format', 2), (2, 'Target group', 1);" contactdb
+psql -c "INSERT INTO tag
+    (tag_id, tag_name_id, tag_value, tag_description, is_default)
+    VALUES
+    (1, 1,'CSV_inline','CSV inline', TRUE),
+    (2, 1,'CSV_attachment','CSV attachment', FALSE),
+    (3, 2,'Provider','Network provider', TRUE),
+    (5, 2,'Government','Government', FALSE),
+    (6, 2,'Industry','Industry sector', FALSE),
+    (7, 2,'Health','Health sector', FALSE),
+    (8, 2,'Energy','Energy sector', FALSE),
+    (9, 2,'Transport','Transportation sector', FALSE),
+    (10, 2,'Finance','Finance sector', FALSE);" contactdb
+
 # use the directory created by ripe_download at the build stage. If ripe_download was called multiple times on different days, select the latest directory.
 latest_ripe_download="$(ls -t1 /opt/ripe_download | head -n 1)"
 pushd "/opt/ripe_download/$latest_ripe_download"
