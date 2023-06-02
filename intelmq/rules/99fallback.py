@@ -1,9 +1,16 @@
 from intelmq_certbund_contact.rulesupport import \
     Directive, most_specific_matches
 
+# A set which is containing information about already logged
+# errors to prevent log-flooding
+LOGGING_SET = set()
+
 
 def determine_directives(context):
-    context.logger.debug("============= 10oneshot.py ===========")
+    context.logger.debug("============= 99fallback.py ===========")
+
+    classification_identifier = context.get("classification.identifier")
+    classification_type = context.get("classification.type")
 
     if context.section == "destination":
         # We are not interested in notifying the contact for the destination of this event.
@@ -22,22 +29,18 @@ def determine_directives(context):
         context.logger.debug("There are no matches I'm willing to process.")
         return
 
-    template = context.get("extra.template_prefix", "oneshot_fallback")
-    # Remove the field
-    context.pop("extra.template_prefix", None)
-    add_directives_to_context(context, msm, template)
-
-    # remove the data which was only relevant up to this step
-    if context.get('extra.target_groups') is not None:
-        context.pop('extra.target_groups')
-
+    # Always convert the classification.identifier to lowercase from now
+    # on. This makes dealing with templates much easier.
+    # Also: Make sure the CI does not contain underscores.
+    new_ci = classification_identifier.lower().replace("_", "-")
+    add_directives_to_context(context, msm, new_ci)
     return True
 
 
 def add_directives_to_context(context, matches, matter):
     # Generate Directives from the matches
 
-    context.logger.debug('add_directives_to_context: Matches: %r', matches)
+    context.logger.debug('%r', matches)
     for match in matches:
         # Iterate the matches...
         # Matches tell us the organisations and their contacts that
@@ -47,13 +50,26 @@ def add_directives_to_context(context, matches, matter):
         # the same criterion (for instance IP - address),
         # this happens due to overlapping networks in the
         # contactdb
-        add_directives_to_context_per_match(context, match, matter)
+        add_vulnerable_directives_to_context(context, match, matter)
 
 
-def add_directives_to_context_per_match(context, match, matter):
+def add_vulnerable_directives_to_context(context, match, matter):
     # Let's have a look at the Organisations associated to this match:
-    context.logger.debug('organisations_for_match: %r', context.organisations_for_match(match))
+    context.logger.debug('%r', context.organisations_for_match(match))
     for org in context.organisations_for_match(match):
+        # Determine the Annotations for this Org.
+        org_annotations = org.annotations
+        context.logger.debug("Org Annotations: %r" % org_annotations)
+
+        is_government = False
+        is_critical = False
+
+        for annotation in org_annotations:
+            if annotation.tag == "government":
+                is_government = True
+            if annotation.tag == "critical":
+                is_critical = True
+
         # Now create the Directives
         #
         # An organisation may have multiple contacts, so we need to
@@ -61,24 +77,24 @@ def add_directives_to_context_per_match(context, match, matter):
         # many organisations will have only one.
         for contact in org.contacts:
             directive = Directive.from_contact(contact)
-            context.logger.debug('Contact annotations: %r', contact.annotations)
+            # Doing this defines "email" as medium and uses the
+            # contact's email attribute as the recipient_address.
+            # One could also do this by hand, see Directive in
+            # intelmq.bots.experts.certbund_contact.rulesupport
+            # If you like to know more details
 
-            # if the field exists, assume it does not match
-            # if the field does not exist, assume it matches
-            target_group_matches = context.get('extra.target_groups') is None
-            # only run this block if relevant
-            if not target_group_matches:
-                for annotation in contact.annotations:
-                    context.logger.debug(f'Annotation {annotation.tag!r}')
-                    if not annotation.tag.startswith('Zielgruppe:'):
-                        continue
-                    if annotation.tag in context.get('extra.target_groups', []):
-                        context.logger.debug('Contact %r matches with contact tag %r the tags of the event %r.', contact.email, annotation, context.get('extra.target_groups', []))
-                        target_group_matches = True
-                        break
+            # Now fill in more details of the directive, depending on
+            # the annotations of the directive and/or the type of the
+            # match
 
-            if not target_group_matches:
-                context.logger.debug('Ignoring contact %r as no contact tag %r matches the tags of the event %r.', contact.email, contact.annotations, context.get('extra.target_groups', []))
+            if is_critical:
+                pass  # Right now we are not generating Notifications for this group
+
+            elif is_government:
+                pass  # Right now we are not generating Notifications for this group
+
+            elif match.field == "geolocation.cc":
+                pass  # Right now we are not generating Notifications for this group
 
             else:
                 d = create_directive(notification_format="default",
@@ -90,8 +106,8 @@ def add_directives_to_context_per_match(context, match, matter):
                 # Add the observation time as an aggregation identifier,
                 # in order to cluster all events from the same report-batch.
                 directive.aggregate_by_field("time.observation")
-                # Always aggregate by Taxonomy
-                directive.aggregate_by_field("classification.taxonomy")
+                # Always aggregate by ASN
+                directive.aggregate_by_field(context.section + ".asn")
                 context.add_directive(directive)
 
 

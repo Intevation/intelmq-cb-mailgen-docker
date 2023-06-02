@@ -6,8 +6,8 @@ to event attributes that should be present in almost all events.
 """
 
 from intelmqmail.tableformat import build_table_format
-#from intelmqmail.templates import Template, read_template, full_template_filename
-#from intelmqmail.notification import Postponed
+from intelmqmail.templates import Template
+from intelmqmail.notification import Postponed
 
 
 table_format = build_table_format(
@@ -22,9 +22,20 @@ table_format = build_table_format(
      ("protocol.transport", "proto"),
      ))
 
+# The text of the template is inlined here to make sure creating the
+# mail does not fail due to a missing template file.
+template = Template.from_strings("Report#${ticket_number}",
+                                 "Dear Sir or Madam,\n"
+                                 "\n"
+                                 "Please find below a list of affected systems"
+                                 " on your network(s).\n"
+                                 "\n"
+                                 "Events:\n"
+                                 "${events_as_csv}")
 
 def create_notifications(context):
-    # always create notifications, never postpone
+    if not context.notification_interval_exceeded():
+        return Postponed
 
     # If there are some additional substitutions to be performed in the
     # above template, add them to the substitutions dictionary. By
@@ -32,5 +43,5 @@ def create_notifications(context):
     # substituted into the template when the mail is created.
     substitutions = dict()
 
-    return context.mail_format_as_csv(table_format,
+    return context.mail_format_as_csv(table_format, template=template,
                                       substitutions=substitutions)
