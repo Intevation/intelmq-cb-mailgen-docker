@@ -16,7 +16,7 @@ on:
       - '.github/**'
 
 jobs:
-  docker:
+  docker-fullpkg:
     name: Run docker-compose build full-pkg
     runs-on: ubuntu-22.04
 
