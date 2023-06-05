@@ -29,7 +29,7 @@ DEFAULT_PKGS=(
   intelmq-mailgen
   intelmq-webinput-csv
   )
-# Obtain directory of this script to have the base path for docekrfiles.
+# Obtain directory of this script to have the base path for dockerfiles.
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 IMQ_BUILD_PACKAGES=${IMQ_BUILD_PACKAGES:-${DEFAULT_PKGS[*]}}
