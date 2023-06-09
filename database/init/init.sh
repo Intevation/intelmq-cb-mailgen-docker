@@ -60,6 +60,8 @@ fi
 psql -c "GRANT eventdb_send_notifications TO intelmq" eventdb
 psql -c "GRANT eventdb_insert TO intelmq" eventdb
 psql -c "GRANT INSERT,SELECT ON ALL TABLES IN SCHEMA public TO intelmq;" eventdb
+# for the 'FOR UPDATE NOWAIT' in mailgens directive SELECT query
+psql -c "GRANT UPDATE ON TABLE events TO intelmq;" eventdb
 psql -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO fody;" eventdb
 psql -c "GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO intelmq;" eventdb
 psql -c "GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO fody;" eventdb
