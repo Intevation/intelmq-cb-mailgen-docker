@@ -70,7 +70,7 @@ def add_directives_to_context_per_match(context, match, matter):
             if not target_group_matches:
                 for annotation in contact.annotations:
                     context.logger.debug(f'Annotation {annotation.tag!r}')
-                    if not annotation.tag.startswith('Zielgruppe:'):
+                    if not annotation.tag.startswith('Target group:'):
                         continue
                     if annotation.tag in context.get('extra.target_groups', []):
                         context.logger.debug('Contact %r matches with contact tag %r the tags of the event %r.', contact.email, annotation, context.get('extra.target_groups', []))
