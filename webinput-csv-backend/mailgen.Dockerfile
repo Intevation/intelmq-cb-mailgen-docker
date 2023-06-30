@@ -14,6 +14,7 @@ ENV INTELMQ_MANAGER_REVISION ${INTELMQ_MANAGER_REVISION}
 ENV INTELMQ_CERTBUND_CONTACT_REVISION ${INTELMQ_CERTBUND_CONTACT_REVISION}
 ENV INTELMQ_MAILGEN_REVISION ${INTELMQ_MAILGEN_REVISION}
 
+COPY common/setup-apt.sh /opt/
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y \
     apache2 libapache2-mod-wsgi-py3 cron git \
     python3-pip python3-psycopg2 \
@@ -194,6 +195,8 @@ COPY intelmq/intelmq-config/harmonization.conf /opt/intelmq/etc/harmonization.co
 WORKDIR /opt/intelmq-webinput-csv
 
 # Install webinput
+RUN /opt/setup-apt.sh intelmq
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y python3-hug
 RUN pip3 install -e .
 
 WORKDIR /opt
@@ -207,7 +210,6 @@ RUN apt-get install -y coreutils
 
 ## webinput csv
 
-COPY common/setup-apt.sh /opt/
 RUN /opt/setup-apt.sh node
 
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y nodejs git
