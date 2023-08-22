@@ -46,14 +46,14 @@ if [ -z "$PKG_IMG" ] ; then
   docker build -t intelmq-packaging:focal -f "$SCRIPT_DIR/intelmq-packaging/Dockerfile" "$SCRIPT_DIR/intelmq-packaging"
 fi
 
-#name of the docker container
-DC=${LOGNAME}.intelmqpackaging-tmp
+#name of the docker container. The login name may not be defined in all build/test environments
+DC=${LOGNAME:=default}.intelmqpackaging-tmp
 
 #directory to use for git checkouts and resulting packages
 buildtmp=${HOME}/${IMQ_BUILD_DIR}
 
 # setup git checkout and right branch
-mkdir "$buildtmp" || { echo "Try (re)moving $buildtmp first" ; exit 1 ; }
+mkdir -p "$buildtmp" || { echo "Try (re)moving $buildtmp first" ; exit 1 ; }
 pushd "$buildtmp"
 
 declare -A CO_VERSION
