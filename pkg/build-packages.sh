@@ -118,6 +118,9 @@ for package in $IMQ_BUILD_PACKAGES ; do
     git archive --format=tar.xz --prefix=\$package/ HEAD > ../\${package}_\${short_version}.orig.tar.xz
     git archive --format=tar.xz --prefix=debian/ HEAD:debian/ > ../\${package}_\${full_version}.debian.tar.xz
   fi
+  echo PWD \$(pwd)
+  echo Installing \$(dpkg-checkbuilddeps 2>&1 | sed -e 's/dpkg-checkbuilddeps:\serror:\sUnmet build dependencies: //g' -e  's/[\(][^)]*[\)] *//g')
+  DEBIAN_FRONTEND="noninteractive" apt-get install --yes \$(dpkg-checkbuilddeps 2>&1 | sed -e 's/dpkg-checkbuilddeps:\serror:\sUnmet build dependencies: //g' -e  's/[\(][^)]*[\)] *//g')
   dpkg-buildpackage -us -uc
   cd ..
 done
