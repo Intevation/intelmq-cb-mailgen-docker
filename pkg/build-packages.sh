@@ -22,6 +22,8 @@
 # Abort on errors:
 set -eu -o pipefail
 
+[ -z "${DEBUG-}" ] || set -x
+
 DEFAULT_PKGS=(
   intelmq-certbund-contact
   intelmq-fody
@@ -36,15 +38,8 @@ IMQ_BUILD_PACKAGES=${IMQ_BUILD_PACKAGES:-${DEFAULT_PKGS[*]}}
 IMQ_BUILD_RELEASE=${IMQ_BUILD_RELEASE:-no}
 IMQ_BUILD_DIR=${IMQ_BUILD_DIR:-build-tmp}
 
-# Check if images for building packages exist.
-BASE_IMG=$(docker image ls intelmq-base:focal | sed -n 2p)
-if [ -z "$BASE_IMG" ] ; then
-  docker build -t intelmq-base:focal -f "$SCRIPT_DIR/intelmq-base/Dockerfile" "$SCRIPT_DIR/intelmq-base"
-fi
-PKG_IMG=$(docker image ls intelmq-packaging:focal | sed -n 2p)
-if [ -z "$PKG_IMG" ] ; then
-  docker build -t intelmq-packaging:focal -f "$SCRIPT_DIR/intelmq-packaging/Dockerfile" "$SCRIPT_DIR/intelmq-packaging"
-fi
+# Build or update the base images if necessary
+docker build -t intelmq-packaging:focal -f "$SCRIPT_DIR/intelmq-packaging/Dockerfile" "$SCRIPT_DIR/intelmq-packaging"
 
 #name of the docker container. The login name may not be defined in all build/test environments
 DC=${LOGNAME:=default}.intelmqpackaging-tmp

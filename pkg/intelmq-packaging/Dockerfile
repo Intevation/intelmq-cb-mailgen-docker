@@ -1,6 +1,27 @@
-FROM intelmq-base:focal
+FROM ubuntu:focal
 
 LABEL authors="Gernot Schulz <gernot@intevation.de>,Sascha Wilde <wilde@intevation.de>"
+
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update && apt-get install -y vim-tiny
+
+ADD https://hg.intevation.de/adminton/raw-file/tip/logbuch-tools/logbuch-installer /root/
+RUN LOGBUCH_BATCHMODE=yes \
+    LOGBUCH_HOST="IntelMQ Base Docker Image" \
+    EMAIL=dockerfile \
+    bash /root/logbuch-installer
+
+RUN DEBIAN_FRONTEND=noninteractive \
+    DEBIAN_PRIORITY=critical \
+    LOGBUCH_BATCHMODE=yes \
+    LOGBUCH_HOST="IntelMQ Base Docker Image" \
+    EMAIL=dockerfile \
+    apt-install -y --purge \
+    curl \
+    git \
+    locales \
+    python3 \
+    sudo
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -49,20 +70,14 @@ RUN DEBIAN_FRONTEND=noninteractive \
       nodejs \
       pbzip2 \
       pristine-tar \
-#      python-all \
-#      python-all-dev \
-#      python-nose \
-#      python-setuptools \
       python-six \
       python-yaml \
-      python3-all \
       python3-all-dev \
       python3-coverage \
       python3-ddt \
       python3-gpg \
       python3-jsonschema \
       python3-mimeparse \
-      python3-nose \
       python3-psycopg2 \
       python3-py \
       python3-pytest \
@@ -71,10 +86,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
       python3-testtools \
       python3-yaml \
       quilt \
-      rsync \
- #     screen \
- #     tmux \
-      tree \
       vim \
       yarn \
       xdelta
