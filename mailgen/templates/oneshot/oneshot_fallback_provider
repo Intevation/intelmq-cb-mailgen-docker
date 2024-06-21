@@ -1,0 +1,10 @@
+Special report about ${classification.taxonomy} (fallback template)
+
+Dear network owner,
+
+We have a special one-off report for you. This is the fallback template.
+
+
+Best regards
+
+${events_as_csv}
