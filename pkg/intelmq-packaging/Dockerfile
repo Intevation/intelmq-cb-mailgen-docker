@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:jammy
 
 LABEL authors="Gernot Schulz <gernot@intevation.de>,Sascha Wilde <wilde@intevation.de>"
 
@@ -7,21 +7,23 @@ RUN DEBIAN_FRONTEND=noninteractive \
 
 ADD https://hg.intevation.de/adminton/raw-file/tip/logbuch-tools/logbuch-installer /root/
 RUN LOGBUCH_BATCHMODE=yes \
-    LOGBUCH_HOST="IntelMQ Base Docker Image" \
+    LOGBUCH_HOST="IntelMQ Packaging Jammy Docker Image" \
     EMAIL=dockerfile \
     bash /root/logbuch-installer
 
 RUN DEBIAN_FRONTEND=noninteractive \
     DEBIAN_PRIORITY=critical \
     LOGBUCH_BATCHMODE=yes \
-    LOGBUCH_HOST="IntelMQ Base Docker Image" \
+    LOGBUCH_HOST="IntelMQ Packaging Jammy Docker Image" \
     EMAIL=dockerfile \
     apt-install -y --purge \
     curl \
     git \
     locales \
     python3 \
-    sudo
+    sudo \
+    apt-transport-https \
+    gnupg
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -30,13 +32,6 @@ ENV LC_ALL en_US.UTF-8
 
 RUN apt-get update
 
-RUN DEBIAN_FRONTEND=noninteractive \
-    DEBIAN_PRIORITY=critical \
-    LOGBUCH_BATCHMODE=yes \
-    LOGBUCH_HOST="IntelMQ Packaging Focal Docker Image" \
-    EMAIL=dockerfile \
-    apt-install -y --purge \
-      apt-transport-https
 COPY nodesource.gpg.key /tmp/
 COPY yarnpkg.gpg.key /tmp/
 COPY update-sources.sh /tmp/
@@ -44,20 +39,24 @@ RUN /bin/bash /tmp/update-sources.sh
 RUN DEBIAN_FRONTEND=noninteractive \
     DEBIAN_PRIORITY=critical \
     LOGBUCH_BATCHMODE=yes \
-    LOGBUCH_HOST="IntelMQ Packaging Focal Docker Image" \
+    LOGBUCH_HOST="IntelMQ Packaging Jammy Docker Image" \
+    EMAIL=dockerfile \
+    apt-get update
+RUN DEBIAN_FRONTEND=noninteractive \
+    DEBIAN_PRIORITY=critical \
+    LOGBUCH_BATCHMODE=yes \
+    LOGBUCH_HOST="IntelMQ Packaging Jammy Docker Image" \
     EMAIL=dockerfile \
     apt-dist-upgrade -y --purge || /bin/true
 RUN DEBIAN_FRONTEND=noninteractive \
     DEBIAN_PRIORITY=critical \
     LOGBUCH_BATCHMODE=yes \
-    LOGBUCH_HOST="IntelMQ Packaging Focal Docker Image" \
+    LOGBUCH_HOST="IntelMQ Packaging Jammy Docker Image" \
     EMAIL=dockerfile \
     apt-install -y --purge \
       autodep8 \
       autopkgtest \
       build-essential \
-      cython \
-      cython3 \
       debhelper \
       devscripts \
       dh-exec \
@@ -71,7 +70,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
       pbzip2 \
       pristine-tar \
       python-six \
-      python-yaml \
       python3-all-dev \
       python3-coverage \
       python3-ddt \
@@ -84,7 +82,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
       python3-setuptools \
       python3-stdeb \
       python3-testtools \
-      python3-yaml \
       quilt \
       vim \
       yarn \

@@ -36,7 +36,7 @@ The following scenarios are supported:
 
 ## Building packages
 
-Currently the build process supports Ubuntu focal only and builds the following packages:
+Currently the build process supports Ubuntu 22.04 Jammy only and builds the following packages:
 
 * intelmq-fody
 * intelmq-fody-backend

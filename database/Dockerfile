@@ -1,4 +1,5 @@
 FROM postgres:14
+# As of 2023-08-22, this is Debian 11 Bullseye
 
 ARG INTELMQ_CERTBUND_CONTACT_REVISION
 ARG INTELMQ_REVISION
@@ -15,7 +16,7 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git cu
 # instead of /usr/local/lib/python3.10/dist-packages (which is the default location, also in python's sitepath)
 # https://github.com/Intevation/intelmq-cb-mailgen-docker/issues/9
 # https://github.com/pypa/pip/issues/10805
-RUN ln -s /usr/local/lib/python3.9/dist-packages/ /usr/lib/python3.9/site-packages
+#RUN ln -s /usr/local/lib/python3.9/dist-packages/ /usr/lib/python3.9/site-packages
 
 WORKDIR /opt
 

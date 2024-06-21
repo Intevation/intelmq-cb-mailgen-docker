@@ -24,7 +24,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: create empty packages directory
-      run: mkdir packages/
+      run: mkdir -p packages/
+    - name: Build all packages
+      run: ./pkg/build-packages.sh
     - name: docker-compose build
       uses: sudo-bot/action-docker-compose@latest
       with:

@@ -39,7 +39,7 @@ IMQ_BUILD_RELEASE=${IMQ_BUILD_RELEASE:-no}
 IMQ_BUILD_DIR=${IMQ_BUILD_DIR:-build-tmp}
 
 # Build or update the base images if necessary
-docker build -t intelmq-packaging:focal -f "$SCRIPT_DIR/intelmq-packaging/Dockerfile" "$SCRIPT_DIR/intelmq-packaging"
+docker build -t intelmq-packaging:jammy -f "$SCRIPT_DIR/intelmq-packaging/Dockerfile" "$SCRIPT_DIR/intelmq-packaging"
 
 #name of the docker container. The login name may not be defined in all build/test environments
 DC=${LOGNAME:=default}.intelmqpackaging-tmp
@@ -127,7 +127,7 @@ date > docker-run.log
 { docker run  --name "${DC}" \
         --env=HOST_UID="$(id -u)" --env=HOST_USERNAME="${LOGNAME}" \
         --volume="${buildtmp}":/build-pkg/ \
-        intelmq-packaging:focal \
+        intelmq-packaging:jammy \
         bash -x /build-pkg/doit.sh 2>&1 | tee -a docker-run.log ; } \
     || exit 1
 exit_code_docker=${PIPESTATUS[0]}
