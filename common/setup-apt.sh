@@ -1,10 +1,17 @@
 #!/bin/bash
 
+# Parameters:
+# repository: one of "intelmq", "intevation", "node", "local"
+# codename, optional: Use the given version codename instead of the detected one. Useful to use packages from another distro version, if packages for the actual version are not available
+
 which wget > /dev/null 2>&1
 dependencies_installed=$?
 
-# defines $ID, $VERSION_ID
+# defines $ID, $VERSION_ID, $VERSION_CODENAME
 . /etc/os-release
+if [ -n "$2" ]; then
+    VERSION_CODENAME=$2
+fi
 
 set -xeu -o pipefail
 

@@ -8,7 +8,8 @@ WORKDIR /opt
 
 COPY common/setup-apt.sh /opt/
 RUN /opt/setup-apt.sh intelmq
-RUN /opt/setup-apt.sh intevation
+# fake being jammy, as these packages are not available for Debian
+RUN /opt/setup-apt.sh intevation jammy
 
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelmq-certbund-contact intelmq-mailgen curl
 
