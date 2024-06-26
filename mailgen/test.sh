@@ -36,7 +36,7 @@ echo "$cbmail_out" | grep "Calling script '$script'"
 echo "$cbmail_out" | grep '1 mails sent'
 [[ "$cbmail_out" =~ New\ ticket\ number ]]
 
-$docker intelmq-dsmtpd tail -n 1 /var/log/dsmtpd.log | fgrep ' -> sub-lir-bund@itzbund.de [IntelMQ-Mailgen#'
+$docker intelmq-dsmtpd tail -n 1 /var/log/dsmtpd.log | fgrep ' -> nic-itzbund@itzbund.de [IntelMQ-Mailgen#'
 
 echo "Mailgen tests completed successfully!"
 
