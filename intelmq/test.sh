@@ -68,7 +68,7 @@ fi
 # Check IntelMQ Manager with status code
 wget --no-verbose -O - http://localhost/intelmq-manager/ > /dev/null
 # Test API Login
-token=$(wget --no-verbose -O - --post-data '{"username": "admin", "password": "secret"}' --header "Content-Type: application/json" http://localhost/intelmq/v1/api/login/ 2>/dev/null | jq .login_token | tr -d '"')
+token=$(wget --no-verbose -O - --post-data 'username=admin&password=secret' http://localhost/intelmq/v1/api/login 2>/dev/null | jq .login_token | tr -d '"')
 wget --no-verbose -O - --header "Authorization: $token" http://localhost/intelmq/v1/api/queues > /dev/null
 
 echo "IntelMQ tests completed successfully!"

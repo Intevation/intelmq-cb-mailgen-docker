@@ -37,6 +37,10 @@ RUN ./setup-certbund.sh /etc/intelmq
 COPY intelmq/startpkg.sh /opt/startpkg.sh
 RUN chmod +x startpkg.sh
 
+# use own intelmq-api configuration to use a local port instead of sockets, as we cannot create a proper socket in this environment
+COPY intelmq/apache-config/intelmq.conf /etc/apache2/sites-available/000-default.conf
+RUN a2ensite 000-default && rm /etc/apache2/conf-enabled/intelmq-api.conf
+
 # Add test script
 COPY intelmq/test.sh /opt/
 
