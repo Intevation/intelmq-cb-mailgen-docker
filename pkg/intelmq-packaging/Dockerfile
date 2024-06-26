@@ -32,8 +32,6 @@ ENV LC_ALL en_US.UTF-8
 
 RUN apt-get update
 
-COPY nodesource.gpg.key /tmp/
-COPY yarnpkg.gpg.key /tmp/
 COPY update-sources.sh /tmp/
 RUN /bin/bash /tmp/update-sources.sh
 RUN DEBIAN_FRONTEND=noninteractive \

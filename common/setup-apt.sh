@@ -21,19 +21,19 @@ fi
 
 if [ "$1" == "intelmq" ]; then
     # Add sebix repo to sources
-    echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq/${os_repo_name}_${VERSION_ID}/ /" > /etc/apt/sources.list.d/intelmq.list
-    wget -O - https://download.opensuse.org/repositories/home:sebix:intelmq/${os_repo_name}_${VERSION_ID}/Release.key | apt-key add -
+    echo "deb [signed-by=/etc/apt/trusted.gpg.d/sebix.asc] http://download.opensuse.org/repositories/home:/sebix:/intelmq/${os_repo_name}_${VERSION_ID}/ /" > /etc/apt/sources.list.d/intelmq.list
+    wget -O /etc/apt/trusted.gpg.d/sebix.asc https://download.opensuse.org/repositories/home:sebix:intelmq/${os_repo_name}_${VERSION_ID}/Release.key
     if [ "${INTELMQ_UNSTABLE_REPOSITORY:-false}" == "true" ]; then
-        echo "deb http://download.opensuse.org/repositories/home:/sebix:/intelmq:/unstable/${os_repo_name}_${VERSION_ID}/ /" >> /etc/apt/sources.list.d/intelmq.list
-        wget -O - https://download.opensuse.org/repositories/home:sebix:intelmq:unstable/${os_repo_name}_${VERSION_ID}/Release.key | apt-key add -
+        echo "deb [signed-by=/etc/apt/trusted.gpg.d/sebix_unstable.asc] http://download.opensuse.org/repositories/home:/sebix:/intelmq:/unstable/${os_repo_name}_${VERSION_ID}/ /" >> /etc/apt/sources.list.d/intelmq.list
+        wget -O /etc/apt/trusted.gpg.d/sebix_unstable.asc https://download.opensuse.org/repositories/home:sebix:intelmq:unstable/${os_repo_name}_${VERSION_ID}/Release.key
     fi
 elif [ "$1" == "intevation" ]; then
     # Add Intevation apt repo
-    echo "deb https://apt.intevation.de ${VERSION_CODENAME} intelmq-testing" > /etc/apt/sources.list.d/intevation.list
-    wget -O - https://ssl.intevation.de/Intevation-Distribution-Key-2021.asc | apt-key add -
+    echo "deb [signed-by=/etc/apt/trusted.gpg.d/intevation.asc] https://apt.intevation.de ${VERSION_CODENAME} intelmq-testing" > /etc/apt/sources.list.d/intevation.list
+    wget -O /etc/apt/trusted.gpg.d/intevation.asc https://ssl.intevation.de/Intevation-Distribution-Key-2021.asc
 elif [ "$1" == "node" ]; then
-    echo "deb https://deb.nodesource.com/node_14.x ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/nodesource.list
-    wget -O -  https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
+    echo "deb [signed-by=/etc/apt/trusted.gpg.d/nodesource.gpg] https://deb.nodesource.com/node_14.x ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/nodesource.list
+    wget -O /etc/apt/trusted.gpg.d/nodesource.gpg  https://deb.nodesource.com/gpgkey/nodesource.gpg.key
 elif [ "$1" == "local" ]; then
     DEBIAN_FRONTEND="noninteractive" apt-get install -y dpkg-dev
     # Add local file system repository and favor it over other sources
