@@ -13,10 +13,7 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y intelm
 
 # Install configuration
 COPY mailgen/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
-RUN mkdir -p /etc/intelmq/mailgen/templates
-RUN mkdir -p /etc/intelmq/mailgen/formats
-# provides test-template
-COPY mailgen/templates/* /etc/intelmq/mailgen/templates/
+# /opt/templates and /opt/formats are provided by a docker volume mount
 
 # Generate gpg key
 COPY mailgen/generate-pgp-key.sh /opt/
