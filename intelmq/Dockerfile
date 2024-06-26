@@ -20,12 +20,6 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y \
 # pkg_resources.extern.packaging.version.InvalidVersion: Invalid version: '1.13.1-unknown' (package: gpg)
 # on any pip install call afterwards
 
-# pip installs some packages (intelmq-api, intelmq-manager) into /usr/lib/python3.8/site-packages
-# instead of /usr/local/lib/python3.10/dist-packages (which is the default location, also in python's sitepath)
-# https://github.com/Intevation/intelmq-cb-mailgen-docker/issues/9
-# https://github.com/pypa/pip/issues/10805
-RUN ln -s /usr/local/lib/python3.8/dist-packages/ /usr/lib/python3.8/site-packages
-
 WORKDIR /opt
 
 # Clone intelmq

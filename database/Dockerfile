@@ -24,7 +24,7 @@ WORKDIR /opt
 RUN git clone https://github.com/certtools/intelmq.git
 WORKDIR /opt/intelmq
 RUN git config --global --add safe.directory /opt/intelmq
-RUN git checkout $INTELMQ_REVISION && pip3 install -e .
+RUN git checkout $INTELMQ_REVISION && pip3 install --break-system-packages -e .
 
 WORKDIR /opt
 
@@ -35,10 +35,10 @@ RUN git clone https://github.com/Intevation/intelmq-certbund-contact.git
 WORKDIR /opt
 # Clone the Mailgen repo
 RUN git clone https://github.com/intevation/intelmq-mailgen.git
-RUN cd /opt/intelmq-mailgen && git checkout $INTELMQ_MAILGEN_REVISION && pip3 install -e .
+RUN cd /opt/intelmq-mailgen && git checkout $INTELMQ_MAILGEN_REVISION && pip3 install --break-system-packages -e .
 
 # Install on the repo
-RUN cd intelmq-certbund-contact && git checkout $INTELMQ_CERTBUND_CONTACT_REVISION && pip3 install -e .
+RUN cd intelmq-certbund-contact && git checkout $INTELMQ_CERTBUND_CONTACT_REVISION && pip3 install --break-system-packages -e .
 
 # Use ripe_download to get the data
 RUN mkdir ripe_download && cd ripe_download && ripe_download
