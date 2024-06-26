@@ -27,17 +27,17 @@ if [ "$USE_CERTBUND" == "true" ]; then
     fi
     set -e
 
-    # Suspend mailgen. Lock will be removed after successful fun of mailgen tests
+    # Suspend mailgen. Lock will be removed after successful run of mailgen tests
     docker exec intelmq-mailgen touch /tmp/intelmqcbmail_disabled
 fi
 
 # clear deduplicator cache
 docker exec intelmq-redis redis-cli -n 6 flushdb
-# Run IntelMQ tests
+# Run IntelMQ tests inside the container
 docker exec --env-file=.env -e DEBUG=${DEBUG-} intelmq /opt/test.sh
 
 # Prerequisites
-sudo apt install -y wget uuid-runtime jq
+sudo apt-get install -y wget uuid-runtime jq
 
 # Run fody tests
 ./fody/test.sh
