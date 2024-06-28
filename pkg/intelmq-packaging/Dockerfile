@@ -17,7 +17,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     LOGBUCH_HOST="IntelMQ Packaging Jammy Docker Image" \
     EMAIL=dockerfile \
     apt-install -y --purge \
-    curl \
+    wget \
     git \
     locales \
     python3 \

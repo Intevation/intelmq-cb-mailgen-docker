@@ -39,8 +39,8 @@ elif [ "$1" == "intevation" ]; then
     echo "deb [signed-by=/etc/apt/trusted.gpg.d/intevation.asc] https://apt.intevation.de ${VERSION_CODENAME} intelmq-testing" > /etc/apt/sources.list.d/intevation.list
     wget -O /etc/apt/trusted.gpg.d/intevation.asc https://ssl.intevation.de/Intevation-Distribution-Key-2021.asc
 elif [ "$1" == "node" ]; then
-    echo "deb [signed-by=/etc/apt/trusted.gpg.d/nodesource.gpg] https://deb.nodesource.com/node_14.x ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/nodesource.list
-    wget -O /etc/apt/trusted.gpg.d/nodesource.gpg  https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    echo "deb [signed-by=/etc/apt/trusted.gpg.d/nodesource.asc] https://deb.nodesource.com/node_14.x ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/nodesource.list
+    wget -O /etc/apt/trusted.gpg.d/nodesource.asc https://deb.nodesource.com/gpgkey/nodesource.gpg.key
 elif [ "$1" == "local" ]; then
     DEBIAN_FRONTEND="noninteractive" apt-get install -y dpkg-dev
     # Add local file system repository and favor it over other sources
