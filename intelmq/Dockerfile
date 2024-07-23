@@ -48,8 +48,9 @@ RUN git checkout $INTELMQ_API_REVISION
 RUN pip3 install -e .
 
 # intelmqsetup expects the files there (not compatible to editable pip installations yet)
-RUN mkdir -p /opt/intelmq-api/etc/intelmq/ && cp /opt/intelmq-api/contrib/api-sudoers.conf /opt/intelmq-api/etc/intelmq/api-sudoers.conf && cp /opt/intelmq-api/contrib/api-apache.conf /opt/intelmq-api/etc/intelmq/api-apache.conf
+RUN mkdir -p /opt/intelmq-api/etc/intelmq/ && cp /opt/intelmq-api/contrib/api-sudoers.conf /opt/intelmq-api/etc/intelmq/api-sudoers.conf
 COPY intelmq/api-config/api-config.json /opt/intelmq-api/etc/intelmq/api-config.json
+COPY intelmq/api-config/apache.conf /opt/intelmq-api/etc/intelmq/api-apache.conf
 
 RUN python3 contrib/initesqlite.py
 

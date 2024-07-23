@@ -14,6 +14,6 @@ cd /opt/intelmq-api
 # required for dev scenario
 ./scripts/intelmq-api-adduser --user admin --password secret
 
-hug -p 81 -m intelmq_api.serve &
+uvicorn intelmq_api.main:app --reload --port 81 &
 apachectl -D FOREGROUND
 
