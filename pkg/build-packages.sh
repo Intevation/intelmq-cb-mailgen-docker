@@ -95,6 +95,10 @@ fi
 cat >doit.sh<< EOF
 cd /build-pkg
 trap "chown -R \${HOST_UID}.\${HOST_UID} /build-pkg" EXIT
+export DEBIAN_FRONTEND="noninteractive"
+export LOGBUCH_BATCHMODE=yes
+export LOGBUCH_HOST="IntelMQ Packaging Jammy Docker Image"
+export EMAIL=doit.sh
 
 set -e
 
@@ -115,7 +119,7 @@ for package in $IMQ_BUILD_PACKAGES ; do
   fi
   echo PWD \$(pwd)
   echo Installing \$(dpkg-checkbuilddeps 2>&1 | sed -e 's/dpkg-checkbuilddeps:\serror:\sUnmet build dependencies: //g' -e  's/[\(][^)]*[\)] *//g')
-  DEBIAN_FRONTEND="noninteractive" apt-get install --yes \$(dpkg-checkbuilddeps 2>&1 | sed -e 's/dpkg-checkbuilddeps:\serror:\sUnmet build dependencies: //g' -e  's/[\(][^)]*[\)] *//g')
+  apt-install --yes \$(dpkg-checkbuilddeps 2>&1 | sed -e 's/dpkg-checkbuilddeps:\serror:\sUnmet build dependencies: //g' -e  's/[\(][^)]*[\)] *//g')
   dpkg-buildpackage -us -uc
   cd ..
 done
