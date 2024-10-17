@@ -235,7 +235,7 @@ url-expert:
     load_balance: true
     overwrite: false
   run_mode: continuous
-deduplicator-expert-oneshot:
+deduplicator-expert-webinput:
   description: Deduplicator is the bot responsible for detection and removal of duplicate
     messages. Messages get cached for <redis_cache_ttl> seconds. If found in the cache,
     it is assumed to be a duplicate.
@@ -246,13 +246,13 @@ deduplicator-expert-oneshot:
   name: Deduplicator
   parameters:
     destination_queues:
-      _default: [taxonomy-expert-oneshot-queue]
+      _default: [taxonomy-expert-webinput-queue]
     filter_keys: raw,time.observation
     filter_type: blacklist
     redis_cache_db: 6
     redis_cache_ttl: 86400
   run_mode: continuous
-taxonomy-expert-oneshot:
+taxonomy-expert-webinput:
   description: Taxonomy is the bot responsible to apply the eCSIRT Taxonomy to all
     events.
   enabled: true
@@ -262,8 +262,8 @@ taxonomy-expert-oneshot:
   name: Taxonomy
   parameters:
     destination_queues:
-      _default: [CERT-bund-Contact-Database-Expert-oneshot-queue]
-CERT-bund-Contact-Database-Expert-oneshot:
+      _default: [CERT-bund-Contact-Database-Expert-webinput-queue]
+CERT-bund-Contact-Database-Expert-webinput:
   description: Retrieve contact information from a PostgreSQL database.
   enabled: true
   group: Expert
@@ -273,14 +273,14 @@ CERT-bund-Contact-Database-Expert-oneshot:
   parameters:
     database: contactdb
     destination_queues:
-      _default: [CERT-bund-Contact-Rules-Expert-oneshot-queue]
+      _default: [CERT-bund-Contact-Rules-Expert-webinput-queue]
     host: intelmq-database
     password: secret
     port: 5432
     sections: source
     sslmode: allow
     user: intelmq
-CERT-bund-Contact-Rules-Expert-oneshot:
+CERT-bund-Contact-Rules-Expert-webinput:
   description: Determine how and whom to notify about the event.
   enabled: true
   group: Expert
@@ -291,5 +291,5 @@ CERT-bund-Contact-Rules-Expert-oneshot:
     destination_queues:
       _default: [SQL-Output-queue]
     remove_contact_data: true
-    script_directory: /opt/rules/oneshot
+    script_directory: /opt/rules/webinput
     sections: source

@@ -29,7 +29,7 @@ echo foobar | $gpg -e -a -r noreply@example.com
 
 # update the mailgen configuration
 key_id=$($gpg -K | grep -Eo '[A-F0-9]{40}' | head -n1)
-# modify the default configuration file and others, e.g intelmq-mailgen-oneshot.conf
+# modify the default configuration file and others, e.g intelmq-mailgen-webinput.conf
 sed -i "s/5F503EFAC8C89323D54C252591B8CD7E15925678/$key_id/" /etc/intelmq/intelmq-mailgen*.conf
 
 echo "Mailgen PGP key successfully generated and configured."

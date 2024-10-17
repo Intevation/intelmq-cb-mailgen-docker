@@ -21,7 +21,7 @@ RUN git checkout $INTELMQ_MAILGEN_REVISION && pip3 install -e .
 # Install configuration
 RUN mkdir /etc/intelmq
 COPY mailgen/intelmq-mailgen.conf /etc/intelmq/intelmq-mailgen.conf
-COPY mailgen/intelmq-mailgen-oneshot.conf /etc/intelmq/intelmq-mailgen-oneshot.conf
+COPY mailgen/intelmq-mailgen-webinput.conf /etc/intelmq/intelmq-mailgen-webinput.conf
 # /opt/templates and /opt/formats are provided by a docker volume mount
 
 # Generate gpg key

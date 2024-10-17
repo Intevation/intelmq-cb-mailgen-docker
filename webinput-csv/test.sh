@@ -44,25 +44,25 @@ wget --no-verbose -O - --header "Authorization: $token" $API/api/classification/
 
 wget --no-verbose -O - --header "Authorization: $token" $API/api/harmonization/event/fields | grep -o source.ip
 
-wget --no-verbose -O - --header "Authorization: $token" $API/api/custom/fields | grep -o '"feed.code": "oneshot"'
+wget --no-verbose -O - --header "Authorization: $token" $API/api/custom/fields | grep -o '"feed.code": "webinput"'
 
 # Test injecting data
-docker exec intelmq intelmqctl stop taxonomy-expert-oneshot
-docker exec intelmq intelmqctl clear taxonomy-expert-oneshot-queue
-docker exec intelmq intelmqctl clear taxonomy-expert-oneshot-queue-internal
+docker exec intelmq intelmqctl stop taxonomy-expert-webinput
+docker exec intelmq intelmqctl clear taxonomy-expert-webinput-queue
+docker exec intelmq intelmqctl clear taxonomy-expert-webinput-queue-internal
 
 # Use a non ISO-formatted date to test datetime parsing
 yesterday=$(date --rfc-email --date='yesterday')
-wget --no-verbose -O - --header "Authorization: $token" --header "Content-Type: application/json;charset=utf-8" --post-data "{\"timezone\":\"+00:00\",\"data\":[{\"time.source\":\" $yesterday \",\"source.ip\":\"192.168.56.7\",\"source.asn\":\"65537\",\"source.as_name\":\"Example AS\"}],\"custom\":{\"custom_classification.type\":\"blacklist\",\"custom_classification.identifier\":\"test\",\"custom_feed.code\":\"oneshot\",\"custom_feed.name\":\"oneshot-csv\"},\"dryrun\":true, \"username\": \"second\", \"password\": \"$password\"}" $API/api/upload | grep -F 'lines_invalid": 0, "errors": {}'
+wget --no-verbose -O - --header "Authorization: $token" --header "Content-Type: application/json;charset=utf-8" --post-data "{\"timezone\":\"+00:00\",\"data\":[{\"time.source\":\" $yesterday \",\"source.ip\":\"192.168.56.7\",\"source.asn\":\"65537\",\"source.as_name\":\"Example AS\"}],\"custom\":{\"custom_classification.type\":\"blacklist\",\"custom_classification.identifier\":\"test\",\"custom_feed.code\":\"webinput\",\"custom_feed.name\":\"webinput-csv\"},\"dryrun\":true, \"username\": \"second\", \"password\": \"$password\"}" $API/api/upload | grep -F 'lines_invalid": 0, "errors": {}'
 
 # test if the data was correctly passed on to IntelMQ
-result=$(docker exec intelmq intelmqctl run taxonomy-expert-oneshot message get | grep -Ev 'taxonomy-expert-oneshot|Waiting for a message|time.observation' | jq -S .)
+result=$(docker exec intelmq intelmqctl run taxonomy-expert-webinput message get | grep -Ev 'taxonomy-expert-webinput|Waiting for a message|time.observation' | jq -S .)
 expected_date=$(TZ=UTC date --iso-8601=seconds --date="$yesterday")
 expected="{
  \"classification.identifier\": \"test\",
  \"classification.type\": \"test\",
- \"feed.code\": \"oneshot\",
- \"feed.name\": \"oneshot-csv\",
+ \"feed.code\": \"webinput\",
+ \"feed.name\": \"webinput-csv\",
  \"feed.provider\": \"my-organization\",
  \"source.as_name\": \"Example AS\",
  \"source.asn\": 65537,

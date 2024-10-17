@@ -3,7 +3,7 @@ from intelmq_certbund_contact.rulesupport import \
 
 
 def determine_directives(context):
-    context.logger.debug("============= 10oneshot.py ===========")
+    context.logger.debug("============= 10webinput.py ===========")
 
     if context.section == "destination":
         # We are not interested in notifying the contact for the destination of this event.
