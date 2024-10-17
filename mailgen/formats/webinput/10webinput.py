@@ -13,4 +13,9 @@ def create_notifications(context):
     # above template, add them to the substitutions dictionary. By
     # passing it to the mail_format_as_csv method below they will be
     # substituted into the template when the mail is created.
-    return context.mail_format_as_csv(substitutions={})
+    data_format = context.directive.event_data_format
+    if data_format.endswith("_csv_attachment"):
+        return context.mail_format_as_csv(substitutions={},
+                                          attach_event_data=True)
+    else:
+        return context.mail_format_as_csv(substitutions={})
