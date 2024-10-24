@@ -38,7 +38,8 @@ def determine_directives(context):
             for annotation in contact.annotations:
                 if not annotation.tag.startswith('Target group:'):
                     continue
-                if annotation.tag in context.get('extra.target_groups', []):
+                # string comparision (tag value) is cheaper than dict comparison (context match), so make that first
+                if annotation.tag in context.get('extra.target_groups', []) and annotation.matches(context):
                     context.logger.debug('Contact %r matches with contact tag %r the tags of the event %r.', contact.email, annotation, context.get('extra.target_groups', []))
                     filtered_contacts.append(contact)
                     break
@@ -46,7 +47,7 @@ def determine_directives(context):
         if filtered_contacts:
             org.contacts = filtered_contacts
             matching_organisations.append(org)
-        
+
     context.organisations = matching_organisations
 
     # remove the data which was only relevant up to this step
