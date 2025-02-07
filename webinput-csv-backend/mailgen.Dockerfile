@@ -92,13 +92,7 @@ RUN git clone https://github.com/Intevation/intelmq-certbund-contact.git
 WORKDIR /opt/intelmq-certbund-contact
 
 RUN git checkout $INTELMQ_CERTBUND_CONTACT_REVISION
-
-# python would load intelmq from /opt/intelmq-certbund-contact/intelmq/ if it had an __init__.py, so remove it
-RUN rm /opt/intelmq-certbund-contact/intelmq/__init__.py
 RUN pip3 install -e .
-# with editable installations, installing a second intelmq package (for the intelmq/bots/experts/certbund* structure) does not work. So we can work around by symlinking the files
-# this is also in startup.sh for dev scenario, but is required here as well, otherwise intelmctl check fails (part of setup-certbund.sh)
-RUN bash -c "cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_rules /opt/intelmq_src/intelmq/bots/experts/ && cp -rs /opt/intelmq-certbund-contact/intelmq/bots/experts/certbund_contact /opt/intelmq_src/intelmq/bots/experts/"
 
 RUN intelmq-api-adduser --user admin --password secret
 

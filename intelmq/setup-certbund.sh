@@ -34,7 +34,5 @@ chown -R intelmq:intelmq $1/*
 chmod -R 664 $1/*{.conf,.yaml}
 
 sudo -u intelmq intelmqctl upgrade-config
-sudo -u intelmq intelmqctl -q check --no-connections
-
 # make configuration upgrades if necessary
-sudo -u intelmq intelmqctl upgrade-config
+sudo -u intelmq intelmqctl -q check --no-connections
