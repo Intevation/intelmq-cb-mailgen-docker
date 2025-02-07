@@ -73,7 +73,6 @@ services:
     webinput-csv-intelmq-mailgen:
         image: intelmq-webinput-csv-backend-mailgen-dev
         build:
-            args:
             context: .
             dockerfile: webinput-csv-backend/mailgen.Dockerfile
             args:
