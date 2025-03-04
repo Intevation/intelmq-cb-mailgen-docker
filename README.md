@@ -69,7 +69,7 @@ Ports on the host machine for the applications and APIs:
 
 The complete stack is mostly configured via the .env-file and has four 'sections'.
 
-The first section configures the paths to development directories containing the source code of required components, which you will need to download in addition to this repository: [`intelmq`](https://github.com/certtools/intelmq), [`intelmq-api`](https://github.com/certtools/intelmq-api), [`intelmq-manager`](https://github.com/certtools/intelmq-manager), [`intelmq-fody`](https://github.com/Intevation/intelmq-fody), [`intelmq-fody-backend`](https://github.com/Intevation/intelmq-fody-backend), [`intelmq-webinput-csv`](https://github.com/certtools/intelmq-webinput-csv), [`intelmq-certbund-contact`](https://github.com/Intevation/intelmq-certbund-contact), [`intelmq-mailgen`](https://github.com/Intevation/intelmq-mailgen)
+The first section configures the paths to development directories containing the source code of required components, which you will need to download in addition to this repository: [`intelmq`](https://github.com/certtools/intelmq), [`intelmq-api`](https://github.com/certtools/intelmq-api), [`intelmq-manager`](https://github.com/certtools/intelmq-manager), [`intelmq-fody`](https://github.com/Intevation/intelmq-fody), [`intelmq-fody-backend`](https://github.com/Intevation/intelmq-fody-backend), [`intelmq-webinput-csv`](https://github.com/Intevation/intelmq-webinput-csv), [`intelmq-certbund-contact`](https://github.com/Intevation/intelmq-certbund-contact), [`intelmq-mailgen`](https://github.com/Intevation/intelmq-mailgen)
 ```
 # Mounted source directories in dev variant
 DEV_INTELMQ_SRC=../intelmq
