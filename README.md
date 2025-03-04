@@ -69,13 +69,17 @@ Ports on the host machine for the applications and APIs:
 
 The complete stack is mostly configured via the .env-file and has four 'sections'.
 
-The first section configures the paths to development directories containing the source of the components 'fody', 'fody-backend', 'webinput-csv' and 'webinput-csv-backend'.
+The first section configures the paths to development directories containing the source code of required components, which you will need to download in addition to this repository: [`intelmq`](https://github.com/certtools/intelmq), [`intelmq-api`](https://github.com/certtools/intelmq-api), [`intelmq-manager`](https://github.com/certtools/intelmq-manager), [`intelmq-fody`](https://github.com/Intevation/intelmq-fody), [`intelmq-fody-backend`](https://github.com/Intevation/intelmq-fody-backend), [`intelmq-webinput-csv`](https://github.com/certtools/intelmq-webinput-csv), [`intelmq-certbund-contact`](https://github.com/Intevation/intelmq-certbund-contact), [`intelmq-mailgen`](https://github.com/Intevation/intelmq-mailgen)
 ```
 # Mounted source directories in dev variant
+DEV_INTELMQ_SRC=../intelmq
+DEV_INTELMQ_API_SRC=../intelmq-api
+DEV_INTELMQ_MANAGER_SRC=../intelmq-manager
 DEV_FODY_SRC=../intelmq-fody
 DEV_FODY_BACKEND_SRC=../intelmq-fody-backend
-DEV_WEBINPUT_CSV_SRC=../intelmq-webinput-csv/client
-DEV_WEBINPUT_CSV_BACKEND_SRC=../intelmq-webinput-csv
+DEV_WEBINPUT_CSV_SRC=../intelmq-webinput-csv
+DEV_CERTBUND_CONTACT_SRC=../intelmq-certbund-contact
+DEV_MAILGEN_SRC=../intelmq-mailgen
 ```
 
 The second section configures the paths to rules, templates and formats of CERT-BUND bots and mailgen. These paths are mounted in all scenarios. The content can be changed during runtime, but remember to restart bots on change.
@@ -89,14 +93,16 @@ DEV_CERTBUND_FORMATS=./mailgen/formats
 In the third section the repository revisions for the default scenario are configured.
 ```
 # Revisions for source variant
-SOURCE_INTELMQ_REVISION=3.1.0
-SOURCE_INTELMQ_PYPI_VERSION=3.1.0
-SOURCE_INTELMQ_API_REVISION=3.0.1
-SOURCE_INTELMQ_MANAGER_REVISION=3.0.1
+SOURCE_INTELMQ_REVISION=develop
+SOURCE_INTELMQ_PYPI_VERSION=3.3.0
+SOURCE_INTELMQ_API_REVISION=develop
+SOURCE_INTELMQ_MANAGER_REVISION=develop
 SOURCE_FODY_REVISION=master
 SOURCE_FODY_BACKEND_REVISION=master
 SOURCE_WEBINPUT_CSV_REVISION=master
 SOURCE_WEBINPUT_CSV_BACKEND_REVISION=master
+SOURCE_INTELMQ_CERTBUND_CONTACT_REVISION=master
+SOURCE_INTELMQ_MAILGEN_REVISION=master
 ```
 
 In the fourth section, the [IntelMQ unstable repository](https://software.opensuse.org/download.html?project=home%3Asebix%3Aintelmq%3Aunstable&package=intelmq) can be optionally activated (in addition to the default stable repository) to test pre-releases of IntelMQ:
@@ -227,7 +233,7 @@ login to the docker container running ` intelmq-api`,
 `intelmq-fody-backend` or `intelmq-webinput-csv-backend` and follow
 the instructions in the documentation  for [IntelMQ-Manager](https://intelmq.readthedocs.io/en/maintenance/user/intelmq-api.html#id6),
 [Fody](https://github.com/Intevation/intelmq-fody-backend#authentication) and
-[Webinput-csv](https://github.com/Intevation/intelmq-webinput-csv/blob/master/docs/INSTALL.md).
+[Webinput-csv](https://intevation.github.io/intelmq-webinput-csv/installation.html).
 
 #### ContactDB
 
