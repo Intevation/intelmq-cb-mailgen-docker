@@ -264,6 +264,14 @@ To use `intelmqctl` you need to set environment variables, which are normally se
 docker exec --env-file=.env -ti --network intelmq-cb-mailgen-docker_intelmq intelmq bash
 ```
 
+#### Database
+
+To enter the database, use
+```bash
+docker exec -ti intelmq-database psql -h localhost contactdb
+docker exec -ti intelmq-database psql -h localhost eventdb
+```
+
 ## Tests
 
 To run the tests, call `testall.sh`:
