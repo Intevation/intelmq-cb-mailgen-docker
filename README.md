@@ -193,19 +193,19 @@ The latest packages are used, no versions can be specified in this scenario.
 ### General
 
 ```
-docker-compose down
+docker compose down
 ```
 
 Stops and removes the containers.
 
 ```
-docker-compose stop
+docker compose stop
 ```
 
 Stops the containers.
 
 ```
-docker-compose images
+docker compose images
 ```
 
 Lists all images used for the services.
@@ -219,7 +219,7 @@ Removes the images.
 ### The containers
 
 ```
-docker-compose start
+docker compose start
 ```
 
 Starts already existing containers
@@ -259,7 +259,7 @@ mutt -f /opt/mails/incoming
 ```
 
 #### IntelMQ
-To use `intelmqctl` you need to set environment variables, which are normally set by `docker-compose`:
+To use `intelmqctl` you need to set environment variables, which are normally set by `docker compose`:
 ```bash
 docker exec --env-file=.env -ti --network intelmq-cb-mailgen-docker_intelmq intelmq bash
 ```
@@ -295,5 +295,5 @@ Everything except fody.
 
 Start:
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build webinput-csv-intelmq-mailgen
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build webinput-csv-intelmq-mailgen
 ```

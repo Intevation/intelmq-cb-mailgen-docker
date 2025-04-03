@@ -1,4 +1,3 @@
-version: "3"
 services:
     intelmq:
         image: intelmq-full-pkg
