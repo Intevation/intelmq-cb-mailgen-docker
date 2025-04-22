@@ -9,8 +9,7 @@ LOGGING_SET = set()
 def determine_directives(context):
     context.logger.debug("============= 99fallback.py ===========")
 
-    classification_identifier = context.get("classification.identifier")
-    classification_type = context.get("classification.type")
+    classification_identifier = context.get("classification.identifier", "fallback")
 
     if context.section == "destination":
         # We are not interested in notifying the contact for the destination of this event.
