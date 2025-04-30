@@ -18,7 +18,7 @@ COPY common/setup-apt.sh /opt/
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y \
     apache2 libapache2-mod-wsgi-py3 cron git \
     python3-pip python3-psycopg2 \
-    python3-bs4 sudo libgpgme-dev sqlite3
+    python3-bs4 sudo libgpgme-dev sqlite3 python3-gpg
 
 WORKDIR /opt
 
