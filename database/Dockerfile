@@ -1,5 +1,4 @@
-FROM postgres:14
-# As of 2023-08-22, this is Debian 11 Bullseye
+FROM postgres:17-bookworm
 
 ARG INTELMQ_CERTBUND_CONTACT_REVISION
 ARG INTELMQ_REVISION

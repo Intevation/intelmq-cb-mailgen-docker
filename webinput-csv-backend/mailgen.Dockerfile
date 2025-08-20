@@ -89,7 +89,8 @@ RUN git clone https://github.com/Intevation/intelmq-certbund-contact.git
 WORKDIR /opt/intelmq-certbund-contact
 
 RUN git checkout $INTELMQ_CERTBUND_CONTACT_REVISION
-RUN pip3 install -e .
+# certbund-contact requires 3.10.15, but Ubuntu 22.04 has only 3.10.12. Only the RIPE Importer requires that version, which is not called in this container.
+RUN pip3 install --ignore-requires-python -e .
 
 RUN intelmq-api-adduser --user admin --password secret
 
@@ -181,7 +182,10 @@ WORKDIR /opt/intelmq-webinput-csv
 
 # Install webinput
 RUN /opt/setup-apt.sh intelmq
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y python3-hug
+# workaround for outdated mirror
+RUN wget http://ftp.gwdg.de/pub/opensuse/repositories/home%3A/sebix%3A/intelmq/xUbuntu_22.04/amd64/python3-hug_2.6.1-2_amd64.deb
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install --yes ./python3-hug_2.6.1-2_amd64.deb
+# RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y python3-hug
 RUN pip3 install -e .
 
 WORKDIR /opt
