@@ -21,8 +21,6 @@ WORKDIR /opt
 
 # Clone intelmq
 RUN git clone https://github.com/certtools/intelmq.git /opt/intelmq_src
-# workaround https://github.com/certtools/intelmq/issues/2559
-RUN sed -i 's/"module": mod.__name__,/"module": bot.name,/' /opt/intelmq_src/intelmq/lib/utils.py
 
 WORKDIR /opt/intelmq_src
 

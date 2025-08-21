@@ -10,6 +10,11 @@ from intelmqmail.templates import Template
 from intelmqmail.notification import Postponed
 
 
+bcc_contacts = {
+    'government': {'recipient': 'abuse@government.example', 'format': 'attached'}
+}
+
+
 table_format = build_table_format(
     "Fallback",
     (("source.asn", "asn"),
@@ -43,5 +48,14 @@ def create_notifications(context):
     # substituted into the template when the mail is created.
     substitutions = dict()
 
-    return context.mail_format_as_csv(table_format, template=template,
+    recipient_group = context.directive.aggregate_identifier.get('recipient_group')
+    context.logger.debug(f'Recipient group {recipient_group}')
+
+
+    notifications = context.mail_format_as_csv(table_format, template=template,
                                       substitutions=substitutions)
+    if recipient_group:
+        notifications.extend(context.mail_format_as_csv(table_format, template=template,
+                                      substitutions=substitutions,
+                                      envelope_tos=[bcc_contacts[recipient_group]['recipient']]))
+    return notifications
