@@ -7,7 +7,7 @@ ENV REVISION ${REVISION}
 ENV INTELMQ_MAILGEN_REVISION ${INTELMQ_MAILGEN_REVISION}
 
 # Install dependencies and stuff
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git python3-pip python3-psycopg2 python3-dateutil libgpgme-dev sqlite3 python3-gpg
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git python3-pip python3-psycopg2 python3-dateutil libgpgme-dev sqlite3 python3-gpg python3-jsonschema
 
 WORKDIR /opt
 
