@@ -53,8 +53,8 @@ pushd "$buildtmp"
 
 declare -A CO_VERSION
 CO_VERSION=(
-  [intelmq]=${IMQ_BUILD_VERSION:-"integrated"}
-  [intelmq-manager]=${IMQ_BUILD_MANAGER_VERSION:-"deb-packaging"}
+  [intelmq]=${IMQ_BUILD_VERSION:-"develop"}
+  [intelmq-manager]=${IMQ_BUILD_MANAGER_VERSION:-"develop"}
   [intelmq-fody]=${IMQ_BUILD_FODY_VERSION:-"master"}
   [intelmq-fody-backend]=${IMQ_BUILD_FODY_BACKEND_VERSION:-"master"}
   [intelmq-mailgen]=${IMQ_BUILD_MAILGEN_VERSION:-"master"}
