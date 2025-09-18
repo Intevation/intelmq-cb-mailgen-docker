@@ -37,7 +37,7 @@ docker exec intelmq-redis redis-cli -n 6 flushdb
 docker exec --env-file=.env -e DEBUG=${DEBUG-} intelmq /opt/test.sh
 
 # Prerequisites
-sudo apt-get install -y wget uuid-runtime jq
+DEBIAN_FRONTEND="noninteractive" sudo apt-get install -y wget uuid-runtime jq
 
 # Run fody tests
 ./fody/test.sh

@@ -9,7 +9,7 @@ function end_test {
 }
 trap end_test ERR
 
-apt install -y wget python3-pytest-cov python3-cerberus python3-requests-mock postgresql-client uuid-runtime jq netcat
+DEBIAN_FRONTEND="noninteractive" apt install -y wget python3-pytest-cov python3-cerberus python3-requests-mock postgresql-client uuid-runtime jq netcat
 
 # Clear IntelMQ logs
 log_dir=$(python3 -c "import intelmq; print(intelmq.DEFAULT_LOGGING_PATH)")
@@ -61,8 +61,9 @@ if [ "$USE_CERTBUND" == "true" ]; then
     now=$(date --rfc-3339=seconds | tr ' ' T)
     # 80.245.144.218 == bsi.bund.de
     intelmqctl run CERT-bund-Contact-Database-Expert process -m "{\"time.observation\": \"$now\", \"source.asn\": 35704, \"source.ip\": \"80.245.144.218\", \"feed.name\": \"Open-Portmapper\"}"
-    result=$(psql postgresql://intelmq:secret@database/eventdb -c "select extra -> 'certbund' from events where \"source.ip\" = '80.245.144.218' and \"time.observation\" =  '$now';" --csv --tuples-only)
-    test "\"{\"\"source_directives\"\": [{\"\"aggregate_identifier\"\": {\"\"source.asn\"\": 35704, \"\"time.observation\"\": \"\"$now\"\"}, \"\"event_data_format\"\": \"\"csv_Open-Portmapper\"\", \"\"medium\"\": \"\"email\"\", \"\"notification_format\"\": \"\"shadowserver\"\", \"\"notification_interval\"\": 86400, \"\"recipient_address\"\": \"\"nic-itzbund@itzbund.de\"\", \"\"template_name\"\": \"\"test-template\"\"}]}\"" = "$result"
+    psql postgresql://intelmq:secret@database/eventdb -c "select extra -> 'certbund' from events where \"source.ip\" = '80.245.144.218' and \"time.observation\" =  '$now';" --tuples-only | jq -S . >| /tmp/actual.json
+    echo "{\"source_directives\": [{\"aggregate_identifier\": {\"source.asn\": 35704, \"time.observation\": \"$now\"}, \"event_data_format\": \"csv_Open-Portmapper\", \"medium\": \"email\", \"notification_format\": \"shadowserver\", \"notification_interval\": 86400, \"recipient_address\": \"nic-itzbund@itzbund.de\", \"template_name\": \"test-template\"}]}" | jq -S . > /tmp/expected.json
+    diff -Naur /tmp/expected.json /tmp/actual.json
 fi
 
 # Check IntelMQ Manager with status code

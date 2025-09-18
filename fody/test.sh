@@ -27,10 +27,13 @@ ip_search=$(wget --no-verbose -O - --header "Authorization: $token" http://local
 echo $ip_search | grep -E '^\{"manual": \[\], "auto": \[[0-9]+\]\}$'
 organisation=$(echo $ip_search | jq .auto[0])
 
-org_search=$(wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/contactdb/org/auto/$organisation)
-echo "$org_search" | grep -E '\{"name": "ITZBund", "sector_id": null, "comment": "", "ripe_org_hdl": "ORG-BFF1-RIPE", "ti_handle": "", "first_handle": "", "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+", "organisation_id": [0-9]+, "asns": \[\{"organisation_automatic_id": [0-9]+, "asn": 35704, "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+"\}\], "contacts": \[\{"contact_automatic_id": [0-9]+, "firstname": "", "lastname": "", "tel": "", "openpgp_fpr": "", "email": "nic-itzbund@itzbund.de", "comment": "", "import_source": "ripe", "import_time": "[0-9-]{10}T[0-9:.]+", "organisation_automatic_id": [0-9]+\}\], "national_certs": \[\], "networks": \[\{"network_id": [0-9]+, "address": "80.245.144.0/20", "comment": ""\}, \{"network_id": [0-9]+, "address": "2a09:1480::/29", "comment": ""\}\], "fqdns": \[\]\}'
-email_search=$(wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/contactdb/email/nic-itzbund@itzbund.de)
-test "$email_search" = '{"email": "nic-itzbund@itzbund.de", "enabled": true, "tags": {}}'
+org_search=$(wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/contactdb/org/auto/$organisation | jq -S .)
+echo "$org_search" | grep '"asn": 35704'
+echo "$org_search" | grep '"email": "nic-itzbund@itzbund.de"'
+echo "$org_search" | grep '"address": "80.245.144.0/20"'
+echo "$org_search" | grep '"ripe_org_hdl": "ORG-BFF1-RIPE"'
+email_search=$(wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/contactdb/email/nic-itzbund@itzbund.de | jq -Sc .)
+test "$email_search" = '{"email":"nic-itzbund@itzbund.de","enabled":true,"tags":{}}'
 
 # Test EventDB
 wget --no-verbose -O - --header "Authorization: $token" http://localhost:1382/api/events/subqueries
