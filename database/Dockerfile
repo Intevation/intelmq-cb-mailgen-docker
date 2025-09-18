@@ -25,17 +25,15 @@ WORKDIR /opt/intelmq
 RUN git config --global --add safe.directory /opt/intelmq
 RUN git checkout $INTELMQ_REVISION && pip3 install --break-system-packages -e .
 
-WORKDIR /opt
-
-# Clone the certbund-contact repo to have the tools for filling the database.
-RUN git clone https://github.com/Intevation/intelmq-certbund-contact.git
-
 # install mailgen to get the notifications.sql file, and dependency for certbund-contact
 WORKDIR /opt
 # Clone the Mailgen repo
 RUN git clone https://github.com/intevation/intelmq-mailgen.git
 RUN cd /opt/intelmq-mailgen && git checkout $INTELMQ_MAILGEN_REVISION && pip3 install --break-system-packages -e .
 
+# Clone the certbund-contact repo to have the tools for filling the database.
+WORKDIR /opt
+RUN git clone https://github.com/Intevation/intelmq-certbund-contact.git
 # Install on the repo
 RUN cd intelmq-certbund-contact && git checkout $INTELMQ_CERTBUND_CONTACT_REVISION && pip3 install --break-system-packages -e .
 
