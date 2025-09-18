@@ -1,7 +1,7 @@
-${ticket_number} Custom oneshot report about ${classification.taxonomy}
+${ticket_number} Custom webinput report about ${classification.taxonomy}
 
 EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE EXAMPLE
 
-ONESHOT
+WEBINPUT
 
 ${events_as_csv}

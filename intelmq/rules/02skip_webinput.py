@@ -8,6 +8,6 @@ def determine_directives(context):
     context.logger.debug('Context: %r.', context)
     feed = context.get("feed.name", "")
     if feed.startswith('webinput-csv'):
-        context.logger.info('Oneshot detected!')
+        context.logger.info('Webinput detected!')
         return True
     return
