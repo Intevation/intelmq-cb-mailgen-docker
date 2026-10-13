@@ -1,0 +1,60 @@
+services:
+    redis:
+        image: redis:latest
+        container_name: intelmq-redis
+        restart: unless-stopped
+        volumes:
+            - ./redis:/usr/local/etc/redis
+        command:
+            - redis-server
+            - /usr/local/etc/redis/redis.conf
+        healthcheck:
+            test: "timeout 4s redis-cli ping || exit 1"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 10s
+            start_interval: 1s
+    database:
+        image: intelmq-database
+        container_name: intelmq-database
+        build:
+            context: .
+            dockerfile: database/Dockerfile
+        restart: unless-stopped
+        volumes:
+            - type: volume
+              source: db-data
+              target: /var/lib/postgresql/data
+        environment:
+            POSTGRES_PASSWORD: secret
+        ports:
+            - 1338:5432
+        healthcheck:
+            test: "test -e /var/lib/postgresql/data/intelmq_init_complete && timeout 4s pg_isready -U postgres || exit 1"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 600s
+            start_interval: 2s
+    dsmtpd:
+        image: intelmq-dsmtpd
+        container_name: intelmq-dsmtpd
+        build:
+            context: .
+            dockerfile: dsmtpd/Dockerfile
+        restart: unless-stopped
+        volumes:
+            - ../mails:/opt/mails
+        ports:
+            - 1325:1025
+        healthcheck:
+            test: "timeout 4s bash -c ': > /dev/tcp/127.0.0.1/1025' || exit 1"
+            interval: 30s
+            timeout: 5s
+            retries: 5
+            start_period: 10s
+            start_interval: 2s
+
+volumes:
+    db-data:
