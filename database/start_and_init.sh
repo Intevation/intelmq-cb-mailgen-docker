@@ -6,11 +6,11 @@ marker="/var/lib/postgresql/data/intelmq_init_complete"
 where="$(dirname "$0")"
 
 if [ -e "$marker" ]; then
-    echo 'Database already initialized. Starting Postgres...'
+    echo 'Database is already populated. Starting Postgres...'
     exec "$where/start.sh"
 fi
 
-echo 'Database will need to be initialized. Starting Postgres...'
+echo 'Database will need to be populated. Starting Postgres...'
 
 "$where/start.sh" &
 pid="$!"
@@ -23,13 +23,13 @@ until timeout 4s pg_isready -qU postgres; do
     fi
     sleep 1
 done
-echo 'Postgres is ready. Initializing database...'
+echo 'Postgres is ready. Populating database...'
 
 # First delete state from any potential incomplete runs
 "$where/deinit.sh"
 "$where/init.sh"
 
-echo 'Initialization complete.'
+echo 'Database population complete.'
 
 touch "$marker"
 
