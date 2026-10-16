@@ -16,6 +16,9 @@ services:
             dockerfile: fody/Dockerfile.pkg
             args:
                 INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
+        depends_on:
+            fody-backend:
+                condition: service_completed_successfully
         ports:
             - 1382:8000
             - 1340:8666
@@ -24,7 +27,7 @@ services:
         build:
             context: .
             dockerfile: fody-backend/Dockerfile.pkg
-        entrypoint: ["echo", "Service disabled."]
+        entrypoint: ["echo", "Service disabled"]
         restart: "no"
     database:
         image: intelmq-database-pkg
@@ -47,6 +50,9 @@ services:
             dockerfile: webinput-csv/Dockerfile.pkg
             args:
                 INTELMQ_UNSTABLE_REPOSITORY: $INTELMQ_UNSTABLE_REPOSITORY
+        depends_on:
+            webinput-csv-backend:
+                condition: service_completed_successfully
         ports:
             - 1383:80
             - 1341:8667
@@ -55,4 +61,5 @@ services:
         build:
             context: .
             dockerfile: webinput-csv-backend/Dockerfile.pkg
+        entrypoint: ["echo", "Service disabled"]
         restart: "no"

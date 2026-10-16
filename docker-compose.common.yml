@@ -1,15 +1,4 @@
 services:
-    redis:
-        image: redis:latest
-        container_name: intelmq-redis
-        volumes:
-            - ./redis:/usr/local/etc/redis
-        command:
-            - redis-server
-            - /usr/local/etc/redis/redis.conf
-        restart: always
-        networks:
-            - intelmq
     intelmq:
         image: intelmq
         container_name: intelmq
@@ -18,10 +7,12 @@ services:
             dockerfile: intelmq/Dockerfile
             args:
                 USE_CERTBUND: $USE_CERTBUND
-        restart: always
+        restart: unless-stopped
         depends_on:
-            - redis
-            - database
+            redis:
+                condition: service_healthy
+            database:
+                condition: service_healthy
         environment:
             INTELMQ_SOURCE_PIPELINE_HOST: redis
             INTELMQ_DESTINATION_PIPELINE_HOST: redis
@@ -31,62 +22,46 @@ services:
             - $DEV_CERTBUND_RULES:/opt/rules
             - $DEV_CERTBUND_FORMATS:/opt/formats
             - $DEV_CERTBUND_TEMPLATES:/opt/templates
-        networks:
-            - intelmq
+        healthcheck:
+            test: "timeout 4s bash -c ': > /dev/tcp/127.0.0.1/81' || exit 1"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 10s
+            start_interval: 1s
     fody:
         image: intelmq-fody
         container_name: intelmq-fody
         build:
             context: .
             dockerfile: fody/Dockerfile
-        restart: always
+        restart: unless-stopped
         depends_on:
-            - fody-backend
-        networks:
-            - intelmq
+            fody-backend:
+                condition: service_healthy
     fody-backend:
         image: intelmq-fody-backend
         container_name: intelmq-fody-backend
         build:
             context: .
             dockerfile: fody-backend/Dockerfile
-        restart: always
+        restart: unless-stopped
         volumes:
             - ./fody-backend/conf:/opt/conf
         depends_on:
-            - database
+            database:
+                condition: service_healthy
         environment:
             EVENTDB_SERVE_CONF_FILE: "/opt/conf/eventdb.conf"
             CONTACTDB_SERVE_CONF_FILE: "/opt/conf/contactdb.conf"
             TICKETS_SERVE_CONF_FILE: "/opt/conf/ticketdb.conf"
-        networks:
-            - intelmq
-        command: ["wait-for-it.sh", "database:5432", "-t", "0", "-s", "--", "hug", "-f", "./intelmq_fody_backend/serve.py", "-p", "8002"]
-    database:
-        image: intelmq-database
-        container_name: intelmq-database
-        build:
-            context: .
-            dockerfile: database/Dockerfile
-        restart: always
-        volumes:
-          - ./database/init:/docker-entrypoint-initdb.d
-        environment:
-            POSTGRES_PASSWORD: secret
-        ports:
-            - 1338:5432
-        networks:
-            - intelmq
-        command:
-            - "postgres"
-            - "-c"
-            - "logging_collector=on"
-            - "-c"
-            - "log_destination=stderr"
-            - "-c"
-            - "log_directory=/var/log/postgresql/"
-            - "-c"
-            - "log_statement=all"
+        healthcheck:
+            test: "timeout 4s bash -c ': > /dev/tcp/127.0.0.1/8002' || exit 1"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 10s
+            start_interval: 1s
     mailgen:
         image: intelmq-mailgen
         container_name: intelmq-mailgen
@@ -97,49 +72,38 @@ services:
             - ./mailgen/init:/opt/init
             - $DEV_CERTBUND_FORMATS:/opt/formats
             - $DEV_CERTBUND_TEMPLATES:/opt/templates
-        restart: always
+        restart: unless-stopped
         depends_on:
-            - database
-            - dsmtpd
-        networks:
-            - intelmq
-    dsmtpd:
-        image: intelmq-dsmtpd
-        container_name: intelmq-dsmtpd
-        build:
-            context: .
-            dockerfile: dsmtpd/Dockerfile
-        volumes:
-            - ../mails:/opt/mails
-        ports:
-            - 1325:1025
-        networks:
-            - intelmq
+            database:
+                condition: service_healthy
+            dsmtpd:
+                condition: service_healthy
     webinput-csv:
         image: intelmq-webinput-csv-spa
         container_name: intelmq-webinput-csv
         build:
             context: .
             dockerfile: webinput-csv/Dockerfile
-        restart: always
+        restart: unless-stopped
         depends_on:
-            - webinput-csv-backend
-        networks:
-            - intelmq
+            webinput-csv-backend:
+                condition: service_healthy
     webinput-csv-backend:
         image: intelmq-webinput-csv-backend
         container_name: intelmq-webinput-csv-backend
         build:
             context: .
             dockerfile: webinput-csv-backend/Dockerfile
-        restart: always
+        restart: unless-stopped
         volumes:
             - ./webinput-csv-backend/conf:/opt/conf
         depends_on:
-            - intelmq
-        networks:
-            - intelmq
-
-networks:
-    intelmq:
-        driver: bridge
+            intelmq:
+                condition: service_healthy
+        healthcheck:
+            test: "timeout 4s bash -c ': > /dev/tcp/127.0.0.1/8002' || exit 1"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 10s
+            start_interval: 1s

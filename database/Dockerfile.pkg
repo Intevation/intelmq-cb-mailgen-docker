@@ -23,6 +23,8 @@ RUN mkdir ripe_download && cd ripe_download && /usr/bin/ripe_download
 # Get additional data
 RUN curl -O -L http://ftp.ripe.net/ripe/stats/delegated-ripencc-latest
 
-# Importing the schema and data is done in the the database/init/init.sh script.
-# This script is added to the container on startup and will be processed
-# automatically ONCE! (see postgres image docs for details)
+COPY "database/init.sh" "database/deinit.sh" "database/start.sh" "database/start_and_init.sh" "/intelmq_database/"
+
+USER postgres:postgres
+
+ENTRYPOINT ["/intelmq_database/start_and_init.sh"]

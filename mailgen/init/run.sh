@@ -2,8 +2,6 @@
 
 set -eu -o pipefail
 
-wait-for-it.sh database:5432 -t 0 -s
-
 # only in non-pkg scenarios
 if [ -d /opt/intelmq-mailgen/ ]; then
     cd /opt/intelmq-mailgen/

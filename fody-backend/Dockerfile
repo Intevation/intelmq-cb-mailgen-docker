@@ -11,12 +11,6 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y git py
 
 WORKDIR /opt
 
-# Add wait-for-it.
-# Used in compose environments to give the database time to start.
-RUN git clone https://github.com/vishnubob/wait-for-it.git
-
-RUN cp wait-for-it/wait-for-it.sh /usr/bin
-
 # Clone Mailgen (used as dependency and can be executed inside the container)
 RUN git clone https://github.com/Intevation/intelmq-mailgen.git
 RUN cd intelmq-mailgen && git checkout $INTELMQ_MAILGEN_REVISION && pip3 install -e .
@@ -59,5 +53,4 @@ WORKDIR /opt/intelmq-fody-backend
 RUN apt-get install -y coreutils
 
 # Start the backend using hug.
-# the dev compose file overwrites this CMD
 CMD ["hug", "-f", "./intelmq_fody_backend/serve.py", "-p", "8002"]
